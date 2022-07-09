@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BackEnd.Entities
 {
@@ -9,17 +10,48 @@ namespace BackEnd.Entities
         {
             DebtSnowballs = new HashSet<DebtSnowball>();
         }
-
+        [Key]
         public int CustomOrderListId { get; set; }
+        
+        
+        [Required]
+        [Display(Name = "")]
         public int _01customOrderPosition { get; set; }
+
+        [Required]
+        [Display(Name = "")]
         public int _02customOrderPosition { get; set; }
+
+        [Required]
+        [Display(Name = "")]
         public int _03customOrderPosition { get; set; }
+
+        [Required]
+        [Display(Name = "")]
         public int _04customOrderPosition { get; set; }
+        
+        [Required]
+        [Display(Name = "")]
         public int _05customOrderPosition { get; set; }
+
+        [Required]
+        [Display(Name = "")]
         public int _06customOrderPosition { get; set; }
+
+        [Required]
+        [Display(Name = "")]
         public int _07customOrderPosition { get; set; }
+
+        [Required]
+        [Display(Name = "")]
         public int _08customOrderPosition { get; set; }
+
+        [Required]
+        [Display(Name = "")]
         public int _09customOrderPosition { get; set; }
+
+        [Required]
+        [Display(Name = "")]
         public int _10customOrderPosition { get; set; }
 
         public virtual Loan _01customOrderPositionNavigation { get; set; } = null!;
