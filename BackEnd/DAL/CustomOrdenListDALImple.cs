@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BackEnd.DAL
 {
-    internal class CustomOrdenListDALImple : ICustomOrdenListDAL
+    public class CustomOrdenListDALImple : ICustomOrdenListDAL
     {
         ProyectoCreditosContext context;
 
