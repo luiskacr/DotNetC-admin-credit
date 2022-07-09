@@ -8,7 +8,7 @@ using BackEnd.Entities;
 
 namespace BackEnd.DAL
 {
-    internal class PaymentHistoryDALImple : IPaymentHistoryDAL
+    public class PaymentHistoryDALImple : IPaymentHistoryDAL
     {
         ProyectoCreditosContext context;
         public PaymentHistoryDALImple() {
