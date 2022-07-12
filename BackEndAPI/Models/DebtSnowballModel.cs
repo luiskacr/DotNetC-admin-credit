@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace BackEnd.Entities
+namespace BackEndAPI.Models
 {
-    public partial class DebtSnowball
+    public class DebtSnowballModel
     {
+
         [Key]
         public int DebtSnowballId { get; set; }
 
@@ -27,8 +26,8 @@ namespace BackEnd.Entities
         [Display(Name = "")]
         public int MonlyPayment { get; set; }
 
-        public virtual CustomOrderList CustomOrderList { get; set; } = null!;
-        public virtual PayOffStragedy PayOffOrderNavigation { get; set; } = null!;
-        public virtual User User { get; set; } = null!;
+        //public virtual CustomOrderList CustomOrderList { get; set; } = null!;
+        //public virtual PayOffStragedy PayOffOrderNavigation { get; set; } = null!;
+        //public virtual User User { get; set; } = null!;
     }
 }
