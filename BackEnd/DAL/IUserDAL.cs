@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BackEnd.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BackEnd.DAL
 {
-    internal class IUserDAL
+    internal interface IUserDAL : IDALGenerico<User>
     {
     }
 }

@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace BackEnd.DAL
 {
-    internal class UserRoleDALImpl : IUserRoleDAL
+    internal class UserDALImpl : IUserDAL
     {
         ProyectoCreditosContext context;
 
-        public UserRoleDALImpl()
+        public UserDALImpl()
         {
             context = new ProyectoCreditosContext();
         }
 
-        public bool Add(UserRole entity)
+        public bool Add(User entity)
         {
             try
             {
-                using (UnidadDeTrabajo<UserRole> unidad = new UnidadDeTrabajo<UserRole>(context))
+                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
                 {
                     unidad.genericDAL.Add(entity);
                     return unidad.Complete();
@@ -33,26 +33,26 @@ namespace BackEnd.DAL
             }
         }
 
-        public void AddRange(IEnumerable<UserRole> entities)
+        public void AddRange(IEnumerable<User> entities)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<UserRole> Find(Expression<Func<UserRole, bool>> predicate)
+        public IEnumerable<User> Find(Expression<Func<User, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public UserRole Get(int id)
+        public User Get(int id)
         {
             try
             {
-                UserRole userRoleList;
-                using (UnidadDeTrabajo<UserRole> unidad = new UnidadDeTrabajo<UserRole>(context))
+                User userList;
+                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
                 {
-                    userRoleList = unidad.genericDAL.Get(id);
+                    userList = unidad.genericDAL.Get(id);
                 }
-                return userRoleList;
+                return userList;
             }
             catch (Exception)
             {
@@ -60,16 +60,16 @@ namespace BackEnd.DAL
             }
         }
 
-        List<UserRole> Get()
+        List<User> Get()
         {
             try
             {
-                IEnumerable<UserRole> userRoleList;
-                using (UnidadDeTrabajo<UserRole> unidad = new UnidadDeTrabajo<UserRole>(context))
+                IEnumerable<User> userList;
+                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
                 {
-                    userRoleList = unidad.genericDAL.GetAll();
+                    userList = unidad.genericDAL.GetAll();
                 }
-                return userRoleList.ToList();
+                return userList.ToList();
             }
             catch (Exception)
             {
@@ -77,16 +77,16 @@ namespace BackEnd.DAL
             }
         }
 
-        public IEnumerable<UserRole> GetAll()
+        public IEnumerable<User> GetAll()
         {
             try
             {
-                IEnumerable<UserRole> userRoleList;
-                using (UnidadDeTrabajo<UserRole> unidad = new UnidadDeTrabajo<UserRole>(context))
+                IEnumerable<User> userList;
+                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
                 {
-                    userRoleList = unidad.genericDAL.GetAll();
+                    userList = unidad.genericDAL.GetAll();
                 }
-                return userRoleList;
+                return userList;
             }
             catch (Exception)
             {
@@ -94,12 +94,12 @@ namespace BackEnd.DAL
             }
         }
 
-        public bool Remove(UserRole entity)
+        public bool Remove(User entity)
         {
             bool result = false;
             try
             {
-                using (UnidadDeTrabajo<UserRole> unidad = new UnidadDeTrabajo<UserRole>(context))
+                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
                 {
                     unidad.genericDAL.Remove(entity);
                     result = unidad.Complete();
@@ -112,22 +112,22 @@ namespace BackEnd.DAL
             return result;
         }
 
-        public void RemoveRange(IEnumerable<UserRole> entities)
+        public void RemoveRange(IEnumerable<User> entities)
         {
             throw new NotImplementedException();
         }
 
-        public UserRole SingleOrDefault(Expression<Func<UserRole, bool>> predicate)
+        public User SingleOrDefault(Expression<Func<User, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(UserRole entity)
+        public bool Update(User entity)
         {
             bool result = false;
             try
             {
-                using (UnidadDeTrabajo<UserRole> unidad = new UnidadDeTrabajo<UserRole>(context))
+                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
                 {
                     unidad.genericDAL.Update(entity);
                     result = unidad.Complete();
