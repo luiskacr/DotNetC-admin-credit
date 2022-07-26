@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BackEnd.DAL
 {
-    internal class UserRoleDALImpl : IUserRoleDAL
+    public class UserRoleDALImpl : IUserRoleDAL
     {
         ProyectoCreditosContext context;
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BackEnd.DAL
 {
-    internal class UserDALImpl : IUserDAL
+    public class UserDALImpl : IUserDAL
     {
         ProyectoCreditosContext context;
 

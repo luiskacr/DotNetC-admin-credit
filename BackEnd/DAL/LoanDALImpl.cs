@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BackEnd.DAL
 {
-    internal class LoanDALImpl : ILoanDAL
+    public class LoanDALImpl : ILoanDAL
     {
         ProyectoCreditosContext context;
 
