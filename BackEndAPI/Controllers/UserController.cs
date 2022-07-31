@@ -1,8 +1,9 @@
-﻿using BackEnd.DAL;
+﻿using Microsoft.AspNetCore.Mvc;
+using BackEnd.DAL;
 using BackEnd.Entities;
 using BackEndAPI.Models;
-using Microsoft.AspNetCore.Mvc;
 using System.Net;
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BackEndAPI.Controllers
@@ -11,14 +12,12 @@ namespace BackEndAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
-        private UserDALImpl userDAL;
+        private IUserDAL userDAL;
 
         public UserController()
         {
             userDAL = new UserDALImpl();
         }
-
 
         // GET: api/<UserController>
         [HttpGet]
@@ -26,16 +25,15 @@ namespace BackEndAPI.Controllers
         {
             try
             {
-                IEnumerable<User> useries = userDAL.GetAll().ToList();
+                List<User> users = userDAL.GetAll().ToList();
                 List<UserModel> result = new List<UserModel>();
-                foreach (User user in useries)
+                foreach (User user in users)
                 {
-                    UserModel userModel = ObjectToModelConvert(user);
-                    result.Add(userModel);
+                    result.Add(objectToModelConvert(user));
                 }
                 return new JsonResult(result)
                 {
-                    StatusCode = (int)HttpStatusCode.OK
+                    StatusCode = (int)HttpStatusCode.OK,
                 };
             }
             catch (Exception ex)
@@ -47,8 +45,6 @@ namespace BackEndAPI.Controllers
             }
         }
 
-     
-
         // GET api/<UserController>/5
         [HttpGet("{id}")]
         public JsonResult Get(int id)
@@ -58,14 +54,14 @@ namespace BackEndAPI.Controllers
                 User user = userDAL.Get(id);
                 if (user != null)
                 {
-                    return new JsonResult(user)
+                    return new JsonResult(objectToModelConvert(user))
                     {
                         StatusCode = (int)HttpStatusCode.OK
                     };
                 }
                 else
                 {
-                    return new JsonResult("Error: The ID is not correct")
+                    return new JsonResult(new { message = "The ID is not correct" })
                     {
                         StatusCode = (int)HttpStatusCode.NotFound
                     };
@@ -82,24 +78,21 @@ namespace BackEndAPI.Controllers
 
         // POST api/<UserController>
         [HttpPost]
-        public JsonResult Post([FromBody] UserModel userModel)
+        public JsonResult Post([FromBody] UserModel user)
         {
             try
             {
-                User user = ModelToObjectConvert(userModel);
-
-                bool result = userDAL.Update(user);
-
+                bool result = userDAL.Add(ModelToObjectConvert(user));
                 if (result)
                 {
-                    return new JsonResult(user)
+                    return new JsonResult(ModelToObjectConvert(user))
                     {
-                        StatusCode = (int)HttpStatusCode.OK
+                        StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult("Error: Information is not correct")
+                    return new JsonResult(new { message = "Error including User" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -107,7 +100,7 @@ namespace BackEndAPI.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(ex.Message)
+                return new JsonResult(new { message = ex.Message })
                 {
                     StatusCode = (int)HttpStatusCode.InternalServerError
                 };
@@ -116,24 +109,21 @@ namespace BackEndAPI.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public JsonResult Put([FromBody] UserModel userModel)
+        public JsonResult Put(int id, [FromBody] UserModel user)
         {
             try
             {
-                User user = ModelToObjectConvert(userModel);
-
-                bool result = userDAL.Add(user);
-
+                bool result = userDAL.Update(ModelToObjectConvert(user));
                 if (result)
                 {
-                    return new JsonResult(user)
+                    return new JsonResult(ModelToObjectConvert(user))
                     {
-                        StatusCode = (int)HttpStatusCode.OK
+                        StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult("Error: Information is not correct")
+                    return new JsonResult(new { message = "Error to Update User" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -141,13 +131,12 @@ namespace BackEndAPI.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(ex.Message)
+                return new JsonResult(new { message = ex.Message })
                 {
                     StatusCode = (int)HttpStatusCode.InternalServerError
                 };
             }
         }
-
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
@@ -157,21 +146,19 @@ namespace BackEndAPI.Controllers
             {
                 User user = new User()
                 {
-                    UserId = id
+                    IdUser = id
                 };
-
                 bool result = userDAL.Remove(user);
-
                 if (result)
                 {
-                    return new JsonResult("Ok: The data is deleted")
+                    return new JsonResult(new { message = "The data is deleted" })
                     {
                         StatusCode = (int)HttpStatusCode.OK
                     };
                 }
                 else
                 {
-                    return new JsonResult("Error: Information is not correct")
+                    return new JsonResult(new { message = "Error to Delete User" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -179,46 +166,37 @@ namespace BackEndAPI.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(ex.Message)
+                return new JsonResult(new { message = ex.Message })
                 {
                     StatusCode = (int)HttpStatusCode.InternalServerError
                 };
             }
         }
 
-        private UserModel ObjectToModelConvert(User user)
+        private UserModel objectToModelConvert(User user)
         {
-            UserModel userModel = new UserModel()
+
+            return new UserModel
             {
-                UserId = user.UserId,
-                UserRoles = user.UserRoles,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Telephone = user.Telephone,
-                Email = user.Email,
-                Paassword = user.Paassword,
-                BirthDay = user.BirthDay,
-                DocumentId = user.DocumentId,
-                Adddress = user.Adddress
+                IdUser = user.IdUser,
+                UserName = user.UserName,
+                UserPassword = user.UserName,
+                UserRole = user.UserRole,
+                IdCustomers = user.IdCustomers,
             };
-            return userModel;
         }
+
         private User ModelToObjectConvert(UserModel userModel)
         {
-            User user = new User()
+
+            return new User
             {
-                UserId = userModel.UserId,
-                UserRoles = userModel.UserRoles,
-                FirstName = userModel.FirstName,
-                LastName = userModel.LastName,
-                Telephone = userModel.Telephone,
-                Email = userModel.Email,
-                Paassword = userModel.Paassword,
-                BirthDay = userModel.BirthDay,
-                DocumentId = userModel.DocumentId,
-                Adddress = userModel.Adddress
+                IdUser = userModel.IdUser,
+                UserName = userModel.UserName,
+                UserPassword = userModel.UserName,
+                UserRole = userModel.UserRole,
+                IdCustomers = userModel.IdCustomers,
             };
-            return user;
         }
     }
 }

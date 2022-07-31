@@ -1,7 +1,7 @@
-﻿using BackEnd.DAL;
+﻿using Microsoft.AspNetCore.Mvc;
+using BackEnd.DAL;
 using BackEnd.Entities;
 using BackEndAPI.Models;
-using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,11 +13,11 @@ namespace BackEndAPI.Controllers
     public class UserRoleController : ControllerBase
     {
 
-        private UserRoleDALImpl userRoleDAL;
+        private IUserRolesDAL userRolesDAL;
 
         public UserRoleController()
         {
-            userRoleDAL = new UserRoleDALImpl();
+            userRolesDAL = new UserRolesDALImpl();
         }
 
         // GET: api/<UserRoleController>
@@ -26,13 +26,13 @@ namespace BackEndAPI.Controllers
         {
             try
             {
-                IEnumerable<UserRole> userRolies = userRoleDAL.GetAll().ToList();
+                List<UserRole> userRoles = userRolesDAL.GetAll().ToList();
                 List<UserRoleModel> result = new List<UserRoleModel>();
-                foreach (UserRole userRole in userRolies)
+                foreach (UserRole userRole in userRoles)
                 {
-                    UserRoleModel userRoleModel = ObjectToModelConvert(userRole);
-                    result.Add(userRoleModel);
+                    result.Add(objectToModelConvert(userRole));
                 }
+
                 return new JsonResult(result)
                 {
                     StatusCode = (int)HttpStatusCode.OK
@@ -47,25 +47,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-    
-
         // GET api/<UserRoleController>/5
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
             try
             {
-                UserRole userRole = userRoleDAL.Get(id);
+                UserRole userRole = userRolesDAL.Get(id);
                 if (userRole != null)
                 {
-                    return new JsonResult(userRole)
+                    return new JsonResult(objectToModelConvert(userRole))
                     {
                         StatusCode = (int)HttpStatusCode.OK
                     };
                 }
                 else
                 {
-                    return new JsonResult("Error: The ID is not correct")
+                    return new JsonResult(new { message = "The ID is not correct" })
                     {
                         StatusCode = (int)HttpStatusCode.NotFound
                     };
@@ -79,26 +77,24 @@ namespace BackEndAPI.Controllers
                 };
             }
         }
+
         // POST api/<UserRoleController>
         [HttpPost]
-        public JsonResult Post([FromBody] UserRoleModel userRoleModel)
+        public JsonResult Post([FromBody] UserRoleModel userRole)
         {
             try
             {
-                UserRole userRole = ModelToObjectConvert(userRoleModel);
-
-                bool result = userRoleDAL.Update(userRole);
-
+                bool result = userRolesDAL.Add(ModelToObjectConvert(userRole));
                 if (result)
                 {
-                    return new JsonResult(userRole)
+                    return new JsonResult(ModelToObjectConvert(userRole))
                     {
-                        StatusCode = (int)HttpStatusCode.OK
+                        StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult("Error: Information is not correct")
+                    return new JsonResult(new { message = "Error including Country" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -106,7 +102,7 @@ namespace BackEndAPI.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(ex.Message)
+                return new JsonResult(new { message = ex.Message })
                 {
                     StatusCode = (int)HttpStatusCode.InternalServerError
                 };
@@ -115,24 +111,21 @@ namespace BackEndAPI.Controllers
 
         // PUT api/<UserRoleController>/5
         [HttpPut("{id}")]
-        public JsonResult Put([FromBody] UserRoleModel userRoleModel)
+        public JsonResult Put(int id, [FromBody] UserRoleModel userRole)
         {
             try
             {
-                UserRole userRole = ModelToObjectConvert(userRoleModel);
-
-                bool result = userRoleDAL.Add(userRole);
-
+                bool result = userRolesDAL.Update(ModelToObjectConvert(userRole));
                 if (result)
                 {
-                    return new JsonResult(userRole)
+                    return new JsonResult(ModelToObjectConvert(userRole))
                     {
-                        StatusCode = (int)HttpStatusCode.OK
+                        StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult("Error: Information is not correct")
+                    return new JsonResult(new { message = "Error to Update Country" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -140,13 +133,12 @@ namespace BackEndAPI.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(ex.Message)
+                return new JsonResult(new { message = ex.Message })
                 {
                     StatusCode = (int)HttpStatusCode.InternalServerError
                 };
             }
         }
-
 
         // DELETE api/<UserRoleController>/5
         [HttpDelete("{id}")]
@@ -156,21 +148,19 @@ namespace BackEndAPI.Controllers
             {
                 UserRole userRole = new UserRole()
                 {
-                    IduserRoles = id
+                    IdUserRole = id
                 };
-
-                bool result = userRoleDAL.Remove(userRole);
-
+                bool result = userRolesDAL.Remove(userRole);
                 if (result)
                 {
-                    return new JsonResult("Ok: The data is deleted")
+                    return new JsonResult(new { message = "The data is deleted" })
                     {
                         StatusCode = (int)HttpStatusCode.OK
                     };
                 }
                 else
                 {
-                    return new JsonResult("Error: Information is not correct")
+                    return new JsonResult(new { message = "Error to Delete Country" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -178,31 +168,29 @@ namespace BackEndAPI.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(ex.Message)
+                return new JsonResult(new { message = ex.Message })
                 {
                     StatusCode = (int)HttpStatusCode.InternalServerError
                 };
             }
         }
 
-        private UserRoleModel ObjectToModelConvert(UserRole userRole)
+        private UserRoleModel objectToModelConvert(UserRole userRole)
         {
-            UserRoleModel userRoleModel = new UserRoleModel()
+            return new UserRoleModel
             {
-                IduserRoles = userRole.IduserRoles,
-                RoleName = userRole.RoleName
+                IdUserRole = userRole.IdUserRole,
+                RoleName = userRole.RoleName,
             };
-            return userRoleModel;
         }
 
         private UserRole ModelToObjectConvert(UserRoleModel userRoleModel)
         {
-            UserRole userRole = new UserRole()
+            return new UserRole
             {
-                IduserRoles = userRoleModel.IduserRoles,
-                RoleName = userRoleModel.RoleName
+                IdUserRole = userRoleModel.IdUserRole,
+                RoleName = userRoleModel.RoleName,
             };
-            return userRole;
         }
     }
 }

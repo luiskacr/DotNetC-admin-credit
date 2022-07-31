@@ -1,50 +1,30 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BackEndAPI.Models
 {
     public class UserModel
     {
         [Key]
-        public int UserId { get; set; }
+        public int IdUser { get; set; }
 
-        [Required]
-        [Display(Name = "")]
-        public int UserRoles { get; set; }
+        [DisplayName("User Name")]
+        [Required(ErrorMessage = "An User Name is required")]
+        public string UserName { get; set; } = null!;
 
-        [Required(ErrorMessage = "First Name is required")]
-        [Display(Name = "First Name")]
-        public string FirstName { get; set; } = null!;
+        [DisplayName("User Password")]
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "An User Password is required")]
+        public string UserPassword { get; set; } = null!;
 
-        [Required(ErrorMessage = "Last Name is required")]
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; } = null!;
+        [DisplayName("User Role")]
+        [Required(ErrorMessage = "An User Role is required")]
+        [ForeignKey("IdUserRole")]
+        public int UserRole { get; set; }
 
-        [Required(ErrorMessage = "Telephone is required")]
-        [Display(Name = "First Name")]
-        public string Telephone { get; set; } = null!;
-
-        [Required(ErrorMessage = "Email is required")]
-        [Display(Name = "Email")]
-        public string Email { get; set; } = null!;
-
-        [Required(ErrorMessage = "Password is required")]
-        [Display(Name = "Password")]
-        public string Paassword { get; set; } = null!;
-
-        [Required]
-        [Display(Name = "BirthDay")]
-        public DateTime BirthDay { get; set; }
-
-        [Required]
-        [Display(Name = "")]
-        public int DocumentId { get; set; }
-
-        [Required]
-        [Display(Name = "Address")]
-        public string Adddress { get; set; } = null!;
-
-        //public virtual UserRole UserRolesNavigation { get; set; } = null!;
-        //public virtual ICollection<DebtSnowball> DebtSnowballs { get; set; }
-        //public virtual ICollection<Loan> Loans { get; set; }
+        [DisplayName("User Customers")]
+        [ForeignKey("IdCustomers")]
+        public int? IdCustomers { get; set; }
     }
 }

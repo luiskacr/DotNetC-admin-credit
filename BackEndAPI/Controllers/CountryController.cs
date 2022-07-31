@@ -10,27 +10,26 @@ namespace BackEndAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoanController : ControllerBase
+    public class CountryController : ControllerBase
     {
-        private ILoanDAL loanDAL;
+        private ICountryDAL countryDAL;
 
-        public LoanController()
+        public CountryController()
         {
-            loanDAL = new LoanDALImpl();
+            countryDAL = new CountryDALImpl();
         }
 
-
-        // GET: api/<LoanController>
+        // GET: api/<CountryController>
         [HttpGet]
         public JsonResult Get()
         {
             try
             {
-                List<Loan> loans = loanDAL.GetAll().ToList();
-                List<LoanModel> result = new List<LoanModel>();
-                foreach (Loan loan in loans)
+                List<Country> countries = countryDAL.GetAll().ToList();
+                List<CountryModel> result = new List<CountryModel>();
+                foreach (Country country in countries)
                 {
-                    result.Add(objectToModelConvert(loan));
+                    result.Add(objectToModelConvert(country));
                 }
 
                 return new JsonResult(result)
@@ -47,16 +46,16 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // GET api/<LoanController>/5
+        // GET api/<CountryController>/5
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
             try
             {
-                Loan loan = loanDAL.Get(id);
-                if (loan != null)
+                Country country = countryDAL.Get(id);
+                if (country != null)
                 {
-                    return new JsonResult(objectToModelConvert(loan))
+                    return new JsonResult(objectToModelConvert(country))
                     {
                         StatusCode = (int)HttpStatusCode.OK
                     };
@@ -78,23 +77,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // POST api/<LoanController>
+        // POST api/<CountryController>
         [HttpPost]
-        public JsonResult Post([FromBody] LoanModel loan)
+        public JsonResult Post([FromBody] CountryModel country)
         {
             try
             {
-                bool result = loanDAL.Add(ModelToObjectConvert(loan));
+                bool result = countryDAL.Add(ModelToObjectConvert(country));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loan))
+                    return new JsonResult(ModelToObjectConvert(country))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error including Loan" })
+                    return new JsonResult(new { message = "Error including Country" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -109,23 +108,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // PUT api/<LoanController>/5
+        // PUT api/<CountryController>/5
         [HttpPut("{id}")]
-        public JsonResult Put(int id, [FromBody] LoanModel loan)
+        public JsonResult Put(int id, [FromBody] CountryModel country)
         {
             try
             {
-                bool result = loanDAL.Update(ModelToObjectConvert(loan));
+                bool result = countryDAL.Update(ModelToObjectConvert(country));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loan))
+                    return new JsonResult(ModelToObjectConvert(country))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error to Update Loan" })
+                    return new JsonResult(new { message = "Error to Update Country" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -140,17 +139,17 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // DELETE api/<LoanController>/5
+        // DELETE api/<CountryController>/5
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
             try
             {
-                Loan loan = new Loan()
+                Country country = new Country()
                 {
-                    IdLoan = id
+                    IdCountry = id
                 };
-                bool result = loanDAL.Remove(loan);
+                bool result = countryDAL.Remove(country);
                 if (result)
                 {
                     return new JsonResult(new { message = "The data is deleted" })
@@ -160,7 +159,7 @@ namespace BackEndAPI.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error to Delete Loan" })
+                    return new JsonResult(new { message = "Error to Delete Country" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -175,47 +174,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        private LoanModel objectToModelConvert(Loan loan)
+        private CountryModel objectToModelConvert(Country country)
         {
 
-            return new LoanModel
+            return new CountryModel
             {
-                IdLoan = loan.IdLoan,
-                Idcustomers = loan.IdLoan,
-                StarDate = loan.StarDate,
-                EndDate = loan.EndDate,
-                InteresRate = loan.InteresRate,
-                LoanAmount = loan.LoanAmount,
-                CurrentAmount = loan.CurrentAmount,
-                MonthlyAmount = loan.MonthlyAmount,
-                NextDueDate = loan.NextDueDate,
-                BankFees = loan.BankFees,
-                LoansDescription = loan.LoansDescription,
-                IdloansType = loan.IdloansType,
-                IdCurrencies = loan.IdCurrencies,
-                IdLoansState = loan.IdLoansState
+                IdCountry = country.IdCountry,
+                CountryName = country.CountryName
             };
         }
 
-        private Loan ModelToObjectConvert(LoanModel loanModel)
+        private Country ModelToObjectConvert(CountryModel countryModel)
         {
 
-            return new Loan
+            return new Country
             {
-                IdLoan = loanModel.IdLoan,
-                Idcustomers = loanModel.IdLoan,
-                StarDate = loanModel.StarDate,
-                EndDate = loanModel.EndDate,
-                InteresRate = loanModel.InteresRate,
-                LoanAmount = loanModel.LoanAmount,
-                CurrentAmount = loanModel.CurrentAmount,
-                MonthlyAmount = loanModel.MonthlyAmount,
-                NextDueDate = loanModel.NextDueDate,
-                BankFees = loanModel.BankFees,
-                LoansDescription = loanModel.LoansDescription,
-                IdloansType = loanModel.IdloansType,
-                IdCurrencies = loanModel.IdCurrencies,
-                IdLoansState = loanModel.IdLoansState
+                IdCountry = countryModel.IdCountry,
+                CountryName = countryModel.CountryName
             };
         }
     }

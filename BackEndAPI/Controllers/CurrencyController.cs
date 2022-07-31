@@ -10,27 +10,26 @@ namespace BackEndAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoanController : ControllerBase
+    public class CurrencyController : ControllerBase
     {
-        private ILoanDAL loanDAL;
+        private ICurrencyDAL currencyDAL;
 
-        public LoanController()
+        public CurrencyController()
         {
-            loanDAL = new LoanDALImpl();
+            currencyDAL = new CurrencyDALImpl();
         }
 
-
-        // GET: api/<LoanController>
+        // GET: api/<CurrencyController>
         [HttpGet]
         public JsonResult Get()
         {
             try
             {
-                List<Loan> loans = loanDAL.GetAll().ToList();
-                List<LoanModel> result = new List<LoanModel>();
-                foreach (Loan loan in loans)
+                List<Currency> currencies = currencyDAL.GetAll().ToList();
+                List<CurrencyModel> result = new List<CurrencyModel>();
+                foreach (Currency currency in currencies)
                 {
-                    result.Add(objectToModelConvert(loan));
+                    result.Add(objectToModelConvert(currency));
                 }
 
                 return new JsonResult(result)
@@ -47,16 +46,16 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // GET api/<LoanController>/5
+        // GET api/<CurrencyController>/5
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
             try
             {
-                Loan loan = loanDAL.Get(id);
-                if (loan != null)
+                Currency currency = currencyDAL.Get(id);
+                if (currency != null)
                 {
-                    return new JsonResult(objectToModelConvert(loan))
+                    return new JsonResult(objectToModelConvert(currency))
                     {
                         StatusCode = (int)HttpStatusCode.OK
                     };
@@ -78,23 +77,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // POST api/<LoanController>
+        // POST api/<CurrencyController>
         [HttpPost]
-        public JsonResult Post([FromBody] LoanModel loan)
+        public JsonResult Post([FromBody] CurrencyModel currency)
         {
             try
             {
-                bool result = loanDAL.Add(ModelToObjectConvert(loan));
+                bool result = currencyDAL.Add(ModelToObjectConvert(currency));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loan))
+                    return new JsonResult(ModelToObjectConvert(currency))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error including Loan" })
+                    return new JsonResult(new { message = "Error including Currency" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -109,23 +108,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // PUT api/<LoanController>/5
+        // PUT api/<CurrencyController>/5
         [HttpPut("{id}")]
-        public JsonResult Put(int id, [FromBody] LoanModel loan)
+        public JsonResult Put(int id, [FromBody] CurrencyModel currency)
         {
             try
             {
-                bool result = loanDAL.Update(ModelToObjectConvert(loan));
+                bool result = currencyDAL.Update(ModelToObjectConvert(currency));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loan))
+                    return new JsonResult(ModelToObjectConvert(currency))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error to Update Loan" })
+                    return new JsonResult(new { message = "Error to Update Currency" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -140,17 +139,17 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // DELETE api/<LoanController>/5
+        // DELETE api/<CurrencyController>/5
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
             try
             {
-                Loan loan = new Loan()
+                Currency currency = new Currency()
                 {
-                    IdLoan = id
+                    IdCurrencies = id
                 };
-                bool result = loanDAL.Remove(loan);
+                bool result = currencyDAL.Remove(currency);
                 if (result)
                 {
                     return new JsonResult(new { message = "The data is deleted" })
@@ -160,7 +159,7 @@ namespace BackEndAPI.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error to Delete Loan" })
+                    return new JsonResult(new { message = "Error to Delete Currency" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -175,47 +174,25 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        private LoanModel objectToModelConvert(Loan loan)
+        private CurrencyModel objectToModelConvert(Currency currency)
         {
 
-            return new LoanModel
+            return new CurrencyModel
             {
-                IdLoan = loan.IdLoan,
-                Idcustomers = loan.IdLoan,
-                StarDate = loan.StarDate,
-                EndDate = loan.EndDate,
-                InteresRate = loan.InteresRate,
-                LoanAmount = loan.LoanAmount,
-                CurrentAmount = loan.CurrentAmount,
-                MonthlyAmount = loan.MonthlyAmount,
-                NextDueDate = loan.NextDueDate,
-                BankFees = loan.BankFees,
-                LoansDescription = loan.LoansDescription,
-                IdloansType = loan.IdloansType,
-                IdCurrencies = loan.IdCurrencies,
-                IdLoansState = loan.IdLoansState
+                IdCurrencies = currency.IdCurrencies,
+                CurrencyName = currency.CurrencyName,
+                CurrencyIso = currency.CurrencyIso
             };
         }
 
-        private Loan ModelToObjectConvert(LoanModel loanModel)
+        private Currency ModelToObjectConvert(CurrencyModel currencyModel)
         {
 
-            return new Loan
+            return new Currency
             {
-                IdLoan = loanModel.IdLoan,
-                Idcustomers = loanModel.IdLoan,
-                StarDate = loanModel.StarDate,
-                EndDate = loanModel.EndDate,
-                InteresRate = loanModel.InteresRate,
-                LoanAmount = loanModel.LoanAmount,
-                CurrentAmount = loanModel.CurrentAmount,
-                MonthlyAmount = loanModel.MonthlyAmount,
-                NextDueDate = loanModel.NextDueDate,
-                BankFees = loanModel.BankFees,
-                LoansDescription = loanModel.LoansDescription,
-                IdloansType = loanModel.IdloansType,
-                IdCurrencies = loanModel.IdCurrencies,
-                IdLoansState = loanModel.IdLoansState
+                IdCurrencies = currencyModel.IdCurrencies,
+                CurrencyName = currencyModel.CurrencyName,
+                CurrencyIso = currencyModel.CurrencyIso
             };
         }
     }

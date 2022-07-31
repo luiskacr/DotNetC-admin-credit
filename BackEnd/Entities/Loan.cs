@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BackEnd.Entities
 {
@@ -7,45 +11,82 @@ namespace BackEnd.Entities
     {
         public Loan()
         {
-            CustomOrderList_01customOrderPositionNavigations = new HashSet<CustomOrderList>();
-            CustomOrderList_02customOrderPositionNavigations = new HashSet<CustomOrderList>();
-            CustomOrderList_03customOrderPositionNavigations = new HashSet<CustomOrderList>();
-            CustomOrderList_04customOrderPositionNavigations = new HashSet<CustomOrderList>();
-            CustomOrderList_05customOrderPositionNavigations = new HashSet<CustomOrderList>();
-            CustomOrderList_06customOrderPositionNavigations = new HashSet<CustomOrderList>();
-            CustomOrderList_07customOrderPositionNavigations = new HashSet<CustomOrderList>();
-            CustomOrderList_08customOrderPositionNavigations = new HashSet<CustomOrderList>();
-            CustomOrderList_09customOrderPositionNavigations = new HashSet<CustomOrderList>();
-            CustomOrderList_10customOrderPositionNavigations = new HashSet<CustomOrderList>();
-            PaymentHistories = new HashSet<PaymentHistory>();
+            LoansHistories = new HashSet<LoansHistory>();
         }
 
-        public int LoansId { get; set; }
-        public int UserId { get; set; }
-        public int CorrencyId { get; set; }
-        public int LoansStatesId { get; set; }
-        public string Description { get; set; } = null!;
-        public decimal LoanAmount { get; set; }
-        public decimal MontlyPayment { get; set; }
-        public DateTime StartDate { get; set; }
+        [Key]
+        public int IdLoan { get; set; }
+
+        [DisplayName("Id customers")]
+        [ForeignKey("IdCustomers")]
+        public int Idcustomers { get; set; }
+
+        [DisplayName("Star Date")]
+        [DataType(DataType.DateTime)]
+        [Required(ErrorMessage = "A Star Date is required")]
+        public DateTime StarDate { get; set; }
+
+        [DisplayName("End Date")]
+        [DataType(DataType.DateTime)]
+        [Required(ErrorMessage = "A End Date is required")]
         public DateTime EndDate { get; set; }
-        public double InterestRate { get; set; }
-        public decimal BankFees { get; set; }
+
+        [DisplayName("Interes Rate")]
+        [Range(0, 99.99)]
+        [Required(ErrorMessage = "An Interes Rate is required")]
+        public decimal InteresRate { get; set; }
+
+        [DisplayName("Loan Amount")]
+        [Range(1, 9999999)]
+        [DataType(DataType.Currency)]
+        [Required(ErrorMessage = "A Loan Amount is required")]
+        public decimal LoanAmount { get; set; }
+
+        [DisplayName("Current Amount")]
+        [Range(1, 9999999.99)]
+        [DataType(DataType.Currency)]
+        [Required(ErrorMessage = "A Current Amount is required")]
+        public decimal? CurrentAmount { get; set; }
+
+        [DisplayName("Monthly Amount")]
+        [Range(1, 9999999.99)]
+        [DataType(DataType.Currency)]
+        [Required(ErrorMessage = "A Monthly Amount is required")]
+        public decimal MonthlyAmount { get; set; }
+
+        [DisplayName("Next Due Date")]
+        [DataType(DataType.DateTime)]
+        [Required(ErrorMessage = "A Next Due Date is required")]
         public DateTime NextDueDate { get; set; }
 
-        public virtual Corrency Corrency { get; set; } = null!;
-        public virtual LoansState LoansStates { get; set; } = null!;
-        public virtual User User { get; set; } = null!;
-        public virtual ICollection<CustomOrderList> CustomOrderList_01customOrderPositionNavigations { get; set; }
-        public virtual ICollection<CustomOrderList> CustomOrderList_02customOrderPositionNavigations { get; set; }
-        public virtual ICollection<CustomOrderList> CustomOrderList_03customOrderPositionNavigations { get; set; }
-        public virtual ICollection<CustomOrderList> CustomOrderList_04customOrderPositionNavigations { get; set; }
-        public virtual ICollection<CustomOrderList> CustomOrderList_05customOrderPositionNavigations { get; set; }
-        public virtual ICollection<CustomOrderList> CustomOrderList_06customOrderPositionNavigations { get; set; }
-        public virtual ICollection<CustomOrderList> CustomOrderList_07customOrderPositionNavigations { get; set; }
-        public virtual ICollection<CustomOrderList> CustomOrderList_08customOrderPositionNavigations { get; set; }
-        public virtual ICollection<CustomOrderList> CustomOrderList_09customOrderPositionNavigations { get; set; }
-        public virtual ICollection<CustomOrderList> CustomOrderList_10customOrderPositionNavigations { get; set; }
-        public virtual ICollection<PaymentHistory> PaymentHistories { get; set; }
+        [DisplayName("Bank Fees")]
+        [Range(1, 9999999.99)]
+        [DataType(DataType.Currency)]
+        [Required(ErrorMessage = "A Bank Fees is required")]
+        public decimal BankFees { get; set; }
+
+        [DisplayName("Loans Description")]
+        public string? LoansDescription { get; set; }
+
+        [ForeignKey("IdloansType")]
+        [DisplayName("Id Loans Type")]
+        [Required(ErrorMessage = "An Id Loans Type is required")]
+        public int IdloansType { get; set; }
+
+        [ForeignKey("IdCurrencies")]
+        [DisplayName("Id Currencies")]
+        [Required(ErrorMessage = "An Id Currencies is required")]
+        public int IdCurrencies { get; set; }
+
+        [ForeignKey("IdLoansState")]
+        [DisplayName("Id Loans State")]
+        [Required(ErrorMessage = "An Loans State is required")]
+        public int IdLoansState { get; set; }
+
+        public virtual Currency IdCurrenciesNavigation { get; set; } = null!;
+        public virtual LoansState IdLoansStateNavigation { get; set; } = null!;
+        public virtual Customer IdcustomersNavigation { get; set; } = null!;
+        public virtual LoansType IdloansTypeNavigation { get; set; } = null!;
+        public virtual ICollection<LoansHistory> LoansHistories { get; set; }
     }
 }

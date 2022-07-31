@@ -1,26 +1,29 @@
-﻿using BackEnd.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using BackEnd.Entities;
 
 namespace BackEnd.DAL
 {
-    public class UserRoleDALImpl : IUserRoleDAL
+    public  class UserRolesDALImpl : IUserRolesDAL 
     {
-        ProyectoCreditosContext context;
 
-        public UserRoleDALImpl()
+        proyectoCreditosContext context;
+
+        public UserRolesDALImpl()
         {
-            context = new ProyectoCreditosContext();
+            context = new proyectoCreditosContext();
         }
 
         public bool Add(UserRole entity)
         {
             try
             {
+                //Business Logic
+
                 using (UnidadDeTrabajo<UserRole> unidad = new UnidadDeTrabajo<UserRole>(context))
                 {
                     unidad.genericDAL.Add(entity);
@@ -29,47 +32,20 @@ namespace BackEnd.DAL
             }
             catch (Exception)
             {
-                throw;
+                return false;
             }
         }
 
-        public void AddRange(IEnumerable<UserRole> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<UserRole> Find(Expression<Func<UserRole, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public UserRole Get(int id)
+        public UserRole Get(int UserRoleId)
         {
             try
             {
-                UserRole userRoleList;
+                UserRole userRole;
                 using (UnidadDeTrabajo<UserRole> unidad = new UnidadDeTrabajo<UserRole>(context))
                 {
-                    userRoleList = unidad.genericDAL.Get(id);
+                    userRole = unidad.genericDAL.Get(UserRoleId);
                 }
-                return userRoleList;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        List<UserRole> Get()
-        {
-            try
-            {
-                IEnumerable<UserRole> userRoleList;
-                using (UnidadDeTrabajo<UserRole> unidad = new UnidadDeTrabajo<UserRole>(context))
-                {
-                    userRoleList = unidad.genericDAL.GetAll();
-                }
-                return userRoleList.ToList();
+                return userRole;
             }
             catch (Exception)
             {
@@ -81,12 +57,12 @@ namespace BackEnd.DAL
         {
             try
             {
-                IEnumerable<UserRole> userRoleList;
+                IEnumerable<UserRole> userRoles;
                 using (UnidadDeTrabajo<UserRole> unidad = new UnidadDeTrabajo<UserRole>(context))
                 {
-                    userRoleList = unidad.genericDAL.GetAll();
+                    userRoles = unidad.genericDAL.GetAll();
                 }
-                return userRoleList;
+                return userRoles.ToList();
             }
             catch (Exception)
             {
@@ -112,16 +88,6 @@ namespace BackEnd.DAL
             return result;
         }
 
-        public void RemoveRange(IEnumerable<UserRole> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        public UserRole SingleOrDefault(Expression<Func<UserRole, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool Update(UserRole entity)
         {
             bool result = false;
@@ -135,9 +101,31 @@ namespace BackEnd.DAL
             }
             catch (Exception)
             {
-                result = false;
+                return false;
             }
             return result;
+        }
+
+        //Other Opctions Not Used
+
+        public void AddRange(IEnumerable<UserRole> entities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<UserRole> Find(Expression<Func<UserRole, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveRange(IEnumerable<UserRole> entities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public UserRole SingleOrDefault(Expression<Func<UserRole, bool>> predicate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

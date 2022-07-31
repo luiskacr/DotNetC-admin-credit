@@ -8,22 +8,22 @@ using BackEnd.Entities;
 
 namespace BackEnd.DAL
 {
-    public class UserDALImpl : IUserDAL
+    public class LoansHistoryDALImpl : ILoansHistoryDAL
     {
         proyectoCreditosContext context;
 
-        public UserDALImpl()
+        public LoansHistoryDALImpl()
         {
             context = new proyectoCreditosContext();
         }
 
-        public bool Add(User entity)
+        public bool Add(LoansHistory entity)
         {
             try
             {
                 //Business Logic
 
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                using (UnidadDeTrabajo<LoansHistory> unidad = new UnidadDeTrabajo<LoansHistory>(context))
                 {
                     unidad.genericDAL.Add(entity);
                     return unidad.Complete();
@@ -35,16 +35,16 @@ namespace BackEnd.DAL
             }
         }
 
-        public User Get(int userId)
+        public LoansHistory Get(int loansHistoryId)
         {
             try
             {
-                User user;
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                LoansHistory loansHistory;
+                using (UnidadDeTrabajo<LoansHistory> unidad = new UnidadDeTrabajo<LoansHistory>(context))
                 {
-                    user = unidad.genericDAL.Get(userId);
+                    loansHistory = unidad.genericDAL.Get(loansHistoryId);
                 }
-                return user;
+                return loansHistory;
             }
             catch (Exception)
             {
@@ -52,16 +52,16 @@ namespace BackEnd.DAL
             }
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<LoansHistory> GetAll()
         {
             try
             {
-                IEnumerable<User> countries;
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                IEnumerable<LoansHistory> loansHistories;
+                using (UnidadDeTrabajo<LoansHistory> unidad = new UnidadDeTrabajo<LoansHistory>(context))
                 {
-                    countries = unidad.genericDAL.GetAll();
+                    loansHistories = unidad.genericDAL.GetAll();
                 }
-                return countries.ToList();
+                return loansHistories.ToList();
             }
             catch (Exception)
             {
@@ -69,12 +69,12 @@ namespace BackEnd.DAL
             }
         }
 
-        public bool Remove(User entity)
+        public bool Remove(LoansHistory entity)
         {
             bool result = false;
             try
             {
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                using (UnidadDeTrabajo<LoansHistory> unidad = new UnidadDeTrabajo<LoansHistory>(context))
                 {
                     unidad.genericDAL.Remove(entity);
                     result = unidad.Complete();
@@ -87,12 +87,12 @@ namespace BackEnd.DAL
             return result;
         }
 
-        public bool Update(User entity)
+        public bool Update(LoansHistory entity)
         {
             bool result = false;
             try
             {
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                using (UnidadDeTrabajo<LoansHistory> unidad = new UnidadDeTrabajo<LoansHistory>(context))
                 {
                     unidad.genericDAL.Update(entity);
                     result = unidad.Complete();
@@ -107,22 +107,22 @@ namespace BackEnd.DAL
 
         //Other Opctions Not Used
 
-        public void AddRange(IEnumerable<User> entities)
+        public void AddRange(IEnumerable<LoansHistory> entities)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> Find(Expression<Func<User, bool>> predicate)
+        public IEnumerable<LoansHistory> Find(Expression<Func<LoansHistory, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(IEnumerable<User> entities)
+        public void RemoveRange(IEnumerable<LoansHistory> entities)
         {
             throw new NotImplementedException();
         }
 
-        public User SingleOrDefault(Expression<Func<User, bool>> predicate)
+        public LoansHistory SingleOrDefault(Expression<Func<LoansHistory, bool>> predicate)
         {
             throw new NotImplementedException();
         }
