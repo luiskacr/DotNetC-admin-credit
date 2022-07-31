@@ -10,27 +10,25 @@ namespace BackEndAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoanController : ControllerBase
+    public class LoansHistoryController : ControllerBase
     {
-        private ILoanDAL loanDAL;
+        private ILoansHistoryDAL loansHistoryDAL;
 
-        public LoanController()
-        {
-            loanDAL = new LoanDALImpl();
+        public LoansHistoryController() {
+            loansHistoryDAL = new LoansHistoryDALImpl();
         }
 
-
-        // GET: api/<LoanController>
+        // GET: api/<LoansHistoryController>
         [HttpGet]
         public JsonResult Get()
         {
             try
             {
-                List<Loan> loans = loanDAL.GetAll().ToList();
-                List<LoanModel> result = new List<LoanModel>();
-                foreach (Loan loan in loans)
+                List<LoansHistory> loansHistories = loansHistoryDAL.GetAll().ToList();
+                List<LoanHistoryModel> result = new List<LoanHistoryModel>();
+                foreach (LoansHistory loansHistory in loansHistories)
                 {
-                    result.Add(objectToModelConvert(loan));
+                    result.Add(objectToModelConvert(loansHistory));
                 }
 
                 return new JsonResult(result)
@@ -47,16 +45,16 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // GET api/<LoanController>/5
+        // GET api/<LoansHistoryController>/5
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
             try
             {
-                Loan loan = loanDAL.Get(id);
-                if (loan != null)
+                LoansHistory loansHistory = loansHistoryDAL.Get(id);
+                if (loansHistory != null)
                 {
-                    return new JsonResult(objectToModelConvert(loan))
+                    return new JsonResult(objectToModelConvert(loansHistory))
                     {
                         StatusCode = (int)HttpStatusCode.OK
                     };
@@ -78,23 +76,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // POST api/<LoanController>
+        // POST api/<LoansHistoryController>
         [HttpPost]
-        public JsonResult Post([FromBody] LoanModel loan)
+        public JsonResult Post([FromBody] LoanHistoryModel loanHistory)
         {
             try
             {
-                bool result = loanDAL.Add(ModelToObjectConvert(loan));
+                bool result = loansHistoryDAL.Add(ModelToObjectConvert(loanHistory));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loan))
+                    return new JsonResult(ModelToObjectConvert(loanHistory))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error including Loan" })
+                    return new JsonResult(new { message = "Error including Loan History" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -109,23 +107,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // PUT api/<LoanController>/5
+        // PUT api/<LoansHistoryController>/5
         [HttpPut("{id}")]
-        public JsonResult Put(int id, [FromBody] LoanModel loan)
+        public JsonResult Put(int id, [FromBody] LoanHistoryModel loanHistory)
         {
             try
             {
-                bool result = loanDAL.Update(ModelToObjectConvert(loan));
+                bool result = loansHistoryDAL.Update(ModelToObjectConvert(loanHistory));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loan))
+                    return new JsonResult(ModelToObjectConvert(loanHistory))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error to Update Loan" })
+                    return new JsonResult(new { message = "Error to Update Loan History" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -140,17 +138,17 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // DELETE api/<LoanController>/5
+        // DELETE api/<LoansHistoryController>/5
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
             try
             {
-                Loan loan = new Loan()
+                LoansHistory loansHistory = new LoansHistory()
                 {
-                    IdLoan = id
+                    IdLoansHistory = id
                 };
-                bool result = loanDAL.Remove(loan);
+                bool result = loansHistoryDAL.Remove(loansHistory);
                 if (result)
                 {
                     return new JsonResult(new { message = "The data is deleted" })
@@ -160,7 +158,7 @@ namespace BackEndAPI.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error to Delete Loan" })
+                    return new JsonResult(new { message = "Error to Delete Loans History" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -175,47 +173,29 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        private LoanModel objectToModelConvert(Loan loan)
+        private LoanHistoryModel objectToModelConvert(LoansHistory loansHistory)
         {
 
-            return new LoanModel
+            return new LoanHistoryModel
             {
-                IdLoan = loan.IdLoan,
-                Idcustomers = loan.IdLoan,
-                StarDate = loan.StarDate,
-                EndDate = loan.EndDate,
-                InteresRate = loan.InteresRate,
-                LoanAmount = loan.LoanAmount,
-                CurrentAmount = loan.CurrentAmount,
-                MonthlyAmount = loan.MonthlyAmount,
-                NextDueDate = loan.NextDueDate,
-                BankFees = loan.BankFees,
-                LoansDescription = loan.LoansDescription,
-                IdloansType = loan.IdloansType,
-                IdCurrencies = loan.IdCurrencies,
-                IdLoansState = loan.IdLoansState
+                IdLoansHistory = loansHistory.IdLoansHistory,
+                LoadId = loansHistory.LoadId,
+                PaymentAmount = loansHistory.PaymentAmount,
+                PayDate = loansHistory.PayDate,
+                PaymentType = loansHistory.PaymentType
             };
         }
 
-        private Loan ModelToObjectConvert(LoanModel loanModel)
+        private LoansHistory ModelToObjectConvert(LoanHistoryModel loanHistoryModel)
         {
 
-            return new Loan
+            return new LoansHistory
             {
-                IdLoan = loanModel.IdLoan,
-                Idcustomers = loanModel.IdLoan,
-                StarDate = loanModel.StarDate,
-                EndDate = loanModel.EndDate,
-                InteresRate = loanModel.InteresRate,
-                LoanAmount = loanModel.LoanAmount,
-                CurrentAmount = loanModel.CurrentAmount,
-                MonthlyAmount = loanModel.MonthlyAmount,
-                NextDueDate = loanModel.NextDueDate,
-                BankFees = loanModel.BankFees,
-                LoansDescription = loanModel.LoansDescription,
-                IdloansType = loanModel.IdloansType,
-                IdCurrencies = loanModel.IdCurrencies,
-                IdLoansState = loanModel.IdLoansState
+                IdLoansHistory = loanHistoryModel.IdLoansHistory,
+                LoadId = loanHistoryModel.LoadId,
+                PaymentAmount = loanHistoryModel.PaymentAmount,
+                PayDate = loanHistoryModel.PayDate,
+                PaymentType = loanHistoryModel.PaymentType
             };
         }
     }

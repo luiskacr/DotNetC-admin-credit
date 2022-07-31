@@ -5,19 +5,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BackEnd.Entities
 {
-    public partial class LoansState
+    public partial class LoansType
     {
-        public LoansState()
+        public LoansType()
         {
             Loans = new HashSet<Loan>();
         }
 
         [Key]
-        public int LoansStatesId { get; set; }
+        public int IdloansType { get; set; }
 
-        [DisplayName("Loans State Name")]
-        [Required(ErrorMessage = "A Loans State Name is required")]
-        public string LoansStateName { get; set; } = null!;
+        [DisplayName("Loans Type Name")]
+        [Required(ErrorMessage = "A Loans Type Name is required")]
+        public string LoansTypeName { get; set; } = null!;
 
         public virtual ICollection<Loan> Loans { get; set; }
     }

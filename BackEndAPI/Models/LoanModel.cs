@@ -1,72 +1,79 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace BackEndAPI.Models
 {
     public class LoanModel
     {
-
         [Key]
-        public int LoansId { get; set; }
+        public int IdLoan { get; set; }
 
-        [Required(ErrorMessage = "UserId is required")]
-        [Display(Name = "")]
-        public int UserId { get; set; }
+        [DisplayName("Id customers")]
+        [ForeignKey("IdCustomers")]
+        public int Idcustomers { get; set; }
 
-        [Required(ErrorMessage = "CorrencyId  is required")]
-        [Display(Name = "")]
-        public int CorrencyId { get; set; }
+        [DisplayName("Star Date")]
+        [DataType(DataType.DateTime)]
+        [Required(ErrorMessage = "A Star Date is required")]
+        public DateTime StarDate { get; set; }
 
-        [Required(ErrorMessage = "LoansStatesID is required")]
-        [Display(Name = "")]
-        public int LoansStatesId { get; set; }
-
-        [Required(ErrorMessage = "Descripcion is required")]
-        [Display(Name = "Descripcion")]
-        public string Description { get; set; } = null!;
-
-        [Required(ErrorMessage = "LoanAmount is required")]
-        [Display(Name = "Loan Amount")]
-        public decimal LoanAmount { get; set; }
-
-        [Required(ErrorMessage = "MontlyPayment is required")]
-        [Display(Name = "MontlyPayment")]
-        public decimal MontlyPayment { get; set; }
-
-        [Required]
-        [Display(Name = "StartDate")]
-        public DateTime StartDate { get; set; }
-
-        [Required]
-        [Display(Name = "EndDate")]
+        [DisplayName("End Date")]
+        [DataType(DataType.DateTime)]
+        [Required(ErrorMessage = "A End Date is required")]
         public DateTime EndDate { get; set; }
 
-        [Required(ErrorMessage = "InterestRate is required")]
-        [Display(Name = "InterestRate")]
-        public double InterestRate { get; set; }
+        [DisplayName("Interes Rate")]
+        [Range(0, 99.99)]
+        [Required(ErrorMessage = "An Interes Rate is required")]
+        public decimal InteresRate { get; set; }
 
-        [Required(ErrorMessage = "BankFees is required")]
-        [Display(Name = "BankFees")]
-        public decimal BankFees { get; set; }
+        [DisplayName("Loan Amount")]
+        [Range(1, 9999999)]
+        [DataType(DataType.Currency)]
+        [Required(ErrorMessage = "A Loan Amount is required")]
+        public decimal LoanAmount { get; set; }
 
-        [Required]
-        [Display(Name = "NextDueDate")]
+        [DisplayName("Current Amount")]
+        [Range(1, 9999999.99)]
+        [DataType(DataType.Currency)]
+        [Required(ErrorMessage = "A Current Amount is required")]
+        public decimal? CurrentAmount { get; set; }
+
+        [DisplayName("Monthly Amount")]
+        [Range(1, 9999999.99)]
+        [DataType(DataType.Currency)]
+        [Required(ErrorMessage = "A Monthly Amount is required")]
+        public decimal MonthlyAmount { get; set; }
+
+        [DisplayName("Next Due Date")]
+        [DataType(DataType.DateTime)]
+        [Required(ErrorMessage = "A Next Due Date is required")]
         public DateTime NextDueDate { get; set; }
 
+        [DisplayName("Bank Fees")]
+        [Range(1, 9999999.99)]
+        [DataType(DataType.Currency)]
+        [Required(ErrorMessage = "A Bank Fees is required")]
+        public decimal BankFees { get; set; }
 
+        [DisplayName("Loans Description")]
+        public string? LoansDescription { get; set; }
 
-        // public virtual Corrency Corrency { get; set; } = null!;
-        // public virtual LoansState LoansStates { get; set; } = null!;
-        //  public virtual User User { get; set; } = null!;
-        // public virtual ICollection<CustomOrderList> CustomOrderList_01customOrderPositionNavigations { get; set; }
-        //  public virtual ICollection<CustomOrderList> CustomOrderList_02customOrderPositionNavigations { get; set; }
-        // public virtual ICollection<CustomOrderList> CustomOrderList_03customOrderPositionNavigations { get; set; }
-        // public virtual ICollection<CustomOrderList> CustomOrderList_04customOrderPositionNavigations { get; set; }
-        //  public virtual ICollection<CustomOrderList> CustomOrderList_05customOrderPositionNavigations { get; set; }
-        // public virtual ICollection<CustomOrderList> CustomOrderList_06customOrderPositionNavigations { get; set; }
-        // public virtual ICollection<CustomOrderList> CustomOrderList_07customOrderPositionNavigations { get; set; }
-        // public virtual ICollection<CustomOrderList> CustomOrderList_08customOrderPositionNavigations { get; set; }
-        // public virtual ICollection<CustomOrderList> CustomOrderList_09customOrderPositionNavigations { get; set; }
-        // public virtual ICollection<CustomOrderList> CustomOrderList_10customOrderPositionNavigations { get; set; }
-        // public virtual ICollection<PaymentHistory> PaymentHistories { get; set; }
+        [ForeignKey("IdloansType")]
+        [DisplayName("Id Loans Type")]
+        [Required(ErrorMessage = "An Id Loans Type is required")]
+        public int IdloansType { get; set; }
+
+        [ForeignKey("IdCurrencies")]
+        [DisplayName("Id Currencies")]
+        [Required(ErrorMessage = "An Id Currencies is required")]
+        public int IdCurrencies { get; set; }
+
+        [ForeignKey("IdLoansState")]
+        [DisplayName("Id Loans State")]
+        [Required(ErrorMessage = "An Loans State is required")]
+        public int IdLoansState { get; set; }
     }
 }

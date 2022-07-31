@@ -7,13 +7,13 @@ namespace BackEnd.DAL
 {
     public class UnidadDeTrabajo<T> : IDisposable where T : class
     {
-        private readonly ProyectoCreditosContext context;
+        private readonly proyectoCreditosContext context;
         //public IDALGenerico<Queja> quejaDAL;
         //public IDALGenerico<TablaGeneral> tablaDAL;
         public IDALGenerico<T> genericDAL;
 
 
-        public UnidadDeTrabajo(ProyectoCreditosContext _context)
+        public UnidadDeTrabajo(proyectoCreditosContext _context)
         {
             context = _context;
             genericDAL = new DALGenericoImpl<T>(context);

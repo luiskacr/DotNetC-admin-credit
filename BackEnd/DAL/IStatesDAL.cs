@@ -1,15 +1,13 @@
-﻿using BackEnd.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BackEnd.Entities;
 
 namespace BackEnd.DAL
 {
-    public interface IPaymentHistoryDAL : IDALGenerico<PaymentHistory>
+    public interface IStatesDAL: IDALGenerico<State>
     {
-
     }
 }
-

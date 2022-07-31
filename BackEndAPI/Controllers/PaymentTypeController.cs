@@ -10,27 +10,26 @@ namespace BackEndAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoanController : ControllerBase
+    public class PaymentTypeController : ControllerBase
     {
-        private ILoanDAL loanDAL;
+        private IPaymentTypeDAL paymentTypeDAL;
 
-        public LoanController()
+        public PaymentTypeController()
         {
-            loanDAL = new LoanDALImpl();
+            paymentTypeDAL = new PaymentTypeDALImpl();
         }
 
-
-        // GET: api/<LoanController>
+        // GET: api/<PaymentTypeController>
         [HttpGet]
         public JsonResult Get()
         {
             try
             {
-                List<Loan> loans = loanDAL.GetAll().ToList();
-                List<LoanModel> result = new List<LoanModel>();
-                foreach (Loan loan in loans)
+                List<PaymentType> paymentTypes = paymentTypeDAL.GetAll().ToList();
+                List<PaymentTypeModel> result = new List<PaymentTypeModel>();
+                foreach (PaymentType paymentType in paymentTypes)
                 {
-                    result.Add(objectToModelConvert(loan));
+                    result.Add(objectToModelConvert(paymentType));
                 }
 
                 return new JsonResult(result)
@@ -47,16 +46,16 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // GET api/<LoanController>/5
+        // GET api/<PaymentTypeController>/5
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
             try
             {
-                Loan loan = loanDAL.Get(id);
-                if (loan != null)
+                PaymentType paymentType = paymentTypeDAL.Get(id);
+                if (paymentType != null)
                 {
-                    return new JsonResult(objectToModelConvert(loan))
+                    return new JsonResult(objectToModelConvert(paymentType))
                     {
                         StatusCode = (int)HttpStatusCode.OK
                     };
@@ -78,23 +77,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // POST api/<LoanController>
+        // POST api/<PaymentTypeController>
         [HttpPost]
-        public JsonResult Post([FromBody] LoanModel loan)
+        public JsonResult Post([FromBody] PaymentTypeModel paymentType)
         {
             try
             {
-                bool result = loanDAL.Add(ModelToObjectConvert(loan));
+                bool result = paymentTypeDAL.Add(ModelToObjectConvert(paymentType));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loan))
+                    return new JsonResult(ModelToObjectConvert(paymentType))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error including Loan" })
+                    return new JsonResult(new { message = "Error including Payment Type" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -109,23 +108,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // PUT api/<LoanController>/5
+        // PUT api/<PaymentTypeController>/5
         [HttpPut("{id}")]
-        public JsonResult Put(int id, [FromBody] LoanModel loan)
+        public JsonResult Put(int id, [FromBody] PaymentTypeModel paymentType)
         {
             try
             {
-                bool result = loanDAL.Update(ModelToObjectConvert(loan));
+                bool result = paymentTypeDAL.Update(ModelToObjectConvert(paymentType));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loan))
+                    return new JsonResult(ModelToObjectConvert(paymentType))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error to Update Loan" })
+                    return new JsonResult(new { message = "Error to Update Payment Type" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -140,17 +139,17 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // DELETE api/<LoanController>/5
+        // DELETE api/<PaymentTypeController>/5
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
             try
             {
-                Loan loan = new Loan()
+                PaymentType paymentType = new PaymentType()
                 {
-                    IdLoan = id
+                    IdPaymentType = id
                 };
-                bool result = loanDAL.Remove(loan);
+                bool result = paymentTypeDAL.Remove(paymentType);
                 if (result)
                 {
                     return new JsonResult(new { message = "The data is deleted" })
@@ -160,7 +159,7 @@ namespace BackEndAPI.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error to Delete Loan" })
+                    return new JsonResult(new { message = "Error to Delete Country" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -175,47 +174,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        private LoanModel objectToModelConvert(Loan loan)
+        private PaymentTypeModel objectToModelConvert(PaymentType paymentType)
         {
 
-            return new LoanModel
+            return new PaymentTypeModel
             {
-                IdLoan = loan.IdLoan,
-                Idcustomers = loan.IdLoan,
-                StarDate = loan.StarDate,
-                EndDate = loan.EndDate,
-                InteresRate = loan.InteresRate,
-                LoanAmount = loan.LoanAmount,
-                CurrentAmount = loan.CurrentAmount,
-                MonthlyAmount = loan.MonthlyAmount,
-                NextDueDate = loan.NextDueDate,
-                BankFees = loan.BankFees,
-                LoansDescription = loan.LoansDescription,
-                IdloansType = loan.IdloansType,
-                IdCurrencies = loan.IdCurrencies,
-                IdLoansState = loan.IdLoansState
+                IdPaymentType = paymentType.IdPaymentType,
+                PaymentTypeName = paymentType.PaymentTypeName
             };
         }
 
-        private Loan ModelToObjectConvert(LoanModel loanModel)
+        private PaymentType ModelToObjectConvert(PaymentTypeModel paymentTypeModel)
         {
 
-            return new Loan
+            return new PaymentType
             {
-                IdLoan = loanModel.IdLoan,
-                Idcustomers = loanModel.IdLoan,
-                StarDate = loanModel.StarDate,
-                EndDate = loanModel.EndDate,
-                InteresRate = loanModel.InteresRate,
-                LoanAmount = loanModel.LoanAmount,
-                CurrentAmount = loanModel.CurrentAmount,
-                MonthlyAmount = loanModel.MonthlyAmount,
-                NextDueDate = loanModel.NextDueDate,
-                BankFees = loanModel.BankFees,
-                LoansDescription = loanModel.LoansDescription,
-                IdloansType = loanModel.IdloansType,
-                IdCurrencies = loanModel.IdCurrencies,
-                IdLoansState = loanModel.IdLoansState
+                IdPaymentType = paymentTypeModel.IdPaymentType,
+                PaymentTypeName = paymentTypeModel.PaymentTypeName
             };
         }
     }

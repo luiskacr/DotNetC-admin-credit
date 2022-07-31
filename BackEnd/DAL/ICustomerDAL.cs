@@ -7,7 +7,7 @@ using BackEnd.Entities;
 
 namespace BackEnd.DAL
 {
-    internal interface ICustomOrdenListDAL:  IDALGenerico<CustomOrderList>
+    public interface  ICustomerDAL: IDALGenerico<Customer>
     {
     }
 }

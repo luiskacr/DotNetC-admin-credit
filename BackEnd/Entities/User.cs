@@ -1,29 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BackEnd.Entities
 {
     public partial class User
     {
-        public User()
-        {
-            DebtSnowballs = new HashSet<DebtSnowball>();
-            Loans = new HashSet<Loan>();
-        }
+        [Key]
+        public int IdUser { get; set; }
 
-        public int UserId { get; set; }
-        public int UserRoles { get; set; }
-        public string FirstName { get; set; } = null!;
-        public string LastName { get; set; } = null!;
-        public string Telephone { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public string Paassword { get; set; } = null!;
-        public DateTime BirthDay { get; set; }
-        public int DocumentId { get; set; }
-        public string Adddress { get; set; } = null!;
+        [DisplayName("User Name")]
+        [Required(ErrorMessage = "An User Name is required")]
+        public string UserName { get; set; } = null!;
 
-        public virtual UserRole UserRolesNavigation { get; set; } = null!;
-        public virtual ICollection<DebtSnowball> DebtSnowballs { get; set; }
-        public virtual ICollection<Loan> Loans { get; set; }
+        [DisplayName("User Password")]
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "An User Password is required")]
+        public string UserPassword { get; set; } = null!;
+
+        [DisplayName("User Role")]
+        [Required(ErrorMessage = "An User Role is required")]
+        [ForeignKey("IdUserRole")]
+        public int UserRole { get; set; }
+
+        [DisplayName("User Customers")]
+        [ForeignKey("IdCustomers")]
+        public int? IdCustomers { get; set; }
+
+        public virtual Customer? IdCustomersNavigation { get; set; }
+        public virtual UserRole UserRoleNavigation { get; set; } = null!;
     }
 }

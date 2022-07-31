@@ -7,7 +7,7 @@ using BackEnd.Entities;
 
 namespace BackEnd.DAL
 {
-    public  interface ILoanDAL : IDALGenerico<Loan>
+    public interface IPaymentTypeDAL : IDALGenerico<PaymentType>
     {
     }
 }

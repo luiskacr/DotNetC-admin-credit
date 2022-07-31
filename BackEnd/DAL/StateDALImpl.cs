@@ -8,22 +8,22 @@ using BackEnd.Entities;
 
 namespace BackEnd.DAL
 {
-    public class UserDALImpl : IUserDAL
+    public class StateDALImpl : IStatesDAL
     {
         proyectoCreditosContext context;
 
-        public UserDALImpl()
+        public StateDALImpl()
         {
             context = new proyectoCreditosContext();
         }
 
-        public bool Add(User entity)
+        public bool Add(State entity)
         {
             try
             {
                 //Business Logic
 
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                using (UnidadDeTrabajo<State> unidad = new UnidadDeTrabajo<State>(context))
                 {
                     unidad.genericDAL.Add(entity);
                     return unidad.Complete();
@@ -35,16 +35,16 @@ namespace BackEnd.DAL
             }
         }
 
-        public User Get(int userId)
+        public State Get(int stateId)
         {
             try
             {
-                User user;
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                State state;
+                using (UnidadDeTrabajo<State> unidad = new UnidadDeTrabajo<State>(context))
                 {
-                    user = unidad.genericDAL.Get(userId);
+                    state = unidad.genericDAL.Get(stateId);
                 }
-                return user;
+                return state;
             }
             catch (Exception)
             {
@@ -52,16 +52,16 @@ namespace BackEnd.DAL
             }
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<State> GetAll()
         {
             try
             {
-                IEnumerable<User> countries;
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                IEnumerable<State> states;
+                using (UnidadDeTrabajo<State> unidad = new UnidadDeTrabajo<State>(context))
                 {
-                    countries = unidad.genericDAL.GetAll();
+                    states = unidad.genericDAL.GetAll();
                 }
-                return countries.ToList();
+                return states.ToList();
             }
             catch (Exception)
             {
@@ -69,12 +69,12 @@ namespace BackEnd.DAL
             }
         }
 
-        public bool Remove(User entity)
+        public bool Remove(State entity)
         {
             bool result = false;
             try
             {
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                using (UnidadDeTrabajo<State> unidad = new UnidadDeTrabajo<State>(context))
                 {
                     unidad.genericDAL.Remove(entity);
                     result = unidad.Complete();
@@ -87,12 +87,12 @@ namespace BackEnd.DAL
             return result;
         }
 
-        public bool Update(User entity)
+        public bool Update(State entity)
         {
             bool result = false;
             try
             {
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                using (UnidadDeTrabajo<State> unidad = new UnidadDeTrabajo<State>(context))
                 {
                     unidad.genericDAL.Update(entity);
                     result = unidad.Complete();
@@ -107,24 +107,25 @@ namespace BackEnd.DAL
 
         //Other Opctions Not Used
 
-        public void AddRange(IEnumerable<User> entities)
+        public void AddRange(IEnumerable<State> entities)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> Find(Expression<Func<User, bool>> predicate)
+        public IEnumerable<State> Find(Expression<Func<State, bool>> predicate)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(IEnumerable<User> entities)
+        public void RemoveRange(IEnumerable<State> entities)
         {
             throw new NotImplementedException();
         }
 
-        public User SingleOrDefault(Expression<Func<User, bool>> predicate)
+        public State SingleOrDefault(Expression<Func<State, bool>> predicate)
         {
             throw new NotImplementedException();
         }
+
     }
 }

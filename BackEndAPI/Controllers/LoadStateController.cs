@@ -10,27 +10,26 @@ namespace BackEndAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoanController : ControllerBase
+    public class LoadStateController : ControllerBase
     {
-        private ILoanDAL loanDAL;
+        private ILoanStateDAL loanStateDAL;
 
-        public LoanController()
+        public LoadStateController()
         {
-            loanDAL = new LoanDALImpl();
+            loanStateDAL = new LoanStateDALImpl();
         }
 
-
-        // GET: api/<LoanController>
+        // GET: api/<LoadStateController>
         [HttpGet]
         public JsonResult Get()
         {
             try
             {
-                List<Loan> loans = loanDAL.GetAll().ToList();
-                List<LoanModel> result = new List<LoanModel>();
-                foreach (Loan loan in loans)
+                List<LoansState> loansStates = loanStateDAL.GetAll().ToList();
+                List<LoadStateModel> result = new List<LoadStateModel>();
+                foreach (LoansState loansState in loansStates)
                 {
-                    result.Add(objectToModelConvert(loan));
+                    result.Add(objectToModelConvert(loansState));
                 }
 
                 return new JsonResult(result)
@@ -47,16 +46,16 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // GET api/<LoanController>/5
+        // GET api/<LoadStateController>/5
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
             try
             {
-                Loan loan = loanDAL.Get(id);
-                if (loan != null)
+                LoansState loansState = loanStateDAL.Get(id);
+                if (loansState != null)
                 {
-                    return new JsonResult(objectToModelConvert(loan))
+                    return new JsonResult(objectToModelConvert(loansState))
                     {
                         StatusCode = (int)HttpStatusCode.OK
                     };
@@ -78,23 +77,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // POST api/<LoanController>
+        // POST api/<LoadStateController>
         [HttpPost]
-        public JsonResult Post([FromBody] LoanModel loan)
+        public JsonResult Post([FromBody] LoadStateModel loadState)
         {
             try
             {
-                bool result = loanDAL.Add(ModelToObjectConvert(loan));
+                bool result = loanStateDAL.Add(ModelToObjectConvert(loadState));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loan))
+                    return new JsonResult(ModelToObjectConvert(loadState))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error including Loan" })
+                    return new JsonResult(new { message = "Error including Load State" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -109,23 +108,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // PUT api/<LoanController>/5
+        // PUT api/<LoadStateController>/5
         [HttpPut("{id}")]
-        public JsonResult Put(int id, [FromBody] LoanModel loan)
+        public JsonResult Put(int id, [FromBody] LoadStateModel loadState)
         {
             try
             {
-                bool result = loanDAL.Update(ModelToObjectConvert(loan));
+                bool result = loanStateDAL.Update(ModelToObjectConvert(loadState));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loan))
+                    return new JsonResult(ModelToObjectConvert(loadState))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error to Update Loan" })
+                    return new JsonResult(new { message = "Error to Update Load State" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -140,17 +139,17 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // DELETE api/<LoanController>/5
+        // DELETE api/<LoadStateController>/5
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
             try
             {
-                Loan loan = new Loan()
+                LoansState loansState = new LoansState()
                 {
-                    IdLoan = id
+                    LoansStatesId = id
                 };
-                bool result = loanDAL.Remove(loan);
+                bool result = loanStateDAL.Remove(loansState);
                 if (result)
                 {
                     return new JsonResult(new { message = "The data is deleted" })
@@ -160,7 +159,7 @@ namespace BackEndAPI.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error to Delete Loan" })
+                    return new JsonResult(new { message = "Error to Delete Loans State" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -175,47 +174,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        private LoanModel objectToModelConvert(Loan loan)
+        private LoadStateModel objectToModelConvert(LoansState loansState)
         {
 
-            return new LoanModel
+            return new LoadStateModel
             {
-                IdLoan = loan.IdLoan,
-                Idcustomers = loan.IdLoan,
-                StarDate = loan.StarDate,
-                EndDate = loan.EndDate,
-                InteresRate = loan.InteresRate,
-                LoanAmount = loan.LoanAmount,
-                CurrentAmount = loan.CurrentAmount,
-                MonthlyAmount = loan.MonthlyAmount,
-                NextDueDate = loan.NextDueDate,
-                BankFees = loan.BankFees,
-                LoansDescription = loan.LoansDescription,
-                IdloansType = loan.IdloansType,
-                IdCurrencies = loan.IdCurrencies,
-                IdLoansState = loan.IdLoansState
+                LoansStatesId = loansState.LoansStatesId,
+                LoansStateName = loansState.LoansStateName
             };
         }
 
-        private Loan ModelToObjectConvert(LoanModel loanModel)
+        private LoansState ModelToObjectConvert(LoadStateModel loadStateModel)
         {
 
-            return new Loan
+            return new LoansState
             {
-                IdLoan = loanModel.IdLoan,
-                Idcustomers = loanModel.IdLoan,
-                StarDate = loanModel.StarDate,
-                EndDate = loanModel.EndDate,
-                InteresRate = loanModel.InteresRate,
-                LoanAmount = loanModel.LoanAmount,
-                CurrentAmount = loanModel.CurrentAmount,
-                MonthlyAmount = loanModel.MonthlyAmount,
-                NextDueDate = loanModel.NextDueDate,
-                BankFees = loanModel.BankFees,
-                LoansDescription = loanModel.LoansDescription,
-                IdloansType = loanModel.IdloansType,
-                IdCurrencies = loanModel.IdCurrencies,
-                IdLoansState = loanModel.IdLoansState
+                LoansStatesId = loadStateModel.LoansStatesId,
+                LoansStateName = loadStateModel.LoansStateName
             };
         }
     }

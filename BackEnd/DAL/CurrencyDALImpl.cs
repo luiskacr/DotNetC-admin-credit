@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BackEnd.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -8,22 +9,22 @@ using BackEnd.Entities;
 
 namespace BackEnd.DAL
 {
-    public class UserDALImpl : IUserDAL
+    public class CurrencyDALImpl : ICurrencyDAL
     {
         proyectoCreditosContext context;
 
-        public UserDALImpl()
+        public CurrencyDALImpl()
         {
             context = new proyectoCreditosContext();
         }
 
-        public bool Add(User entity)
+        public bool Add(Currency entity)
         {
             try
             {
                 //Business Logic
 
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                using (UnidadDeTrabajo<Currency> unidad = new UnidadDeTrabajo<Currency>(context))
                 {
                     unidad.genericDAL.Add(entity);
                     return unidad.Complete();
@@ -35,16 +36,17 @@ namespace BackEnd.DAL
             }
         }
 
-        public User Get(int userId)
+
+        public Currency Get(int currencyId)
         {
             try
             {
-                User user;
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                Currency currency;
+                using (UnidadDeTrabajo<Currency> unidad = new UnidadDeTrabajo<Currency>(context))
                 {
-                    user = unidad.genericDAL.Get(userId);
+                    currency = unidad.genericDAL.Get(currencyId);
                 }
-                return user;
+                return currency;
             }
             catch (Exception)
             {
@@ -52,16 +54,16 @@ namespace BackEnd.DAL
             }
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<Currency> GetAll()
         {
             try
             {
-                IEnumerable<User> countries;
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                IEnumerable<Currency> currency;
+                using (UnidadDeTrabajo<Currency> unidad = new UnidadDeTrabajo<Currency>(context))
                 {
-                    countries = unidad.genericDAL.GetAll();
+                    currency = unidad.genericDAL.GetAll();
                 }
-                return countries.ToList();
+                return currency.ToList();
             }
             catch (Exception)
             {
@@ -69,12 +71,12 @@ namespace BackEnd.DAL
             }
         }
 
-        public bool Remove(User entity)
+        public bool Remove(Currency entity)
         {
             bool result = false;
             try
             {
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                using (UnidadDeTrabajo<Currency> unidad = new UnidadDeTrabajo<Currency>(context))
                 {
                     unidad.genericDAL.Remove(entity);
                     result = unidad.Complete();
@@ -87,12 +89,12 @@ namespace BackEnd.DAL
             return result;
         }
 
-        public bool Update(User entity)
+        public bool Update(Currency entity)
         {
             bool result = false;
             try
             {
-                using (UnidadDeTrabajo<User> unidad = new UnidadDeTrabajo<User>(context))
+                using (UnidadDeTrabajo<Currency> unidad = new UnidadDeTrabajo<Currency>(context))
                 {
                     unidad.genericDAL.Update(entity);
                     result = unidad.Complete();
@@ -107,22 +109,21 @@ namespace BackEnd.DAL
 
         //Other Opctions Not Used
 
-        public void AddRange(IEnumerable<User> entities)
+        public void AddRange(IEnumerable<Currency> entities)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> Find(Expression<Func<User, bool>> predicate)
+        public IEnumerable<Currency> Find(Expression<Func<Currency, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+        public void RemoveRange(IEnumerable<Currency> entities)
         {
             throw new NotImplementedException();
         }
 
-        public void RemoveRange(IEnumerable<User> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        public User SingleOrDefault(Expression<Func<User, bool>> predicate)
+        public Currency SingleOrDefault(Expression<Func<Currency, bool>> predicate)
         {
             throw new NotImplementedException();
         }
