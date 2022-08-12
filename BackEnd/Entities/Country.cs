@@ -12,11 +12,8 @@ namespace BackEnd.Entities
             States = new HashSet<State>();
         }
 
-        [Key]
+    
         public int IdCountry { get; set; }
-
-        [DisplayName("Country Name")]
-        [Required(ErrorMessage = "A Country Name is required")]
         public string CountryName { get; set; } = null!;
 
         public virtual ICollection<State> States { get; set; }

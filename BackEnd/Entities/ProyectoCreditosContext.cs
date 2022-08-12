@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using BackEnd.Authentication;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BackEnd.Entities
 {
-    public partial class proyectoCreditosContext : DbContext
+    public partial class proyectoCreditosContext : IdentityDbContext<ApplicationUser>
     {
         public proyectoCreditosContext()
         {
+            var optionsBuilder = new DbContextOptionsBuilder<proyectoCreditosContext>();
+            optionsBuilder.UseSqlServer(Utilities.Util.ConnectionString);
         }
 
         public proyectoCreditosContext(DbContextOptions<proyectoCreditosContext> options)
@@ -25,20 +29,19 @@ namespace BackEnd.Entities
         public virtual DbSet<LoansType> LoansTypes { get; set; } = null!;
         public virtual DbSet<PaymentType> PaymentTypes { get; set; } = null!;
         public virtual DbSet<State> States { get; set; } = null!;
-        public virtual DbSet<User> Users { get; set; } = null!;
-        public virtual DbSet<UserRole> UserRoles { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.;Database=proyectoCreditos;Integrated Security=True;Trusted_Connection=True;");
-            }
+            optionsBuilder.UseSqlServer(Utilities.Util.ConnectionString);
+            base.OnConfiguring(optionsBuilder);
+
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Country>(entity =>
             {
                 entity.HasKey(e => e.IdCountry)
@@ -311,55 +314,6 @@ namespace BackEnd.Entities
                     .HasConstraintName("FK__states__idCountr__267ABA7A");
             });
 
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.HasKey(e => e.IdUser)
-                    .HasName("PK__users__3717C982AE73CA82");
-
-                entity.ToTable("users");
-
-                entity.Property(e => e.IdUser).HasColumnName("idUser");
-
-                entity.Property(e => e.IdCustomers).HasColumnName("idCustomers");
-
-                entity.Property(e => e.UserName)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("userName");
-
-                entity.Property(e => e.UserPassword)
-                    .HasMaxLength(500)
-                    .IsUnicode(false)
-                    .HasColumnName("userPassword");
-
-                entity.Property(e => e.UserRole).HasColumnName("userRole");
-
-                entity.HasOne(d => d.IdCustomersNavigation)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.IdCustomers)
-                    .HasConstraintName("FK__users__idCustome__300424B4");
-
-                entity.HasOne(d => d.UserRoleNavigation)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.UserRole)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__users__userRole__2F10007B");
-            });
-
-            modelBuilder.Entity<UserRole>(entity =>
-            {
-                entity.HasKey(e => e.IdUserRole)
-                    .HasName("PK__userRole__2E1B15A5B7978D5A");
-
-                entity.ToTable("userRoles");
-
-                entity.Property(e => e.IdUserRole).HasColumnName("idUserRole");
-
-                entity.Property(e => e.RoleName)
-                    .HasMaxLength(25)
-                    .IsUnicode(false)
-                    .HasColumnName("roleName");
-            });
 
             OnModelCreatingPartial(modelBuilder);
         }

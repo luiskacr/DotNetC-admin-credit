@@ -27,18 +27,6 @@ CREATE TABLE customers(
 	idState INT NOT NULL FOREIGN KEY REFERENCES states(idState),     
 );
 
-CREATE TABLE userRoles(
-	idUserRole INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	roleName VARCHAR(25)  NOT NULL ,
-);
-
-CREATE TABLE users(
-	idUser INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	userName VARCHAR(50)  NOT NULL ,
-	userPassword VARCHAR(500) NOT NULL ,
-	userRole INT NOT NULL FOREIGN KEY REFERENCES userRoles(idUserRole),
-	idCustomers INT NOT NULL FOREIGN KEY REFERENCES customers(idCustomers),
-);
 
 CREATE TABLE currencies(
 	idCurrencies INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
@@ -124,13 +112,6 @@ VALUES ('Wilmar','Arlett','352959179','warlett0@amazon.co.uk','82899837 ','8/2/2
 ('Scottie ','Minocchi','902588915','sminocchib@google.ca','(806)888-9723','4/10/1971','6903 Cassin Crescent',14),
 ('Isabel','Briseño Hijo','174898275','ualvarez@info.cr','85608182','09/21/1999','Avenida Benavídez',1);
 
-INSERT INTO userRoles (roleName)
-VALUES ('Administrator'),
-('Employee'),
-('User');
-
-INSERT INTO users(userName,userPassword,userRole,idCustomers)
-VALUES ('Admin','8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',1,null);
 
 INSERT INTO currencies(currencyName,currencyISO)
 VALUES ('Colon','CRC'),
