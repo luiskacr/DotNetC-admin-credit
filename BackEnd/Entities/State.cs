@@ -13,16 +13,9 @@ namespace BackEnd.Entities
             Customers = new HashSet<Customer>();
         }
 
-        [Key]
+   
         public int IdState { get; set; }
-
-        [DisplayName("State Name")]
-        [Required(ErrorMessage = "A State Name is required")]
         public string StateName { get; set; } = null!;
-
-        [DisplayName("Country")]
-        [Required(ErrorMessage = "A Country is required")]
-        [ForeignKey("IdCountry")]
         public int IdCountry { get; set; }
 
         public virtual Country IdCountryNavigation { get; set; } = null!;

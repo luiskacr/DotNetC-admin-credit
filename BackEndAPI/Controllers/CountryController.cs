@@ -3,6 +3,7 @@ using BackEnd.DAL;
 using BackEnd.Entities;
 using BackEndAPI.Models;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,6 +21,8 @@ namespace BackEndAPI.Controllers
         }
 
         // GET: api/<CountryController>
+        //Agregar [Authorize] a cada metodo que quiero ponerle seguridad
+        [Authorize]
         [HttpGet]
         public JsonResult Get()
         {
