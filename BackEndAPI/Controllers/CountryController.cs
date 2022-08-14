@@ -22,7 +22,7 @@ namespace BackEndAPI.Controllers
 
         // GET: api/<CountryController>
         //Agregar [Authorize] a cada metodo que quiero ponerle seguridad
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public JsonResult Get()
         {
