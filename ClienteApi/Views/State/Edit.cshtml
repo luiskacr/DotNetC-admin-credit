@@ -1,0 +1,108 @@
+﻿@model ClienteApi.Models.StateViewModel
+
+@{
+    ViewData["Title"] = "Editar Provincia";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int selectCountry = Model.IdCountry;
+    List<SelectListItem> contentData = new List<SelectListItem>();
+    foreach (var item in ViewBag.Countries)
+    {
+        if (item.IdCountry == selectCountry)
+        {
+            contentData.Add(new SelectListItem
+                    {
+                        Selected = true,
+                        Text = item.CountryName,
+                        Value = item.IdCountry.ToString()
+                    });
+        }
+        else { 
+            contentData.Add(new SelectListItem
+                    {
+                        Text = item.CountryName,
+                        Value = item.IdCountry.ToString()
+                    });
+        }
+
+    }
+}
+
+@if (ViewBag.exito == "" | ViewBag.exito == null)
+{
+
+}
+else
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.exito</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+@if (ViewBag.error == "" | ViewBag.error == null)
+{
+
+}
+else
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+<div class="card-body card shadow mb-4">
+    <style>
+        .card-title {
+            padding-bottom: 15px;
+            background: #040FD9;
+            color: #fff;
+            padding: 16px 30px;
+            min-width: 100%;
+            margin: -20px -25px 10px;
+            border-radius: 3px 3px 0 0;
+        }
+    </style>
+    <div class="card-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Editar una Provincia</h2>
+            </div>
+        </div>
+    </div>
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input asp-for="IdState" class="form-control" type="hidden" />
+
+        <div class="col-md-10 mt-3">
+            <label class="text-dark">
+                <strong>
+                    <label asp-for="StateName" class="control-label"></label>
+                </strong>
+            </label>
+            <input asp-for="StateName" class="form-control" />
+            <span asp-validation-for="StateName" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-10 mt-3">
+            <label class="text-dark">
+                <strong>
+                    <label asp-for="IdCountry" class="control-label"></label>
+                </strong>
+            </label>
+            <select class="form-select" id="IdCountry" asp-for="IdCountry" asp-items="@contentData"></select>
+            <span asp-validation-for="IdCountry" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mt-5">
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Index">Volver a la Lista</a>
+    </div>
+</div>
+
+

@@ -11,9 +11,6 @@ namespace ClienteAPI.Controllers
             return View();
         }
 
-
-
-
         [HttpGet]
         public IActionResult Login()
         {
@@ -29,6 +26,13 @@ namespace ClienteAPI.Controllers
 
                 ServiceRepository serviceObj = new ServiceRepository();
                 HttpResponseMessage response = serviceObj.PostResponse("api/Authenticate/login", model);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    ViewBag.message = "El Usuario o Contraseña no son Correctos";
+                    return View("Login");
+                }
+                
                 response.EnsureSuccessStatusCode();
                 TokenModel tokenModel = response.Content.ReadAsAsync<TokenModel>().Result;
 
@@ -36,16 +40,15 @@ namespace ClienteAPI.Controllers
 
                 HttpContext.Session.SetString("JWTToken", token);
 
-                return RedirectToAction("index", "home");
+                return RedirectToAction("index", "Dashboard");
 
             }
             ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
 
             return View(model);
-        
+
+
+        }
 
     }
-
-
-}
 }
