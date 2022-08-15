@@ -38,38 +38,67 @@ else
 
 }
 
-<h1>Create</h1>
+<div class="card-body card shadow mb-4">
+    <style>
+        .card-title {
+            padding-bottom: 15px;
+            background: #007BFF;
+            color: #fff;
+            padding: 16px 30px;
+            min-width: 100%;
+            margin: -20px -25px 10px;
+            border-radius: 3px 3px 0 0;
+        }
+    </style>
+    <div class="card-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Creacion una Provincia</h2>
+            </div>
+        </div>
+    </div>
 
-<h4>StateViewModel</h4>
-<hr />
-<div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <div class="form-horizontal">
+                <div class="form-group">
 
-            <div class="form-group">
-                <label asp-for="StateName" class="control-label"></label>
-                <input asp-for="StateName" class="form-control" />
-                <span asp-validation-for="StateName" class="text-danger"></span>
-            </div>
+                    <div class="col-md-10 mt-3">
+                        <label class="text-dark">
+                            <span>
+                                <label asp-for="StateName" class="control-label"></label>
+                            </span>
+                        </label>
+                        <input asp-for="StateName" class="form-control" />
+                        <span asp-validation-for="StateName" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group">
-                <label asp-for="IdCountry" class="control-label"></label>
-                <select class="form-select"  id="IdCountry" asp-for="IdCountry" asp-items="@contentData">
-                    <option selected>Seleccione un Pais</option>
-                </select>
-                <span asp-validation-for="IdCountry" class="text-danger"></span>
-            </div>
+                    <div class="col-md-10 mt-3">
+                        <label class="text-dark">
+                            <span>
+                                <label asp-for="IdCountry" class="control-label"></label>
+                            </span>
+                        </label>
+                        <select class="form-select" id="IdCountry" asp-for="IdCountry" asp-items="@contentData">
+                            <option selected>Seleccione un Pais</option>
+                        </select>
+                        <span asp-validation-for="IdCountry" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                    <div class="form-group mt-5">
+                        <input type="submit" value="Crear" class="btn btn-primary" />
+                    </div>
+
+                </div>
             </div>
         </form>
+
+        <div>
+            <a asp-action="Index">Volver al Listado</a>
+        </div>
+
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
-
