@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BackEndAPI.Models
 {
-    public class LoadStateModel
+    public class LoanStateModel
     {
       
         public int LoansStatesId { get; set; }
