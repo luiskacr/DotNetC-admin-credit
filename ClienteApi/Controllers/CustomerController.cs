@@ -2,42 +2,28 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Dynamic;
-using ClienteApi.Models;
+using System.Diagnostics.Metrics;
 
 namespace ClienteApi.Controllers
 {
-    public class StateController : Controller
+    public class CustomerController : Controller
     {
-        // GET: StateController
+        // GET: CustomerController
         public ActionResult Index()
         {
             try
             {
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("api/State");
+                HttpResponseMessage response = serviceObj.GetResponse("api/Customer");
 
                 response.EnsureSuccessStatusCode();
 
-                HttpResponseMessage response2 = serviceObj.GetResponse("api/Country");
-
-                response2.EnsureSuccessStatusCode();
-
                 var content = response.Content.ReadAsStringAsync().Result;
-                
-                var content2 = response2.Content.ReadAsStringAsync().Result;
-
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    List<Models.StateViewModel> states = JsonConvert.DeserializeObject<List<Models.StateViewModel>>(content);
+                    List<Models.CustomerViewModel> customer = JsonConvert.DeserializeObject<List<Models.CustomerViewModel>>(content);
 
-                    List<Models.CountryViewModel> countrys = JsonConvert.DeserializeObject<List<Models.CountryViewModel>>(content2);
-
-                    States_CountryViewModel newStateModel = new States_CountryViewModel();
-
-                    newStateModel.state = states;
-                    newStateModel.country = countrys;
 
                     if (TempData["exito"] != null)
                     {
@@ -49,17 +35,17 @@ namespace ClienteApi.Controllers
                         ViewBag.error = TempData["error"];
                     }
 
-                    return View(newStateModel);
+                    return View(customer);
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                 {
-                    TempData["error"] = "Hubo un error Interno no se pueden mostrar los Paises";
+                    TempData["error"] = "Hubo un error Interno no se pueden mostrar los Clientes";
 
                     return RedirectToAction("Index", "Dashboard");
                 }
                 else
                 {
-                    TempData["error"] = "Hubo un error al Cargar los Paises";
+                    TempData["error"] = "Hubo un error al Cargar los Clientes";
 
                     return RedirectToAction("Index", "Dashboard");
                 }
@@ -67,100 +53,99 @@ namespace ClienteApi.Controllers
             catch (Exception e)
             {
 
-                TempData["error"] = "Hubo un error al Cargar los Paises";
+                TempData["error"] = "Hubo un error al Cargar los Clientes";
                 return RedirectToAction("Index", "Dashboard");
 
                 throw;
             }
         }
 
-        // GET: StateController/Details/5
+        // GET: CustomerController/Details/5
         public ActionResult Details(int id)
         {
             try
             {
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("api/State/" + id.ToString());
+                
+                HttpResponseMessage response = serviceObj.GetResponse("api/Customer/" + id.ToString());
+                HttpResponseMessage response2 = serviceObj.GetResponse("api/State");
+                HttpResponseMessage response3 = serviceObj.GetResponse("api/Country");
 
                 response.EnsureSuccessStatusCode();
-
-                HttpResponseMessage response2 = serviceObj.GetResponse("api/Country");
-
                 response2.EnsureSuccessStatusCode();
+                response3.EnsureSuccessStatusCode();
 
                 var content = response.Content.ReadAsStringAsync().Result;
 
                 var content2 = response2.Content.ReadAsStringAsync().Result;
 
+                var content3 = response3.Content.ReadAsStringAsync().Result;
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    Models.StateViewModel state = response.Content.ReadAsAsync<Models.StateViewModel>().Result;
+                    Models.CustomerViewModel customer = response.Content.ReadAsAsync<Models.CustomerViewModel>().Result;
 
-                    List<Models.StateViewModel> states = new List<StateViewModel>();
+                    ViewBag.State = JsonConvert.DeserializeObject<List<Models.StateViewModel>>(content2);
 
-                    states.Add(state);
+                    ViewBag.Country = JsonConvert.DeserializeObject<List<Models.CountryViewModel>>(content3);
 
-                    List<Models.CountryViewModel> countrys = JsonConvert.DeserializeObject<List<Models.CountryViewModel>>(content2);
-
-                    States_CountryViewModel newStateModel = new States_CountryViewModel();
-
-                    newStateModel.state = states;
-                    newStateModel.country = countrys;
-
-                    return View(newStateModel);
+                    return View(customer);
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    TempData["error"] = "Hubo un error al buscar el Pais";
+                    TempData["error"] = "Hubo un error al buscar los Clientes";
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    TempData["error"] = "Hubo un error al buscar el Pais";
+                    TempData["error"] = "Hubo un error al buscar los Clientes";
                     return RedirectToAction("Index");
                 }
             }
             catch (Exception e)
             {
-                TempData["error"] = "Hubo un error al eliminar el Pais";
+                TempData["error"] = "Hubo un error al buscar los Clientes";
                 return RedirectToAction("Index");
                 throw;
             }
         }
 
-        // GET: StateController/Create
+        // GET: CustomerController/Create
         public ActionResult Create()
-        {
-            try 
-            {
-                ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("api/Country");
-
-                response.EnsureSuccessStatusCode();
-
-                var content = response.Content.ReadAsStringAsync().Result;
-
-                ViewBag.Countries = JsonConvert.DeserializeObject<List<Models.CountryViewModel>>(content);
-
-                return View();
-            }
-            catch (Exception e) 
-            {
-                TempData["error"] = "Hubo un error Interno";
-                return RedirectToAction("Index");
-            }
-
-        }
-
-        // POST: StateController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Models.StateViewModel state)
         {
             try
             {
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.PostResponse("api/State/", state);
+                HttpResponseMessage response = serviceObj.GetResponse("api/State");
+                HttpResponseMessage response2 = serviceObj.GetResponse("api/Country");
+
+                response.EnsureSuccessStatusCode();
+                response2.EnsureSuccessStatusCode();
+
+                var content = response.Content.ReadAsStringAsync().Result;
+                var content2 = response2.Content.ReadAsStringAsync().Result;
+
+                ViewBag.States = JsonConvert.DeserializeObject<List<Models.StateViewModel>>(content);
+                ViewBag.Country = JsonConvert.DeserializeObject<List<Models.CountryViewModel>>(content2);
+
+                return View();
+            }
+            catch (Exception e)
+            {
+                TempData["error"] = "Hubo un error Interno";
+                return RedirectToAction("Index");
+            }
+        }
+
+        // POST: CustomerController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Models.CustomerViewModel customer)
+        {
+            try
+            {
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.PostResponse("api/Customer/", customer);
                 response.EnsureSuccessStatusCode();
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -188,124 +173,127 @@ namespace ClienteApi.Controllers
             }
         }
 
-        // GET: StateController/Edit/5
+        // GET: CustomerController/Edit/5
         public ActionResult Edit(int id)
         {
             try
             {
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.GetResponse("api/State/" + id.ToString());
+                HttpResponseMessage response = serviceObj.GetResponse("api/Customer/" + id.ToString());
+                HttpResponseMessage response2 = serviceObj.GetResponse("api/State");
+                HttpResponseMessage response3 = serviceObj.GetResponse("api/Country");
+
 
                 response.EnsureSuccessStatusCode();
-
-                HttpResponseMessage response2 = serviceObj.GetResponse("api/Country");
-
                 response2.EnsureSuccessStatusCode();
+                response3.EnsureSuccessStatusCode();
 
                 var content = response.Content.ReadAsStringAsync().Result;
-
                 var content2 = response2.Content.ReadAsStringAsync().Result;
+                var content3 = response3.Content.ReadAsStringAsync().Result;
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    Models.StateViewModel state = response.Content.ReadAsAsync<Models.StateViewModel>().Result;
+                    Models.CustomerViewModel customer = response.Content.ReadAsAsync<Models.CustomerViewModel>().Result;
 
-                    ViewBag.Countries = JsonConvert.DeserializeObject<List<Models.CountryViewModel>>(content2);
+                    ViewBag.States = JsonConvert.DeserializeObject<List<Models.StateViewModel>>(content2);
+                    ViewBag.Country = JsonConvert.DeserializeObject<List<Models.CountryViewModel>>(content3);
 
-                    return View(state);
+                    return View(customer);
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    TempData["error"] = "Hubo un error al buscar la Provincia";
+                    TempData["error"] = "Hubo un error al buscar el Pais";
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    TempData["error"] = "Hubo un error al buscar la Provincia";
+                    TempData["error"] = "Hubo un error al buscar el Pais";
                     return RedirectToAction("Index");
                 }
             }
             catch (Exception e)
             {
-                TempData["error"] = "Hubo un error al eliminar la Provincia";
+
+                TempData["error"] = "Hubo un error al cargar el Pais";
+
                 return RedirectToAction("Index");
-                throw;
             }
         }
 
-        // POST: StateController/Edit/5
+        // POST: CustomerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Models.StateViewModel state)
+        public ActionResult Edit(Models.CustomerViewModel customer)
         {
             try
             {
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.PutResponse("api/State/" + state.IdState.ToString(), state);
+                HttpResponseMessage response = serviceObj.PutResponse("api/Customer/" + customer.IdCustomers.ToString(), customer);
                 response.EnsureSuccessStatusCode();
 
                 if (response.StatusCode == System.Net.HttpStatusCode.Created)
                 {
-                    TempData["exito"] = "Se ha Modificado la Provincia ";
+                    TempData["exito"] = "Se ha Modificado el Cliente con Exito ";
                     return RedirectToAction("Index");
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
-                    ViewBag.error = "Hubo un error al editar la Provincia";
+                    ViewBag.error = "Hubo un error al editar el Cliente";
                     return View();
                 }
                 else
                 {
-                    ViewBag.error = "Hubo un error al editar la Provincia";
+                    ViewBag.error = "Hubo un error al editar el Cliente";
                     return View();
                 }
             }
             catch
             {
-                ViewBag.error = "Hubo un error al editar la Provincia";
-                return View();
+                TempData["error"] = "Hubo un error al modificar el Cliente";
+                return RedirectToAction("Index");
             }
         }
 
+        // GET: CustomerController/Delete/5
         /*
-        // GET: StateController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
         */
 
-        // POST: StateController/Delete/5
+        // POST: CustomerController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Models.CustomerViewModel customer)
         {
             try
             {
 
                 ServiceRepository serviceObj = new ServiceRepository();
-                HttpResponseMessage response = serviceObj.DeleteResponse("api/State/" + id.ToString());
+                HttpResponseMessage response = serviceObj.DeleteResponse("api/Customer/" + customer.IdCustomers.ToString());
                 //bool delete = response.Content.ReadAsAsync<bool>().Result;
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    TempData["exito"] = "Se ha Eliminado la Provincia ";
+                    TempData["exito"] = "Se ha Eliminado el Cliente ";
                     return RedirectToAction("Index");
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
-                    TempData["error"] = "La Provincia no se puede eliminar";
+                    TempData["error"] = "El Clienteno se puede eliminar";
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    TempData["error"] = "Hubo un error al eliminar la Provincia ";
+                    TempData["error"] = "Hubo un error al eliminar el Cliente";
                     return RedirectToAction("Index");
                 }
             }
             catch
             {
-                TempData["error"] = "Hubo un error al eliminar la Provincia ";
+                TempData["error"] = "Hubo un error al eliminar la Cliente ";
 
                 return RedirectToAction("Index");
             }
