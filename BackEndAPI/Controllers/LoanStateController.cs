@@ -10,11 +10,11 @@ namespace BackEndAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoadStateController : ControllerBase
+    public class LoanStateController : ControllerBase
     {
         private ILoanStateDAL loanStateDAL;
 
-        public LoadStateController()
+        public LoanStateController()
         {
             loanStateDAL = new LoanStateDALImpl();
         }
@@ -26,7 +26,7 @@ namespace BackEndAPI.Controllers
             try
             {
                 List<LoansState> loansStates = loanStateDAL.GetAll().ToList();
-                List<LoadStateModel> result = new List<LoadStateModel>();
+                List<LoanStateModel> result = new List<LoanStateModel>();
                 foreach (LoansState loansState in loansStates)
                 {
                     result.Add(objectToModelConvert(loansState));
@@ -46,7 +46,7 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // GET api/<LoadStateController>/5
+        // GET api/<LoanStateController>/5
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
@@ -77,16 +77,16 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // POST api/<LoadStateController>
+        // POST api/<LoanStateController>
         [HttpPost]
-        public JsonResult Post([FromBody] LoadStateModel loadState)
+        public JsonResult Post([FromBody] LoanStateModel loanState)
         {
             try
             {
-                bool result = loanStateDAL.Add(ModelToObjectConvert(loadState));
+                bool result = loanStateDAL.Add(ModelToObjectConvert(loanState));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loadState))
+                    return new JsonResult(ModelToObjectConvert(loanState))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
@@ -108,23 +108,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // PUT api/<LoadStateController>/5
+        // PUT api/<LoanStateController>/5
         [HttpPut("{id}")]
-        public JsonResult Put(int id, [FromBody] LoadStateModel loadState)
+        public JsonResult Put(int id, [FromBody] LoanStateModel loanState)
         {
             try
             {
-                bool result = loanStateDAL.Update(ModelToObjectConvert(loadState));
+                bool result = loanStateDAL.Update(ModelToObjectConvert(loanState));
                 if (result)
                 {
-                    return new JsonResult(ModelToObjectConvert(loadState))
+                    return new JsonResult(ModelToObjectConvert(loanState))
                     {
                         StatusCode = (int)HttpStatusCode.Created
                     };
                 }
                 else
                 {
-                    return new JsonResult(new { message = "Error to Update Load State" })
+                    return new JsonResult(new { message = "Error to Update Loan State" })
                     {
                         StatusCode = (int)HttpStatusCode.BadRequest
                     };
@@ -139,7 +139,7 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        // DELETE api/<LoadStateController>/5
+        // DELETE api/<LoanStateController>/5
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
@@ -174,23 +174,23 @@ namespace BackEndAPI.Controllers
             }
         }
 
-        private LoadStateModel objectToModelConvert(LoansState loansState)
+        private LoanStateModel objectToModelConvert(LoansState loansState)
         {
 
-            return new LoadStateModel
+            return new LoanStateModel
             {
                 LoansStatesId = loansState.LoansStatesId,
                 LoansStateName = loansState.LoansStateName
             };
         }
 
-        private LoansState ModelToObjectConvert(LoadStateModel loadStateModel)
+        private LoansState ModelToObjectConvert(LoanStateModel loanStateModel)
         {
 
             return new LoansState
             {
-                LoansStatesId = loadStateModel.LoansStatesId,
-                LoansStateName = loadStateModel.LoansStateName
+                LoansStatesId = loanStateModel.LoansStatesId,
+                LoansStateName = loanStateModel.LoansStateName
             };
         }
     }
