@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BackEndAPI.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -20,5 +21,6 @@ namespace BackEnd.Entities
         public string Symbol { get; set; } = null!;
 
         public virtual ICollection<Loan> Loans { get; set; }
+        public virtual ICollection<LoansTypeInterest> LoansTypeInterest { get; set; }
     }
 }

@@ -8,12 +8,12 @@ namespace BackEnd.Entities
 {
     public partial class LoansHistory
     {
-  
-        public int IdLoansHistory { get; set; }
-        public int LoadId { get; set; }
-        public decimal PaymentAmount { get; set; }
-        public DateTime PayDate { get; set; }
-        public int PaymentType { get; set; }
+
+        public int? IdLoansHistory { get; set; } = null!;
+        public int? LoadId { get; set; }
+        public decimal? PaymentAmount { get; set; } = null!;
+        public DateTime? PayDate { get; set; } = null!;
+        public int? PaymentType { get; set; } = null!;
 
         public virtual Loan Load { get; set; } = null!;
         public virtual PaymentType PaymentTypeNavigation { get; set; } = null!;

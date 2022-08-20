@@ -205,11 +205,11 @@ namespace BackEndAPI.Controllers
 
             return new LoanHistoryModel
             {
-                IdLoansHistory = loansHistory.IdLoansHistory,
-                LoadId = loansHistory.LoadId,
-                PaymentAmount = loansHistory.PaymentAmount,
-                PayDate = loansHistory.PayDate,
-                PaymentType = loansHistory.PaymentType
+                IdLoansHistory = (int)loansHistory.IdLoansHistory,
+                LoadId = (int)loansHistory.LoadId,
+                PaymentAmount = (decimal)loansHistory.PaymentAmount,
+                PayDate = (DateTime)loansHistory.PayDate,
+                PaymentType = (int)loansHistory.PaymentType
             };
         }
 

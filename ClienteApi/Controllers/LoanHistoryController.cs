@@ -75,23 +75,66 @@ namespace ClienteApi.Controllers
         }
 
         // GET: LoanHistoryController/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
-            return View();
+
+            try
+            {
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.GetResponse("api/PaymentType");
+
+                response.EnsureSuccessStatusCode();
+
+                var content = response.Content.ReadAsStringAsync().Result;
+                ViewBag.PaymentType = JsonConvert.DeserializeObject<List<Models.PaymentTypeViewModel>>(content);
+
+
+                ViewBag.loanId = id;
+
+                return View();
+            }
+            catch (Exception e) 
+            {
+                return RedirectToAction("Index", "Loan");
+
+                throw;
+            }
+
         }
 
         // POST: LoanHistoryController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Models.LoanHistoryViewModel loanHistory)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.PostResponse("api/LoansHistory/", loanHistory);
+                response.EnsureSuccessStatusCode();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    TempData["exito"] = "Se creado el Pago con exito";
+
+                    return RedirectToAction("Index","Loan");
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    TempData["error"] = "Hubo un error al crear el Pago";
+                    return RedirectToAction("Index", "Loan");
+                }
+                else
+                {
+                    TempData["error"] = "Hubo un error al crear el Pago";
+                    return RedirectToAction("Index", "Loan");
+                }
+
             }
             catch
             {
-                return View();
+                TempData["error"] = "Hubo un error al crear el Pago";
+                return RedirectToAction("Index", "Loan");
             }
         }
 
@@ -116,24 +159,27 @@ namespace ClienteApi.Controllers
             }
         }
 
+        /*
         // GET: LoanHistoryController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
+        */
 
         // POST: LoanHistoryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                TempData["exito"] = "Se ha Eliminado el Pago ";
+                return RedirectToAction("Index", "Loan");
             }
             catch
             {
-                return View();
+                return RedirectToAction("Index","Loan");
             }
         }
     }

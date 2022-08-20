@@ -91,7 +91,7 @@ else
     <div class="table-title">
         <div class="row">
             <div class="col-sm-6">
-                <h2>Credito # 000-@ViewBag.LoanId</h2>
+                <h2>Credito #FIDE000-@ViewBag.LoanId</h2>
             </div>
             <div class="col-sm-6">
                 <a class="btn btn-dark btn-lg" asp-action="Create">Crear un Pago</a>
@@ -102,6 +102,9 @@ else
         <table id="TableEmployee" class="table table-avance table-striped ">
             <thead class="table-primaryk">
                 <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdLoansHistory)
+                    </th>
                     <th>
                         @Html.DisplayNameFor(model => model.LoadId)
                     </th>
@@ -125,6 +128,14 @@ else
                 {
                     <tr>
                         <td>
+                            @{
+                                int id = item.IdLoansHistory;
+                                String thisHistory = item.IdLoansHistory.ToString();
+                                String numReferen = "FIDE0000" + @thisLoanInfo.IdLoan + "-00" + thisHistory;
+                            }
+                            @numReferen
+                        </td>
+                        <td>
                             @thisLoanInfo.LoansDescription
                             @*Html.DisplayFor(modelItem => item.LoadId)*@
                         </td>
@@ -145,11 +156,37 @@ else
                             }
                         </td>
                         <td>
-                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                            @Html.ActionLink("Edit", "Edit", new {  id=item.IdLoansHistory  } , new { @class = "btn btn-primary " })
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-@item.IdLoansHistory">
+                                Eliminar
+                            </button>
                         </td>
                     </tr>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal-@item.IdLoansHistory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">
+                                        <i class="fas fa-exclamation-triangle" style="color:red;"></i>
+                                        Advertencia
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Esta Seguro que desea Eliminar el Pago con Numero de Referencia @numReferen ?
+                                </div>
+                                <div class="modal-footer">
+
+                                    <form asp-action="Delete" asp-route-id="@item.IdLoansHistory" >
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <input type="submit" value="Eliminar" class="btn btn-danger" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
                 }
 
             </tbody>
@@ -164,3 +201,4 @@ else
 
 
 </div>
+

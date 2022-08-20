@@ -84,10 +84,10 @@ else
                         @Html.DisplayNameFor(model => model.IdLoan)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Idcustomers)
+                        @Html.DisplayNameFor(model => model.LoanAmount)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.LoanAmount)
+                        @Html.DisplayNameFor(model => model.CurrentAmount)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.MonthlyAmount)
@@ -102,16 +102,13 @@ else
                         @Html.DisplayNameFor(model => model.IdLoansState)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.StarDate)
-                    </th>
-                    <th>
                         @Html.DisplayNameFor(model => model.EndDate)
                     </th>
                     <th>
-                        Opciones de Credito
+                        Opciones de Pago
                     </th>
                     <th>
-                        Opciones
+                        Opciones de Credito
                     </th>
                 </tr>
 
@@ -131,20 +128,15 @@ else
                             }
                         }
                         <td>
-                            Credito # 000-@Html.DisplayFor(modelItem => item.IdLoan)
-                        </td>
-                        <td>
-                            @foreach (CustomerViewModel customer in ViewBag.Customer)
-                            {
-                                if (customer.IdCustomers == item.Idcustomers) 
-                                {
-                                    @Html.DisplayFor(modelItem => customer.FirstName)
-                                }
-                            }
+                            FIDE000-@Html.DisplayFor(modelItem => item.IdLoan)
                         </td>
                         <td>
                             @CurrencySymbol
                             @Html.DisplayFor(modelItem => item.LoanAmount)
+                        </td>
+                        <td>
+                            @CurrencySymbol
+                            @Html.DisplayFor(modelItem => item.CurrentAmount)
                         </td>
                         <td>
                             @CurrencySymbol
@@ -239,18 +231,20 @@ else
                             }
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.StarDate)
-                        </td>
-                        <td>
                             @Html.DisplayFor(modelItem => item.EndDate)
                         </td>
                         <td>
-                            @Html.ActionLink("Crear Pago", "Edit", new { id=item.IdLoan  }, new { @class = "btn btn-secondary " })
-                            @Html.ActionLink("Historial de Pago", "IndexDetail", "LoanHistory", new {  id=item.IdLoan }, new { @class = "btn btn-success " })
+                            @Html.ActionLink("Incluir Pago", "Create","LoanHistory", new { id=item.IdLoan  }, new { @class = "btn btn-secondary btn-sm " })
+                            @Html.ActionLink("Historial", "IndexDetail", "LoanHistory", new {  id=item.IdLoan }, new { @class = "btn btn-success btn-sm " })
+                            @Html.ActionLink("Cambio Moneda", "", "LoanHistory", new {  id=item.IdLoan }, new { @class = "btn btn-warning btn-sm" })
                         </td>
                         <td>
-                            @Html.ActionLink("Editar", "Edit", new { id=item.IdLoan  }, new { @class = "btn btn-primary " })
-                            @Html.ActionLink("Detalles", "Details", new {  id=item.IdLoan }, new { @class = "btn btn-success " })
+                            @Html.ActionLink("Editar", "Edit", new { id=item.IdLoan  }, new { @class = "btn btn-primary btn-sm " })
+                            @Html.ActionLink("Detalles", "Details", new {  id=item.IdLoan }, new { @class = "btn btn-success btn-sm" })
+                            @if (item.IdLoansState == 6)
+                            {
+                                @Html.ActionLink("Eliminar", "Delete", new {  id=item.IdLoan }, new { @class = "btn btn-danger btn-sm" })
+                            }
                         </td>
                     </tr>
                 }

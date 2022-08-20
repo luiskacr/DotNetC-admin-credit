@@ -6,9 +6,10 @@ namespace ClienteApi.Models
     public class LoanHistoryViewModel
     {
         [Key]
+        [DisplayName("Numero de Referencia")]
         public int IdLoansHistory { get; set; }
 
-        [DisplayName("Credito")]
+        [DisplayName("Tipo de Credito")]
         [Required(ErrorMessage = "El Credito es Requerido")]
         public int LoadId { get; set; }
 

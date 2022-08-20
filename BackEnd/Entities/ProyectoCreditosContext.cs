@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BackEnd.Authentication;
+using BackEndAPI.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -30,6 +31,7 @@ namespace BackEnd.Entities
         public virtual DbSet<PaymentType> PaymentTypes { get; set; } = null!;
         public virtual DbSet<State> States { get; set; } = null!;
         public virtual DbSet<LoansTypeInterest> LoansTypeInterest { get; set; } = null!;
+        public virtual DbSet<LogLoanHistory> LogLoanHistory { get; set; } = null!;
         public virtual DbSet<sp_DeleteAllLoans_Result> sp_DeleteAllLoans_Result { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -261,6 +263,71 @@ namespace BackEnd.Entities
                     .HasMaxLength(75)
                     .IsUnicode(false)
                     .HasColumnName("loansStateName");
+            });
+
+            modelBuilder.Entity<LoansTypeInterest>(entity =>
+            {
+                entity.HasKey(e => e.IdloansTypeInterest)
+                    .HasName("PK__loansTyp__6940328F10EA00C3");
+
+                entity.ToTable("loansTypeInterest");
+
+                entity.Property(e => e.IdloansTypeInterest).HasColumnName("idloansTypeInterest");
+
+                entity.Property(e => e.IdCurrencies).HasColumnName("idCurrencies");
+
+                entity.Property(e => e.IdloansType).HasColumnName("idloansType");
+
+                entity.Property(e => e.InteresRate)
+                    .HasColumnType("decimal(9, 6)")
+                    .HasColumnName("interesRate");
+
+                entity.Property(e => e.YearTime).HasColumnName("yearTime");
+
+                entity.HasOne(d => d.IdCurrenciesNavigation)
+                    .WithMany(p => p.LoansTypeInterest)
+                    .HasForeignKey(d => d.IdCurrencies)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__loansType__idCur__72C60C4A");
+
+                entity.HasOne(d => d.IdloansTypeNavigation)
+                    .WithMany(p => p.LoansTypeInterest)
+                    .HasForeignKey(d => d.IdloansType)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__loansType__idloa__71D1E811");
+            });
+
+            modelBuilder.Entity<LogLoanHistory>(entity =>
+            {
+                entity.HasKey(e => e.Idlog)
+                    .HasName("PK__LOG_Loan__07BE4DF8B57C5423");
+
+                entity.ToTable("LOG_LoanHistory");
+
+                entity.Property(e => e.Idlog).HasColumnName("idlog");
+
+                entity.Property(e => e.ChangeDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("changeDate");
+
+                entity.Property(e => e.IdLoansHistory).HasColumnName("idLoansHistory");
+
+                entity.Property(e => e.LoadId).HasColumnName("loadId");
+
+                entity.Property(e => e.PayDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("payDate");
+
+                entity.Property(e => e.PaymentAmount)
+                    .HasColumnType("money")
+                    .HasColumnName("paymentAmount");
+
+                entity.Property(e => e.PaymentType).HasColumnName("paymentType");
+
+                entity.Property(e => e.TypeChange)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("typeChange");
             });
 
             modelBuilder.Entity<LoansType>(entity =>

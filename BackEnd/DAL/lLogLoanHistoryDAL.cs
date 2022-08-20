@@ -1,14 +1,15 @@
-﻿using System;
+﻿using BackEnd.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BackEnd.Entities;
 using BackEndAPI.Entities;
 
 namespace BackEnd.DAL
 {
-    public interface ILoansTypeInterestDAL : IDALGenerico<LoansTypeInterest>
+    public interface  lLogLoanHistoryDAL : IDALGenerico<LogLoanHistory>
     {
+
     }
 }

@@ -1,0 +1,132 @@
+﻿@using ClienteApi.Models;
+@model ClienteApi.Models.LoanHistoryViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<SelectListItem> contentData = new List<SelectListItem>();
+    foreach (PaymentTypeViewModel paymentType in ViewBag.PaymentType)
+    {
+        contentData.Add(new SelectListItem {
+                    Text = paymentType.PaymentTypeName,
+                    Value = paymentType.IdPaymentType.ToString(),
+        });
+    }
+
+}
+
+
+@if (ViewBag.exito == "" | ViewBag.exito == null)
+{
+
+}
+else
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.exito</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+@if (ViewBag.error == "" | ViewBag.error == null)
+{
+
+}
+else
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+<div class="card-body card shadow mb-4">
+    <style>
+        .card-title {
+            padding-bottom: 15px;
+            background: #007BFF;
+            color: #fff;
+            padding: 16px 30px;
+            min-width: 100%;
+            margin: -20px -25px 10px;
+            border-radius: 3px 3px 0 0;
+        }
+    </style>
+    <div class="card-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Creacion de un Pago</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-horizontal">
+                <div class="form-group">
+
+                    <div class="col-md-10 mt-3">
+                        <label class="text-dark">
+                            <span>
+                                <label asp-for="LoadId" class="control-label"></label>
+                            </span>
+                        </label>
+                        <input class="form-control" value="Credito: #Fide000-@ViewBag.loanId" disabled />
+                        <input hidden asp-for="LoadId" class="form-control" value="@ViewBag.loanId" />
+                        <span asp-validation-for="LoadId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-10 mt-3">
+                        <label class="text-dark">
+                            <span>
+                                <label asp-for="PaymentAmount" class="control-label"></label>
+                            </span>
+                        </label>
+                        <input asp-for="PaymentAmount" class="form-control" type="number"/>
+                        <span asp-validation-for="PaymentAmount" class="text-danger"></span>
+                    </div>
+
+                    @* 
+                    <div class="col-md-10 mt-3">
+                        <label class="text-dark">
+                            <span>
+                                <label asp-for="PayDate" class="control-label"></label>
+                            </span>
+                        </label>
+                        @{
+                            String date = DateTime.Now.ToString("dd/MM/yyyy");
+                        }
+                        <input asp-for="PayDate" class="form-control" value="@date"  disabled />
+                        <span asp-validation-for="PayDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-10 mt-3">
+                        <label class="text-dark">
+                            <span>
+                                <label asp-for="PaymentType" class="control-label"></label>
+                            </span>
+                        </label>
+                        <select class="form-select" id="IdCountry" asp-for="PaymentType" asp-items="@contentData">
+                            <option selected>Seleccione un Tipo de Pago</option>
+                        </select>
+                        <span asp-validation-for="PaymentType" class="text-danger"></span>
+                    </div>
+                    *@
+
+                    <div class="form-group mt-5">
+                        <input type="submit" value="Pagar" class="btn btn-primary" />
+                    </div>
+
+                </div>
+            </div>
+        </form>
+        <div>
+            <a asp-action="Index", asp-controller="Loan">Volver al Listado de Creditos</a>
+        </div>
+    </div>
+
+
+
+</div>
+
