@@ -100,8 +100,8 @@ else
                             @Html.DisplayFor(modelItem => item.LoansStateName)
                         </td>
                         <td>
-                            @Html.ActionLink("Editar", "Edit", new { id=item.LoansStatesId}) |
-                            @Html.ActionLink("Detalles", "Details", new { id=item.LoansStatesId })
+                            @Html.ActionLink("Editar", "Edit", new { id=item.LoansStatesId}, new { @class = "btn btn-primary " })
+                            @Html.ActionLink("Detalles", "Details", new { id=item.LoansStatesId }, new { @class = "btn btn-success " })
                         </td>
                     </tr>
                 }

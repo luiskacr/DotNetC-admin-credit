@@ -29,6 +29,8 @@ namespace BackEnd.Entities
         public virtual DbSet<LoansType> LoansTypes { get; set; } = null!;
         public virtual DbSet<PaymentType> PaymentTypes { get; set; } = null!;
         public virtual DbSet<State> States { get; set; } = null!;
+        public virtual DbSet<LoansTypeInterest> LoansTypeInterest { get; set; } = null!;
+        public virtual DbSet<sp_DeleteAllLoans_Result> sp_DeleteAllLoans_Result { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -314,6 +316,28 @@ namespace BackEnd.Entities
                     .HasConstraintName("FK__states__idCountr__267ABA7A");
             });
 
+            modelBuilder.Entity<State>(entity =>
+            {
+                entity.HasKey(e => e.IdState)
+                    .HasName("PK__states__98CB37231FE181DF");
+
+                entity.ToTable("states");
+
+                entity.Property(e => e.IdState).HasColumnName("idState");
+
+                entity.Property(e => e.IdCountry).HasColumnName("idCountry");
+
+                entity.Property(e => e.StateName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("stateName");
+
+                entity.HasOne(d => d.IdCountryNavigation)
+                    .WithMany(p => p.States)
+                    .HasForeignKey(d => d.IdCountry)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__states__idCountr__267ABA7A");
+            });
 
             OnModelCreatingPartial(modelBuilder);
         }

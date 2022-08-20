@@ -17,6 +17,7 @@ namespace BackEnd.Entities
         public int IdCurrencies { get; set; }
         public string CurrencyName { get; set; } = null!;
         public string CurrencyIso { get; set; } = null!;
+        public string Symbol { get; set; } = null!;
 
         public virtual ICollection<Loan> Loans { get; set; }
     }

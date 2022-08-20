@@ -31,6 +31,147 @@ else
 
 <div class="container-fluid">
     <h1>Dasboard</h1>
+
+
+    <div class="card-body">
+        <div class="row">
+
+            @if (ViewBag.Dasboard != null)
+            {
+                <div class="col-12 col-lg-6 mt-3 col-xl">
+
+                    <div class="card bg-primary text-white">
+
+                        <div class="card-body">
+                            <div class="row align-items-center gx-0">
+
+                                <div class="col">
+
+                                    <h6 class="text-uppercase mb-2">Total de Clientes  </h6>
+                                    <span class="h2 mb-0">@ViewBag.Dasboard.totalCustomers </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-lg-6 mt-3 col-xl">
+
+                    <div class="card bg-info  text-white">
+
+                        <div class="card-body">
+                            <div class="row align-items-center gx-0">
+
+                                <div class="col">
+
+                                    <h6 class="text-uppercase  mb-2">Total de Creditos  </h6>
+                                    <span class="h2 mb-0">@ViewBag.Dasboard.totalLoans </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-lg-6 mt-3  col-xl">
+
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="row align-items-center gx-0">
+
+                                <div class="col">
+
+                                    <h6 class="text-uppercase text-muted mb-2">Creditos Activos  </h6>
+                                    <span class="h2 mb-0">@ViewBag.Dasboard.activeLoans </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-lg-6 mt-3  col-xl">
+
+                    <div class="card bg-danger  text-white">
+
+                        <div class="card-body">
+                            <div class="row align-items-center gx-0">
+
+                                <div class="col">
+
+                                    <h6 class="text-uppercase  mb-2">Creditos Atrasados  </h6>
+                                    <span class="h2 mb-0">@ViewBag.Dasboard.delayLoans </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            }
+      
+        </div>
+        <div class="row">
+
+            @if (ViewBag.exchangeRate != null) 
+            {
+
+                <div class="col-12 col-lg-6 mt-3 col-xl">
+
+                    <div class="card bg-success text-white">
+
+                        <div class="card-body">
+                            <div class="row align-items-center gx-0">
+
+                                <div class="col">
+
+                                    <h6 class="text-uppercase mb-2">Venta Dolar </h6>
+                                    <span class="h2 mb-0"> ₡ @ViewBag.exchangeRate.venta </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-lg-6 mt-3 col-xl">
+
+                    <div class="card bg-success text-white">
+
+                        <div class="card-body">
+                            <div class="row align-items-center gx-0">
+
+                                <div class="col">
+
+                                    <h6 class="text-uppercase mb-2">Compra  Dolar </h6>
+                                    <span class="h2 mb-0"> ₡ @ViewBag.exchangeRate.compra </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
 </div>
 
 

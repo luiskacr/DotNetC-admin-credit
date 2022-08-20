@@ -75,26 +75,57 @@
                 </a>
                 <div class="collapse" id="home-collapse" style="">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
+                        <h6 class="collapse-header">Creditos:</h6>
+                        <a class="collapse-item" asp-area="" asp-controller="Loan" asp-action="index">Creditos</a>
+                        <a class="collapse-item" asp-area="" asp-controller="LoansHistory" asp-action="index">Historial de Pagos</a>
+                        <h6 class="collapse-header">COnfiguraciones:</h6>
+                        <a class="collapse-item" asp-area="" asp-controller="LoanState" asp-action="index">Estados de Creditos</a>
+                        <a class="collapse-item" asp-area="" asp-controller="LoansType" asp-action="index">Tipos de Creditos</a>
+                        <a class="collapse-item" asp-area="" asp-controller="PaymentType" asp-action="index">Tipos de Pago</a>
                     </div>
                 </div>
             </li>
 
             <hr class="sidebar-divider">
 
+            <div class="sidebar-heading">
+                Clientes
+            </div>
+
             <!-- Options -->
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#opciones-collapse" aria-expanded="false">
+                    <i class="fa fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <div class="collapse" id="opciones-collapse" style="">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Clientes:</h6>
+                        <a class="collapse-item" asp-area="" asp-controller="Customer" asp-action="index">Clientes</a>
+                    </div>
+                </div>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading">
+                Opciones
+            </div>
+            <!-- Options -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#opciones-collapse2" aria-expanded="false">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Configuracion</span>
                 </a>
-                <div class="collapse" id="opciones-collapse" style="">
+                <div class="collapse" id="opciones-collapse2" style="">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Configuraciones:</h6>
                         <a class="collapse-item" asp-area="" asp-controller="Country" asp-action="index">Paices</a>
                         <a class="collapse-item" asp-area="" asp-controller="State" asp-action="index">Privincias</a>
                         <a class="collapse-item" asp-area="" asp-controller="Currency" asp-action="index">Monedas</a>
+                        <h6 class="collapse-header">Logs:</h6>
+                        <a class="collapse-item" asp-area="" asp-controller="#" asp-action="#">Log de Pagos</a>
+                        <a class="collapse-item" asp-area="" asp-controller="#" asp-action="#">Log de Creditos</a>
                     </div>
                 </div>
             </li>
@@ -135,9 +166,28 @@
                             </div>
 
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
+                            <a class="nav-link dropdown-toggle ml-5" href="#" id="navbarDarkDropdownMenuLink" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                @{
+                                    try
+                                    {
+                                        String username = Context.Session.GetString("UserName");
+                                        if (username.Length == 0 ^ username != null)
+                                        {
+                                            String displayName = char.ToUpper(username[0]) + username.Substring(1);
+                                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">@displayName</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">User Name</span>
+                                        }
+                                    }
+                                    catch (Exception e) 
+                                    {
+                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">User Name</span>
+                                    }
+
+                                }                              
                                 @if (ViewBag.image == null) 
                                 {
                                     <img class="img-profile rounded-circle" src="/img/user.png">
@@ -146,9 +196,9 @@
                                 }
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li><a class="dropdown-item" href="#">My Perfil</a></li>
+                                <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Salir</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LogOut">Salir</a></li>
                             </ul>
                         </li>
 

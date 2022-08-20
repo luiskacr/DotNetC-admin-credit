@@ -175,6 +175,39 @@ namespace BackEndAPI.Controllers
             }
         }
 
+        // DELETE api/<LoanController>/5
+        [Route("AllDelete/{id}")]
+        [HttpDelete]
+        [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
+        public JsonResult AllDelete(int id)
+        {
+            try
+            {
+                bool result = loanDAL.RemoveAll(id);
+                if (result)
+                {
+                    return new JsonResult(new { message = "The data is deleted" })
+                    {
+                        StatusCode = (int)HttpStatusCode.OK
+                    };
+                }
+                else
+                {
+                    return new JsonResult(new { message = "Error to Delete Loan" })
+                    {
+                        StatusCode = (int)HttpStatusCode.BadRequest
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { message = ex.Message })
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
+            }
+        }
+
         private LoanModel objectToModelConvert(Loan loan)
         {
 

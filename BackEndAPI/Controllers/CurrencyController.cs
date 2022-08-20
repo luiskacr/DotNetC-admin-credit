@@ -181,7 +181,8 @@ namespace BackEndAPI.Controllers
             {
                 IdCurrencies = currency.IdCurrencies,
                 CurrencyName = currency.CurrencyName,
-                CurrencyIso = currency.CurrencyIso
+                CurrencyIso = currency.CurrencyIso,
+                Symbol = currency.Symbol
             };
         }
 
@@ -192,7 +193,8 @@ namespace BackEndAPI.Controllers
             {
                 IdCurrencies = currencyModel.IdCurrencies,
                 CurrencyName = currencyModel.CurrencyName,
-                CurrencyIso = currencyModel.CurrencyIso
+                CurrencyIso = currencyModel.CurrencyIso,
+                Symbol = currencyModel.Symbol
             };
         }
     }

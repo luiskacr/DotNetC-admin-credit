@@ -1,11 +1,15 @@
-﻿using ClienteAPI.Helpers;
+﻿using ClienteApi.Models;
+using ClienteAPI.Helpers;
 using ClienteAPI.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ClienteAPI.Controllers
 {
     public class AccountController : Controller
     {
+
         public IActionResult Index()
         {
             return View();
@@ -40,6 +44,10 @@ namespace ClienteAPI.Controllers
 
                 HttpContext.Session.SetString("JWTToken", token);
 
+                HttpContext.Session.SetString("UserName", tokenModel.user.UserName);
+                HttpContext.Session.SetString("UserId", tokenModel.user.Id);
+
+
                 return RedirectToAction("index", "Dashboard");
 
             }
@@ -48,6 +56,13 @@ namespace ClienteAPI.Controllers
             return View(model);
 
 
+        }
+
+        public async Task<IActionResult> LogOut() 
+        {
+            HttpContext.Session.Clear();
+
+            return RedirectToAction("Index","Home");
         }
 
     }

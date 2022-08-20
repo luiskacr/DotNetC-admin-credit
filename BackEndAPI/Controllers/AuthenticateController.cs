@@ -57,11 +57,13 @@ namespace BackEndAPI.Controllers
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
+                user.PasswordHash = "";
 
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
+                    expiration = token.ValidTo,
+                    user
                 });
             }
             return Unauthorized();

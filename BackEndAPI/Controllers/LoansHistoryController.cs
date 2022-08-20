@@ -45,6 +45,33 @@ namespace BackEndAPI.Controllers
             }
         }
 
+        [Route("GetbyLoan/{id}")]
+        [HttpGet]
+        public JsonResult GetbyLoan(int id)
+        {
+            try
+            {
+                List<LoansHistory> loansHistories = loansHistoryDAL.GetbyLoan(id).ToList();
+                List<LoanHistoryModel> result = new List<LoanHistoryModel>();
+                foreach (LoansHistory loansHistory in loansHistories)
+                {
+                    result.Add(objectToModelConvert(loansHistory));
+                }
+
+                return new JsonResult(result)
+                {
+                    StatusCode = (int)HttpStatusCode.OK
+                };
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message)
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
+            }
+        }
+
         // GET api/<LoansHistoryController>/5
         [HttpGet("{id}")]
         public JsonResult Get(int id)

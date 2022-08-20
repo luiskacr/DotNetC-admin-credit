@@ -88,6 +88,9 @@ else
                         @Html.DisplayNameFor(model => model.CurrencyIso)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(model => model.Symbol)
+                    </th>
+                    <th>
                         Opciones
                     </th>
                 </tr>
@@ -103,6 +106,9 @@ else
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CurrencyIso)
+                    </td>
+                    <td>
+                            @Html.DisplayFor(modelItem => item.Symbol)
                     </td>
                     <td>
                             @Html.ActionLink("Edit", "Edit", new { id=item.IdCurrencies } , new { @class = "btn btn-primary " })

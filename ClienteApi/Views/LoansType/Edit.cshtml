@@ -1,7 +1,7 @@
 ﻿@model ClienteApi.Models.LoanTypeViewModel
 
 @{
-    ViewData["Title"] = "Editar Tipo de Préstamo";
+    ViewData["Title"] = "Editar Tipo de Credito";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -34,7 +34,7 @@ else
     <style>
         .card-title {
             padding-bottom: 15px;
-            background: #040FD9;
+            background: #007BFF;
             color: #fff;
             padding: 16px 30px;
             min-width: 100%;
@@ -45,16 +45,16 @@ else
     <div class="card-title">
         <div class="row">
             <div class="col-sm-6">
-                <h2>Editar Pais</h2>
+                <h2>Editar un Tipo de Credito</h2>
             </div>
         </div>
     </div>
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
-            <input asp-for="IdloansType" class="form-control" />
+            <input asp-for="IdloansType" class="form-control" hidden/>
 
-            <div class="col-md-10">
+            <div class="col-md-10 mt-3">
                 <label class="text-dark">
                     <strong>
                         <label class="text-dark" asp-for="LoansTypeName"></label>

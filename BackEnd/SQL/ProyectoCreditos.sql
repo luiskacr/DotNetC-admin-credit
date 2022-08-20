@@ -1,5 +1,17 @@
 ﻿DROP DATABASE proyectoCreditos
 
+--Alternative to Drop
+
+USE master;
+GO
+ALTER DATABASE proyectoCreditos 
+SET SINGLE_USER 
+WITH ROLLBACK IMMEDIATE;
+GO
+DROP DATABASE proyectoCreditos;
+
+--Create Start
+
 CREATE DATABASE proyectoCreditos;
 
 USE proyectoCreditos;
@@ -203,7 +215,8 @@ CREATE TABLE customers(
 CREATE TABLE currencies(
 	idCurrencies INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	currencyName VARCHAR(75) NOT NULL,
-	currencyISO VARCHAR(5) NOT NULL
+	currencyISO VARCHAR(5) NOT NULL,
+	symbol VARCHAR(5) 
 );
 
 CREATE TABLE loansStates(
@@ -216,16 +229,24 @@ CREATE TABLE loansType(
 	loansTypeName VARCHAR(75) NOT NULL
 );
 
+CREATE TABLE loansTypeInterest(
+	idloansTypeInterest INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	idloansType INT NOT NULL FOREIGN KEY REFERENCES loansType(idloansType),
+	idCurrencies INT NOT NULL FOREIGN KEY REFERENCES currencies(idCurrencies),
+	interesRate DECIMAL(9,6) NOT NULL,
+	yearTime INT,
+);
+
 CREATE TABLE loans(
 	idLoan INT IDENTITY(1,1)PRIMARY KEY NOT NULL,
 	idcustomers INT NOT NULL FOREIGN KEY REFERENCES customers(idCustomers),
 	starDate DATETIME NOT NULL,
-	endDate DATETIME NOT NULL,
+	endDate DATETIME ,
 	interesRate DECIMAL(9,6) NOT NULL,
 	loanAmount MONEY NOT NULL,
 	currentAmount MONEY DEFAULT 0,
 	monthlyAmount MONEY NOT NULL,
-	nextDueDate DATETIME NOT NULL,
+	nextDueDate DATETIME ,
 	bankFees MONEY NOT NULL,
 	loansDescription VARCHAR(250),
 	idloansType INT NOT NULL FOREIGN KEY REFERENCES loansType(idloansType),
@@ -246,7 +267,167 @@ CREATE TABLE loansHistories(
 	paymentType INT NOT NULL FOREIGN KEY REFERENCES paymentType(idPaymentType),
 );
 
+CREATE TABLE LOG_LoanHistory(
+	idlog INT IDENTITY(1,1)PRIMARY KEY NOT NULL,
+	idLoansHistory INT NOT NULL,
+	loadId INT NOT NULL,
+	paymentAmount MONEY NOT NULL,
+	payDate DATETIME NOT NULL,
+	paymentType INT NOT NULL,
+	typeChange VARCHAR(50) NOT NULL,
+	changeDate DATETIME NOT NULL,
+);
+
 --Triggers,Store Procedures and
+
+CREATE OR ALTER TRIGGER tr_insert_loadAmount 
+ON loansHistories
+	INSTEAD OF INSERT 
+AS
+BEGIN 
+	SET NOCOUNT ON
+	DECLARE @loadId INT;
+	DECLARE @paymentAmount MONEY;
+	DECLARE @paymentType INT; 
+	DECLARE @newCurrentAmount MONEY;
+
+	SELECT @loadId = INSERTED.loadId from INSERTED
+	SELECT @paymentAmount = INSERTED.paymentAmount from INSERTED
+	SELECT @paymentType = INSERTED.paymentType from INSERTED
+	SELECT @newCurrentAmount = currentAmount FROM loans where idLoan = @loadId
+
+	INSERT INTO loansHistories (loadId,paymentAmount,payDate,paymentType)
+	VALUES (@loadId,@paymentAmount,GETDATE(),@paymentType);
+
+	SET @newCurrentAmount = @newCurrentAmount - @paymentAmount;
+
+	UPDATE loans SET currentAmount = @newCurrentAmount WHERE idLoan = @loadId;
+
+END;
+
+
+CREATE OR ALTER TRIGGER tr_update_loadAmount
+ON loansHistories
+	INSTEAD OF UPDATE 
+AS
+BEGIN 
+	SET NOCOUNT ON
+	DECLARE @idLoansHistory INT;
+	DECLARE @loadId INT;
+	DECLARE @paymentAmount MONEY;
+	DECLARE @paymentType INT; 
+	DECLARE @newCurrentAmount MONEY;
+	DECLARE @payDate DATETIME;
+
+	DECLARE @oldidLoansHistory INT;
+	DECLARE @oldloadId INT;
+	DECLARE @oldpaymentAmount MONEY;
+	DECLARE @oldpaymentType INT; 
+	DECLARE @oldpayDate DATETIME;
+
+	SELECT @idLoansHistory = INSERTED.idLoansHistory from INSERTED
+	SELECT @loadId = INSERTED.loadId from INSERTED
+	SELECT @paymentAmount = INSERTED.paymentAmount from INSERTED
+	SELECT @paymentType = INSERTED.paymentType from INSERTED
+	SELECT @payDate = INSERTED.payDate from INSERTED
+	SELECT @newCurrentAmount = currentAmount FROM loans where idLoan = @loadId
+
+	SELECT @oldidLoansHistory = DELETED.idLoansHistory from DELETED
+	SELECT @oldloadId = DELETED.loadId from DELETED
+	SELECT @oldpaymentAmount = DELETED.paymentAmount from DELETED
+	SELECT @oldpaymentType = DELETED.paymentType from DELETED
+	SELECT @oldpayDate = DELETED.payDate from DELETED
+
+	INSERT INTO LOG_LoanHistory (idLoansHistory,loadId,paymentAmount,payDate,paymentType,typeChange,changeDate)
+	VALUES(@oldidLoansHistory,@oldloadId,@oldpaymentAmount,@oldpayDate,@oldpaymentType,'BEFORE UPDATE',GETDATE());
+
+	UPDATE loansHistories SET paymentAmount = @paymentAmount, payDate = @payDate, paymentType = @paymentType WHERE idLoansHistory = @idLoansHistory;
+
+	INSERT INTO LOG_LoanHistory (idLoansHistory,loadId,paymentAmount,payDate,paymentType,typeChange,changeDate)
+	VALUES (@oldidLoansHistory,@loadId,@paymentAmount,@payDate,@paymentType,'After Update',GETDATE());
+
+	IF(@oldpaymentAmount = @paymentAmount) SET @newCurrentAmount = @newCurrentAmount - @paymentAmount;
+	ELSE IF (@oldpaymentAmount > @paymentAmount) SET @newCurrentAmount = @newCurrentAmount + (@oldpaymentAmount -@paymentAmount) ;
+	ELSE IF (@oldpaymentAmount < @paymentAmount) SET @newCurrentAmount = @newCurrentAmount - (@paymentAmount - @oldpaymentAmount) ;
+
+	UPDATE loans SET currentAmount = @newCurrentAmount WHERE idLoan = @loadId;
+
+END;
+
+
+CREATE OR ALTER TRIGGER tr_delete_loadAmount
+ON loansHistories
+	INSTEAD OF DELETE 
+AS
+BEGIN 
+	SET NOCOUNT ON
+
+	DECLARE @newCurrentAmount MONEY;
+	DECLARE @oldidLoansHistory INT;
+	DECLARE @oldloadId INT;
+	DECLARE @oldpaymentAmount MONEY;
+	DECLARE @oldpaymentType INT; 
+	DECLARE @oldpayDate DATETIME;
+
+	
+	SELECT @oldidLoansHistory = DELETED.idLoansHistory from DELETED
+	SELECT @oldloadId = DELETED.loadId from DELETED
+	SELECT @oldpaymentAmount = DELETED.paymentAmount from DELETED
+	SELECT @oldpaymentType = DELETED.paymentType from DELETED
+	SELECT @oldpayDate = DELETED.payDate from DELETED
+	SELECT @newCurrentAmount = currentAmount FROM loans where idLoan = @oldloadId
+
+	INSERT INTO LOG_LoanHistory (idLoansHistory,loadId,paymentAmount,payDate,paymentType,typeChange,changeDate)
+	VALUES(@oldidLoansHistory,@oldloadId,@oldpaymentAmount,@oldpayDate,@oldpaymentType,'DELETE',GETDATE());
+
+	DELETE FROM loansHistories WHERE idLoansHistory = @oldidLoansHistory;
+
+	SET @newCurrentAmount = @newCurrentAmount + @oldpaymentAmount;
+
+	UPDATE loans SET currentAmount = @newCurrentAmount WHERE idLoan = @oldloadId;
+
+END;
+
+
+
+CREATE OR ALTER PROCEDURE sp_delete_loans_all @idLoan int
+AS
+BEGIN 
+	DECLARE	@return_value BIT;
+	DECLARE @actualLoanHistory int;
+	DECLARE db_cursor CURSOR FOR SELECT idloansHistory from loansHistories where loadId = @idLoan;
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM loans WHERE idLoan = @idLoan)
+			BEGIN
+				BEGIN TRANSACTION
+					OPEN db_cursor 
+					FETCH NEXT FROM db_cursor INTO @actualLoanHistory
+					WHILE @@FETCH_STATUS = 0  
+					BEGIN  
+						DELETE FROM loansHistories WHERE idloansHistory = @actualLoanHistory;
+						FETCH NEXT FROM db_cursor INTO @actualLoanHistory
+					END
+					CLOSE db_cursor  
+					DEALLOCATE db_cursor 
+					DELETE FROM LOANS WHERE idLoan = @idLoan;
+				COMMIT TRANSACTION;
+				SET @return_value = 1;
+				SELECT 'Return' = @return_value;
+			END;
+		ELSE
+			BEGIN
+				SET @return_value = 0;
+				SELECT 'Return' = @return_value;
+			END;		
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		CLOSE db_cursor  
+		DEALLOCATE db_cursor 
+		SET @return_value = 0;
+		SELECT 'Return' = @return_value;
+	END CATCH;
+END;
 
 
 --Create Entries for this Database
@@ -255,7 +436,7 @@ INSERT INTO countries (countryName)
 VALUES ('Costa Rica'),
 ('Panamá'),
 ('United States'),
-('Spain ');
+('España ');
 
 INSERT INTO states (stateName,idCountry)
 VALUES ('San Jose',1),
@@ -285,26 +466,26 @@ VALUES ('Wilmar','Arlett','352959179','warlett0@amazon.co.uk','82899837 ','8/2/2
 ('Isabel','Briseño Hijo','174898275','ualvarez@info.cr','85608182','09/21/1999','Avenida Benavídez',1);
 
 
-INSERT INTO currencies(currencyName,currencyISO)
-VALUES ('Colon','CRC'),
-('Dollar','USD'),
-('Euro','EUR ');
+INSERT INTO currencies(currencyName,currencyISO,symbol)
+VALUES ('Colones','CRC','₡'),
+('Dollares','USD','$'),
+('Euros','EUR ','€');
 
 INSERT INTO loansStates (loansStateName)
-VALUES ('Created'),
-('Under Validation'),
-('Approved'),
-('Active'),
-('Formalization'),
-('Canceled'),
-('Rejected'),
-('Delayed Payment');
+VALUES ('Creado'),
+('Bajo Validación'),
+('Aprobado'),
+('Activo'),
+('Formalizado'),
+('Cancelado'),
+('Rechazado'),
+('Pago Retrazado');
 
 INSERT INTO loansType(loansTypeName)
 VALUES ('Personal Loan'),
-('Home Loan'),
-('Vehicle loan'),
-('Commercial loans');
+('Credito Casa'),
+('Credito Vehiculo'),
+('Credito Comercial');
 
 INSERT INTO loans (idcustomers,starDate,endDate,interesRate,loanAmount,currentAmount,monthlyAmount,nextDueDate,
 bankFees,loansDescription,idloansType,idCurrencies,idLoansState)
@@ -313,8 +494,8 @@ VALUES (1,'8/1/2021','8/1/2051',8.00,50000000,50000000,366883,'9/15/2022',100000
 (3,'5/1/2018','6/1/2030',22.6,5000,3000,102,'9/15/2022',250,'Credit Card Payment',1,2,4);
 
 INSERT INTO paymentType(paymentTypeName)
-VALUES ('Monthly Payment'),
-('Extraordinary Payment');
+VALUES ('Pago Mensual'),
+('Pago Extraordinario');
 
 INSERT INTO loansHistories(loadId,paymentAmount,payDate,paymentType)
 values(2,156005,'7/15/2022',1),
@@ -322,3 +503,13 @@ values(2,156005,'7/15/2022',1),
 (3,102,'7/15/2022',1),
 (3,1000,'8/1/2022',2),
 (3,102,'8/15/2022',1);
+
+INSERT INTO loansTypeInterest (idloansType,idCurrencies,interesRate,yearTime)
+VALUES (1,1,15.3,5),
+(1,1,15.3,5),
+(1,1,16.43,6),
+(1,1,17.56,7),
+(1,1,18.69,8),
+(1,1,19.82,9),
+(1,1,20.95,10);
+

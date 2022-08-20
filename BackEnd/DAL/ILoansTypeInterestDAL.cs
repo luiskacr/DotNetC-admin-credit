@@ -7,8 +7,7 @@ using BackEnd.Entities;
 
 namespace BackEnd.DAL
 {
-    public interface ILoansHistoryDAL : IDALGenerico<LoansHistory>
+    public interface ILoansTypeInterestDAL : IDALGenerico<LoansTypeInterest>
     {
-        public IEnumerable<LoansHistory> GetbyLoan(int loansId);
     }
 }

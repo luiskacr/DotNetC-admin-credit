@@ -52,6 +52,23 @@ namespace BackEnd.DAL
             }
         }
 
+        public IEnumerable<LoansHistory> GetbyLoan(int loansId)
+        {
+            try
+            {
+                IEnumerable<LoansHistory> loansHistories;
+                using (UnidadDeTrabajo<LoansHistory> unidad = new UnidadDeTrabajo<LoansHistory>(context))
+                {
+                    loansHistories = unidad.genericDAL.GetAll().Where(m => m.LoadId == loansId);
+                }
+                return loansHistories;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public IEnumerable<LoansHistory> GetAll()
         {
             try

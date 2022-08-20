@@ -16,5 +16,9 @@ namespace ClienteApi.Models
         [DisplayName("Iso Moneda")]
         [Required(ErrorMessage = "la Iso de la Moneda es requerido")]
         public string CurrencyIso { get; set; } = null!;
+
+        [DisplayName("Simbolo")]
+        [Required(ErrorMessage = "El Simbolo de la Moneda es requerido")]
+        public string Symbol { get; set; } = null!;
     }
 }

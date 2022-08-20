@@ -10,5 +10,6 @@ namespace BackEndAPI.Models
         public int IdCurrencies { get; set; }
         public string CurrencyName { get; set; } = null!;
         public string CurrencyIso { get; set; } = null!;
+        public string Symbol { get; set; } = null!;
     }
 }

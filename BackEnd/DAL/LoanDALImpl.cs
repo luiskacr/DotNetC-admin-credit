@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using BackEnd.Entities;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd.DAL
 {
@@ -86,6 +88,39 @@ namespace BackEnd.DAL
             }
             return result;
         }
+
+        public bool RemoveAll(int Id) 
+        {
+            bool result = false;
+            
+            try
+            {
+                List<sp_DeleteAllLoans_Result> results;
+                string sql = " EXEC sp_delete_loans_all @idLoan " ;
+                var param = new SqlParameter[]
+                {
+                    new SqlParameter()
+                    {
+                        ParameterName = "@idLoan",
+                        SqlDbType = System.Data.SqlDbType.Int,
+                        Direction = System.Data.ParameterDirection.Input,
+                        Value = Id
+                    }
+                };
+                results = context.sp_DeleteAllLoans_Result.FromSqlRaw(sql, param).ToListAsync().Result;
+
+                if (results[0].Return) 
+                {
+                    result = true;
+                }
+            }
+            catch (Exception) 
+            {
+                result = false;
+            }
+            return result;
+        }
+
 
         public bool Update(Loan entity)
         {
