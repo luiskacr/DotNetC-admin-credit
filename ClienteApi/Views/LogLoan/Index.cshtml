@@ -1,0 +1,194 @@
+﻿@model IEnumerable<ClienteApi.Models.LogLoanViewModel>
+
+@{
+    ViewData["Title"] = "Log de Creditos";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (ViewBag.exito == "" | ViewBag.exito == null)
+{
+
+}
+else
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.exito</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+@if (ViewBag.error == "" | ViewBag.error == null)
+{
+
+}
+else
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+<div class="card-body card shadow mb-4">
+    <style>
+        .table-title {
+            padding-bottom: 15px;
+            background: #007BFF;
+            color: #fff;
+            padding: 16px 30px;
+            min-width: 100%;
+            margin: -20px -25px 10px;
+            border-radius: 3px 3px 0 0;
+        }
+
+            .table-title h2 {
+                margin: 5px 0 0;
+                font-size: 24px;
+            }
+
+            .table-title .btn-group {
+                float: right;
+            }
+
+            .table-title .btn {
+                float: right;
+                font-size: 13px;
+                border: none;
+                min-width: 50px;
+                border-radius: 2px;
+                border: none;
+                outline: none !important;
+                margin-left: 10px;
+            }
+    </style>
+
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Log de Creditos</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive table-hover">
+        <table id="TableEmployee" class="table table-avance table-striped ">
+            <thead class="table-primaryk">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Idlog)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdLoan)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Idcustomers)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StarDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EndDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InteresRate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LoanAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CurrentAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MonthlyAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NextDueDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BankFees)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LoansDescription)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdloansType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdCurrencies)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdLoansState)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TypeChange)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ChangeDate)
+                    </th>
+                </tr>
+            </thead>
+            <tbody class=" ">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Idlog)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IdLoan)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Idcustomers)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StarDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EndDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InteresRate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoanAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CurrentAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MonthlyAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NextDueDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BankFees)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoansDescription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IdloansType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IdCurrencies)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IdLoansState)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TypeChange)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ChangeDate)
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+
+</div>

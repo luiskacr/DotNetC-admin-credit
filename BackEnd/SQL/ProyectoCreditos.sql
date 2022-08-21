@@ -429,6 +429,29 @@ BEGIN
 					END
 					CLOSE db_cursor  
 					DEALLOCATE db_cursor 
+					DECLARE @idcustomers INT;
+					DECLARE @starDate DATETIME;
+					DECLARE @endDate DATETIME;
+					DECLARE @interesRate DECIMAL(9,6);
+					DECLARE @loanAmount MONEY;
+					DECLARE @currentAmount MONEY;
+					DECLARE @monthlyAmount MONEY;
+					DECLARE @nextDueDate DATETIME;
+					DECLARE @bankFees MONEY;
+					DECLARE @loansDescription VARCHAR(250);
+					DECLARE @idloansType INT;
+					DECLARE @idCurrencies INT;
+					DECLARE @idLoansState INT;
+					SELECT @idcustomers = idcustomers,@starDate = starDate, @endDate = endDate,@interesRate = interesRate,
+						@loanAmount = loanAmount, @currentAmount = currentAmount, @monthlyAmount = monthlyAmount,
+						@nextDueDate = nextDueDate, @bankFees = bankFees,@loansDescription = loansDescription,
+						@idloansType = idloansType, @idCurrencies = idCurrencies, @idLoansState = idLoansState
+						FROM loans WHERE idLoan = @idLoan;
+					INSERT INTO LOG_Loan(idLoan,idcustomers,starDate,endDate,interesRate,loanAmount,currentAmount,monthlyAmount,
+						nextDueDate,bankFees,loansDescription,idloansType,idCurrencies,idLoansState,typeChange,changeDate)
+						values (@idLoan,@idcustomers,@starDate, @endDate,@interesRate,@loanAmount,@currentAmount,
+						@monthlyAmount,@nextDueDate,@bankFees,@loansDescription,@idloansType,@idCurrencies,@idLoansState,
+						'DELETE',GETDATE());
 					DELETE FROM LOANS WHERE idLoan = @idLoan;
 				COMMIT TRANSACTION;
 				SET @return_value = 1;

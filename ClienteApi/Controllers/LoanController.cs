@@ -210,14 +210,50 @@ namespace ClienteApi.Controllers
         // POST: LoanController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Models.LoanViewModel loan)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+
+                ServiceRepository serviceObj = new ServiceRepository();
+
+                HttpResponseMessage response1 = serviceObj.GetResponse("api/Loan/" + loan.IdLoan.ToString());
+                response1.EnsureSuccessStatusCode();
+                var content = response1.Content.ReadAsStringAsync().Result;
+                Models.LoanViewModel oldLoan = response1.Content.ReadAsAsync<Models.LoanViewModel>().Result;
+
+                loan.BankFees = oldLoan.BankFees;
+                loan.CurrentAmount = oldLoan.CurrentAmount;
+                loan.MonthlyAmount = oldLoan.MonthlyAmount;
+                loan.LoanAmount = oldLoan.LoanAmount;
+                loan.StarDate = oldLoan.StarDate;
+                loan.EndDate = oldLoan.EndDate;
+                loan.NextDueDate = oldLoan.NextDueDate;
+                loan.InteresRate = oldLoan.InteresRate;
+
+
+                HttpResponseMessage response = serviceObj.PutResponse("api/Loan/" + loan.IdLoan.ToString(), loan);
+                response.EnsureSuccessStatusCode();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    TempData["exito"] = "Se ha Modificado el Credito ";
+                    return RedirectToAction("Index");
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    ViewBag.error = "Hubo un error al editar el Credito";
+                    return View();
+                }
+                else
+                {
+                    ViewBag.error = "Hubo un error al editar el Credito";
+                    return View();
+                }
             }
             catch
             {
+                ViewBag.error = "Hubo un error al editar el Credito";
                 return View();
             }
         }

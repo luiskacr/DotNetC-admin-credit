@@ -31,6 +31,8 @@ namespace BackEnd.Entities
         public virtual DbSet<PaymentType> PaymentTypes { get; set; } = null!;
         public virtual DbSet<State> States { get; set; } = null!;
         public virtual DbSet<LoansTypeInterest> LoansTypeInterest { get; set; } = null!;
+
+        public virtual DbSet<LogLoan> LogLoans { get; set; } = null!;
         public virtual DbSet<LogLoanHistory> LogLoanHistory { get; set; } = null!;
         public virtual DbSet<sp_DeleteAllLoans_Result> sp_DeleteAllLoans_Result { get; set; }
 
@@ -295,6 +297,73 @@ namespace BackEnd.Entities
                     .HasForeignKey(d => d.IdloansType)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__loansType__idloa__71D1E811");
+            });
+
+            modelBuilder.Entity<LogLoan>(entity =>
+            {
+                entity.HasKey(e => e.Idlog)
+                    .HasName("PK__LOG_Loan__07BE4DF83CBE32C3");
+
+                entity.ToTable("LOG_Loan");
+
+                entity.Property(e => e.Idlog).HasColumnName("idlog");
+
+                entity.Property(e => e.BankFees)
+                    .HasColumnType("money")
+                    .HasColumnName("bankFees");
+
+                entity.Property(e => e.ChangeDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("changeDate");
+
+                entity.Property(e => e.CurrentAmount)
+                    .HasColumnType("money")
+                    .HasColumnName("currentAmount")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.EndDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("endDate");
+
+                entity.Property(e => e.IdCurrencies).HasColumnName("idCurrencies");
+
+                entity.Property(e => e.IdLoan).HasColumnName("idLoan");
+
+                entity.Property(e => e.IdLoansState).HasColumnName("idLoansState");
+
+                entity.Property(e => e.Idcustomers).HasColumnName("idcustomers");
+
+                entity.Property(e => e.IdloansType).HasColumnName("idloansType");
+
+                entity.Property(e => e.InteresRate)
+                    .HasColumnType("decimal(9, 6)")
+                    .HasColumnName("interesRate");
+
+                entity.Property(e => e.LoanAmount)
+                    .HasColumnType("money")
+                    .HasColumnName("loanAmount");
+
+                entity.Property(e => e.LoansDescription)
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("loansDescription");
+
+                entity.Property(e => e.MonthlyAmount)
+                    .HasColumnType("money")
+                    .HasColumnName("monthlyAmount");
+
+                entity.Property(e => e.NextDueDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("nextDueDate");
+
+                entity.Property(e => e.StarDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("starDate");
+
+                entity.Property(e => e.TypeChange)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("typeChange");
             });
 
             modelBuilder.Entity<LogLoanHistory>(entity =>
