@@ -3,6 +3,7 @@ using BackEnd.DAL;
 using BackEnd.Entities;
 using BackEndAPI.Models;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,6 +20,7 @@ namespace BackEndAPI.Controllers
         }
 
         // GET: api/<LoansHistoryController>
+        //[Authorize]
         [HttpGet]
         public JsonResult Get()
         {
@@ -45,6 +47,7 @@ namespace BackEndAPI.Controllers
             }
         }
 
+        //[Authorize]
         [Route("GetbyLoan/{id}")]
         [HttpGet]
         public JsonResult GetbyLoan(int id)
@@ -73,6 +76,7 @@ namespace BackEndAPI.Controllers
         }
 
         // GET api/<LoansHistoryController>/5
+        //[Authorize]
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
@@ -104,6 +108,7 @@ namespace BackEndAPI.Controllers
         }
 
         // POST api/<LoansHistoryController>
+        //[Authorize]
         [HttpPost]
         public JsonResult Post([FromBody] LoanHistoryModel loanHistory)
         {
@@ -135,6 +140,7 @@ namespace BackEndAPI.Controllers
         }
 
         // PUT api/<LoansHistoryController>/5
+        //[Authorize]
         [HttpPut("{id}")]
         public JsonResult Put(int id, [FromBody] LoanHistoryModel loanHistory)
         {
@@ -166,6 +172,7 @@ namespace BackEndAPI.Controllers
         }
 
         // DELETE api/<LoansHistoryController>/5
+        //[Authorize]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {

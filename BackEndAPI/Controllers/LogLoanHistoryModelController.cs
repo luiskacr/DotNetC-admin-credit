@@ -24,6 +24,7 @@ namespace BackEndAPI.Controllers
         }
 
         // GET: api/<LogLoanHistoryModelController>
+        //[Authorize]
         [HttpGet]
         public JsonResult Get()
         {

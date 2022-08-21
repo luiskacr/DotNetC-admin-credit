@@ -21,7 +21,6 @@ namespace BackEndAPI.Controllers
         }
 
         // GET: api/<CountryController>
-        //Agregar [Authorize] a cada metodo que quiero ponerle seguridad
         //[Authorize]
         [HttpGet]
         public JsonResult Get()
@@ -50,6 +49,7 @@ namespace BackEndAPI.Controllers
         }
 
         // GET api/<CountryController>/5
+        //[Authorize]
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
@@ -81,6 +81,7 @@ namespace BackEndAPI.Controllers
         }
 
         // POST api/<CountryController>
+        //[Authorize]
         [HttpPost]
         public JsonResult Post([FromBody] CountryModel country)
         {
@@ -112,6 +113,7 @@ namespace BackEndAPI.Controllers
         }
 
         // PUT api/<CountryController>/5
+        //[Authorize]
         [HttpPut("{id}")]
         public JsonResult Put(int id, [FromBody] CountryModel country)
         {
@@ -143,6 +145,7 @@ namespace BackEndAPI.Controllers
         }
 
         // DELETE api/<CountryController>/5
+        //[Authorize]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {

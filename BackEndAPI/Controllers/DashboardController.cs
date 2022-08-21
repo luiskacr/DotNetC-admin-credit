@@ -1,6 +1,7 @@
 ﻿using BackEnd.DAL;
 using BackEnd.Entities;
 using BackEndAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -19,6 +20,7 @@ namespace BackEndAPI.Controllers
         }
 
         // GET: api/<DashboardController>
+        //[Authorize]
         [HttpGet]
         public JsonResult Get()
         {
