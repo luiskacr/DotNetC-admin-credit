@@ -214,7 +214,7 @@ namespace BackEndAPI.Controllers
             return new LoanModel
             {
                 IdLoan = loan.IdLoan,
-                Idcustomers = loan.IdLoan,
+                Idcustomers = loan.Idcustomers,
                 StarDate = loan.StarDate,
                 EndDate = loan.EndDate,
                 InteresRate = loan.InteresRate,
@@ -236,7 +236,7 @@ namespace BackEndAPI.Controllers
             return new Loan
             {
                 IdLoan = loanModel.IdLoan,
-                Idcustomers = loanModel.IdLoan,
+                Idcustomers = loanModel.Idcustomers,
                 StarDate = loanModel.StarDate,
                 EndDate = loanModel.EndDate,
                 InteresRate = loanModel.InteresRate,

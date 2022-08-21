@@ -278,6 +278,26 @@ CREATE TABLE LOG_LoanHistory(
 	changeDate DATETIME NOT NULL,
 );
 
+CREATE TABLE LOG_Loan(
+	idlog INT IDENTITY(1,1)PRIMARY KEY NOT NULL,
+	idLoan INT NOT NULL,
+	idcustomers INT NOT NULL,
+	starDate DATETIME NOT NULL,
+	endDate DATETIME ,
+	interesRate DECIMAL(9,6) NOT NULL,
+	loanAmount MONEY NOT NULL,
+	currentAmount MONEY DEFAULT 0,
+	monthlyAmount MONEY NOT NULL,
+	nextDueDate DATETIME ,
+	bankFees MONEY NOT NULL,
+	loansDescription VARCHAR(250),
+	idloansType INT NOT NULL,
+	idCurrencies INT NOT NULL ,
+	idLoansState INT NOT NULL ,
+	typeChange VARCHAR(50) NOT NULL,
+	changeDate DATETIME NOT NULL,
+);
+
 --Triggers,Store Procedures and
 
 CREATE OR ALTER TRIGGER tr_insert_loadAmount 
@@ -344,7 +364,7 @@ BEGIN
 	UPDATE loansHistories SET paymentAmount = @paymentAmount, payDate = @payDate, paymentType = @paymentType WHERE idLoansHistory = @idLoansHistory;
 
 	INSERT INTO LOG_LoanHistory (idLoansHistory,loadId,paymentAmount,payDate,paymentType,typeChange,changeDate)
-	VALUES (@oldidLoansHistory,@loadId,@paymentAmount,@payDate,@paymentType,'After Update',GETDATE());
+	VALUES (@oldidLoansHistory,@loadId,@paymentAmount,@payDate,@paymentType,'AFTER UPDATE',GETDATE());
 
 	IF(@oldpaymentAmount = @paymentAmount) SET @newCurrentAmount = @newCurrentAmount - @paymentAmount;
 	ELSE IF (@oldpaymentAmount > @paymentAmount) SET @newCurrentAmount = @newCurrentAmount + (@oldpaymentAmount -@paymentAmount) ;
@@ -479,7 +499,7 @@ VALUES ('Creado'),
 ('Formalizado'),
 ('Cancelado'),
 ('Rechazado'),
-('Pago Retrazado');
+('Pago en Atraso');
 
 INSERT INTO loansType(loansTypeName)
 VALUES ('Personal Loan'),

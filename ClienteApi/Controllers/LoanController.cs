@@ -222,24 +222,46 @@ namespace ClienteApi.Controllers
             }
         }
 
+        /*
         // GET: LoanController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
+        */
 
         // POST: LoanController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.DeleteResponse("api/Loan/AllDelete/" + id.ToString());
+                //bool delete = response.Content.ReadAsAsync<bool>().Result;
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    TempData["exito"] = "Se ha Eliminado el Credito ";
+                    return RedirectToAction("Index");
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    TempData["error"] = "El Credito no se puede eliminar";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "Hubo un error al eliminar el Credito";
+                    return RedirectToAction("Index");
+                }
             }
             catch
             {
-                return View();
+                TempData["error"] = "Hubo un error al eliminar el Credito";
+
+                return RedirectToAction("Index");
             }
         }
     }
