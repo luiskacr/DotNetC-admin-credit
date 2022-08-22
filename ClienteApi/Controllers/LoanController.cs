@@ -134,20 +134,84 @@ namespace ClienteApi.Controllers
         // GET: LoanController/Create
         public ActionResult Create()
         {
-            return View();
+            try
+            {
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.GetResponse("api/LoansTypeInterest");
+                HttpResponseMessage response2 = serviceObj.GetResponse("api/Customer");
+                HttpResponseMessage response3 = serviceObj.GetResponse("api/LoansType");
+                HttpResponseMessage response4 = serviceObj.GetResponse("api/Currency");
+                HttpResponseMessage response5 = serviceObj.GetResponse("api/LoanState");
+
+                response.EnsureSuccessStatusCode();
+                response2.EnsureSuccessStatusCode();
+                response3.EnsureSuccessStatusCode();
+                response4.EnsureSuccessStatusCode();
+                response4.EnsureSuccessStatusCode();
+
+                var content = response.Content.ReadAsStringAsync().Result;
+                var content2 = response2.Content.ReadAsStringAsync().Result;
+                var content3 = response3.Content.ReadAsStringAsync().Result;
+                var content4 = response4.Content.ReadAsStringAsync().Result;
+                var content5 = response5.Content.ReadAsStringAsync().Result;
+
+                List<Models.LoansTypeInterestViewModel> loansTypeInterests = JsonConvert.DeserializeObject<List<Models.LoansTypeInterestViewModel>>(content);
+                ViewBag.CustomerViewModel = JsonConvert.DeserializeObject<List<Models.CustomerViewModel>>(content2);
+                ViewBag.LoansStype = JsonConvert.DeserializeObject<List<Models.LoanTypeViewModel>>(content3);
+                ViewBag.Currency = JsonConvert.DeserializeObject<List<Models.CurrencyViewModel>>(content4);
+                ViewBag.LoanState = JsonConvert.DeserializeObject<List<Models.LoanStateViewModel>>(content5);
+                ViewBag.TypeInterests = loansTypeInterests;
+
+
+                return View();
+            }
+            catch (Exception e) 
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         // POST: LoanController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(int tiempo,Models.LoanViewModel loan)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                loan.StarDate = DateTime.Now;
+                loan.NextDueDate = DateTime.Now.AddMonths(1);
+                loan.CurrentAmount = (loan.LoanAmount * (1 + (loan.InteresRate/100))) + loan.BankFees;
+                loan.MonthlyAmount = (loan.CurrentAmount / (tiempo*12));
+                loan.EndDate = DateTime.Now.AddYears(tiempo);
+                loan.IdLoansState = 1;
+
+
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.PostResponse("api/Loan", loan);
+                response.EnsureSuccessStatusCode();
+
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    TempData["exito"] = "Se creado el Credito con exito";
+
+                    return RedirectToAction("Index");
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    ViewBag.error = "Hubo un error al crear el Credito";
+                    return View();
+                }
+                else
+                {
+                    ViewBag.error = "Hubo un error al crear el Credito";
+                    return View();
+                }
+
             }
             catch
             {
+                ViewBag.error = "Hubo un error al crear el Credito";
                 return View();
             }
         }

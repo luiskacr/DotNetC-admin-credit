@@ -40,7 +40,7 @@ namespace ClienteApi.Models
         [DisplayName("Mensualidad")]
         [Range(1, 9999999.99)]
         [Required(ErrorMessage = "La mensualidad es obligatoria")]
-        public decimal MonthlyAmount { get; set; }
+        public decimal? MonthlyAmount { get; set; }
 
         [DisplayName("Siguente Fecha de Pago")]
         [DataType(DataType.Date)]

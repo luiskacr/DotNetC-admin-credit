@@ -408,7 +408,25 @@ BEGIN
 
 END;
 
+CREATE OR ALTER TRIGGER tr_update_loanStatus
+on loans
+	AFTER UPDATE
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @loadId INT;
+	DECLARE @newCurrentAmount MONEY;
+	DECLARE @actualCurrentAmount MONEY;
 
+	SELECT @loadId = INSERTED.idLoan from INSERTED
+	SELECT @newCurrentAmount = INSERTED.currentAmount from INSERTED
+	SELECT @actualCurrentAmount = currentAmount FROM loans WHERE idLoan = @loadId;
+
+	IF(@newCurrentAmount<=0)
+		BEGIN
+			UPDATE loans SET currentAmount=0, idLoansState=6 WHERE idLoan = @loadId 
+		END;
+END;
 
 CREATE OR ALTER PROCEDURE sp_delete_loans_all @idLoan int
 AS
@@ -472,6 +490,34 @@ BEGIN
 	END CATCH;
 END;
 
+CREATE OR ALTER PROCEDURE usp_change_loan_currency 
+@tiempo INT, @id int, @bankfee money, @moneda int, @exchange money
+AS
+BEGIN 
+	BEGIN TRY
+        BEGIN TRAN t
+			INSERT INTO loans (idcustomers,starDate,endDate,interesRate,loanAmount,currentAmount,monthlyAmount,
+				nextDueDate,bankFees,loansDescription,idloansType,idCurrencies,idLoansState)
+				SELECT l.idcustomers,GETDATE(),DATEADD(YEAR,@tiempo ,GETDATE()),l.interesRate, 
+					(l.currentAmount * @exchange),	
+					((l.currentAmount * @exchange)*(1+(l.interesRate/100))+ @bankfee ),
+					((l.currentAmount * @exchange)*(1+(l.interesRate/100))+ @bankfee ) / (@tiempo *12),
+					DATEADD(MONTH,1 ,GETDATE()),@bankfee,CONCAT('Cambio de Moneda del Credito: FIDE000-',@id ),
+					5, @moneda, 4
+					FROM loans l WHERE idLoan = @id;
+			EXEC sp_delete_loans_all @idLoan = @id;
+        COMMIT TRAN t
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRAN t
+        DECLARE @Message varchar(MAX) ,@Severity int ,@State smallint
+        SET @Message = CONCAT('Error: ', ERROR_NUMBER(), ', ', ERROR_PROCEDURE(), ', ', ERROR_MESSAGE())
+        SET    @Severity = ERROR_SEVERITY()
+        SET    @State = ERROR_STATE()
+        RAISERROR('Error DB: No se pudo cambiar la moneda del Credito',@Severity,@State) --Retorna un error
+    END CATCH
+END;
+
 
 --Create Entries for this Database
 
@@ -525,10 +571,11 @@ VALUES ('Creado'),
 ('Pago en Atraso');
 
 INSERT INTO loansType(loansTypeName)
-VALUES ('Personal Loan'),
+VALUES ('Credito Personal'),
 ('Credito Casa'),
 ('Credito Vehiculo'),
-('Credito Comercial');
+('Credito Comercial'),
+('Cambio de Moneda');
 
 INSERT INTO loans (idcustomers,starDate,endDate,interesRate,loanAmount,currentAmount,monthlyAmount,nextDueDate,
 bankFees,loansDescription,idloansType,idCurrencies,idLoansState)

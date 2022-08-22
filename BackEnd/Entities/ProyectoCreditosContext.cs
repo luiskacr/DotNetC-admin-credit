@@ -35,6 +35,7 @@ namespace BackEnd.Entities
         public virtual DbSet<LogLoan> LogLoans { get; set; } = null!;
         public virtual DbSet<LogLoanHistory> LogLoanHistory { get; set; } = null!;
         public virtual DbSet<sp_DeleteAllLoans_Result> sp_DeleteAllLoans_Result { get; set; }
+        public virtual DbSet<usp_change_loan_currency> usp_change_loan_currency { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
