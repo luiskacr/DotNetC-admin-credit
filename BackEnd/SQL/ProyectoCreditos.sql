@@ -278,6 +278,26 @@ CREATE TABLE LOG_LoanHistory(
 	changeDate DATETIME NOT NULL,
 );
 
+CREATE TABLE LOG_Loan(
+	idlog INT IDENTITY(1,1)PRIMARY KEY NOT NULL,
+	idLoan INT NOT NULL,
+	idcustomers INT NOT NULL,
+	starDate DATETIME NOT NULL,
+	endDate DATETIME ,
+	interesRate DECIMAL(9,6) NOT NULL,
+	loanAmount MONEY NOT NULL,
+	currentAmount MONEY DEFAULT 0,
+	monthlyAmount MONEY NOT NULL,
+	nextDueDate DATETIME ,
+	bankFees MONEY NOT NULL,
+	loansDescription VARCHAR(250),
+	idloansType INT NOT NULL,
+	idCurrencies INT NOT NULL ,
+	idLoansState INT NOT NULL ,
+	typeChange VARCHAR(50) NOT NULL,
+	changeDate DATETIME NOT NULL,
+);
+
 --Triggers,Store Procedures and
 
 CREATE OR ALTER TRIGGER tr_insert_loadAmount 
@@ -344,7 +364,7 @@ BEGIN
 	UPDATE loansHistories SET paymentAmount = @paymentAmount, payDate = @payDate, paymentType = @paymentType WHERE idLoansHistory = @idLoansHistory;
 
 	INSERT INTO LOG_LoanHistory (idLoansHistory,loadId,paymentAmount,payDate,paymentType,typeChange,changeDate)
-	VALUES (@oldidLoansHistory,@loadId,@paymentAmount,@payDate,@paymentType,'After Update',GETDATE());
+	VALUES (@oldidLoansHistory,@loadId,@paymentAmount,@payDate,@paymentType,'AFTER UPDATE',GETDATE());
 
 	IF(@oldpaymentAmount = @paymentAmount) SET @newCurrentAmount = @newCurrentAmount - @paymentAmount;
 	ELSE IF (@oldpaymentAmount > @paymentAmount) SET @newCurrentAmount = @newCurrentAmount + (@oldpaymentAmount -@paymentAmount) ;
@@ -409,6 +429,29 @@ BEGIN
 					END
 					CLOSE db_cursor  
 					DEALLOCATE db_cursor 
+					DECLARE @idcustomers INT;
+					DECLARE @starDate DATETIME;
+					DECLARE @endDate DATETIME;
+					DECLARE @interesRate DECIMAL(9,6);
+					DECLARE @loanAmount MONEY;
+					DECLARE @currentAmount MONEY;
+					DECLARE @monthlyAmount MONEY;
+					DECLARE @nextDueDate DATETIME;
+					DECLARE @bankFees MONEY;
+					DECLARE @loansDescription VARCHAR(250);
+					DECLARE @idloansType INT;
+					DECLARE @idCurrencies INT;
+					DECLARE @idLoansState INT;
+					SELECT @idcustomers = idcustomers,@starDate = starDate, @endDate = endDate,@interesRate = interesRate,
+						@loanAmount = loanAmount, @currentAmount = currentAmount, @monthlyAmount = monthlyAmount,
+						@nextDueDate = nextDueDate, @bankFees = bankFees,@loansDescription = loansDescription,
+						@idloansType = idloansType, @idCurrencies = idCurrencies, @idLoansState = idLoansState
+						FROM loans WHERE idLoan = @idLoan;
+					INSERT INTO LOG_Loan(idLoan,idcustomers,starDate,endDate,interesRate,loanAmount,currentAmount,monthlyAmount,
+						nextDueDate,bankFees,loansDescription,idloansType,idCurrencies,idLoansState,typeChange,changeDate)
+						values (@idLoan,@idcustomers,@starDate, @endDate,@interesRate,@loanAmount,@currentAmount,
+						@monthlyAmount,@nextDueDate,@bankFees,@loansDescription,@idloansType,@idCurrencies,@idLoansState,
+						'DELETE',GETDATE());
 					DELETE FROM LOANS WHERE idLoan = @idLoan;
 				COMMIT TRANSACTION;
 				SET @return_value = 1;
@@ -479,7 +522,7 @@ VALUES ('Creado'),
 ('Formalizado'),
 ('Cancelado'),
 ('Rechazado'),
-('Pago Retrazado');
+('Pago en Atraso');
 
 INSERT INTO loansType(loansTypeName)
 VALUES ('Personal Loan'),

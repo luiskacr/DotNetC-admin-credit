@@ -141,20 +141,76 @@ namespace ClienteApi.Controllers
         // GET: LoanHistoryController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            try
+            {
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.GetResponse("api/LoansHistory/" + id.ToString());
+
+                HttpResponseMessage response2 = serviceObj.GetResponse("api/PaymentType");
+
+                response.EnsureSuccessStatusCode();
+                response2.EnsureSuccessStatusCode();
+
+                var content2 = response2.Content.ReadAsStringAsync().Result;
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    Models.LoanHistoryViewModel loanHistoryView = response.Content.ReadAsAsync<Models.LoanHistoryViewModel>().Result;
+
+                    ViewBag.PaymentType = JsonConvert.DeserializeObject<List<Models.PaymentTypeViewModel>>(content2);
+
+                    return View(loanHistoryView);
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    TempData["error"] = "Hubo un error al buscar el Pago";
+                    return RedirectToAction("Index","Loan");
+                }
+                else
+                {
+                    TempData["error"] = "Hubo un error al buscar el Pago";
+                    return RedirectToAction("Index", "Loan");
+                }
+            }
+            catch (Exception e)
+            {
+
+                TempData["error"] = "Hubo un error al cargar el Pago";
+
+                return RedirectToAction("Index", "Loan");
+            }
         }
 
         // POST: LoanHistoryController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Models.LoanHistoryViewModel loanHistory)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.PutResponse("api/LoansHistory/" + loanHistory.IdLoansHistory.ToString(), loanHistory);
+                response.EnsureSuccessStatusCode();
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+                {
+                    TempData["exito"] = "Se ha Modificado el Pago ";
+                    return RedirectToAction("Index","Loan");
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    TempData["error"] = "Hubo un error al editar el Pago";
+                    return View();
+                }
+                else
+                {
+                    TempData["error"] = "Hubo un error al editar el Pago";
+                    return View();
+                }
             }
             catch
             {
+                TempData["error"] = "Hubo un error al editar el Pago";
                 return View();
             }
         }
@@ -174,11 +230,32 @@ namespace ClienteApi.Controllers
         {
             try
             {
+                ServiceRepository serviceObj = new ServiceRepository();
+                HttpResponseMessage response = serviceObj.DeleteResponse("api/LoansHistory/" + id.ToString());
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    TempData["exito"] = "Se ha Eliminado el Pago ";
+                    return RedirectToAction("Index","Loan");
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    TempData["error"] = "El Pago no se puede eliminar";
+                    return RedirectToAction("Index", "Loan");
+                }
+                else
+                {
+                    TempData["error"] = "Hubo un error al eliminar el Pago";
+                    return RedirectToAction("Index", "Loan");
+                }
+
+
                 TempData["exito"] = "Se ha Eliminado el Pago ";
-                return RedirectToAction("Index", "Loan");
+                return RedirectToAction("Index","Loan");
             }
             catch
             {
+                TempData["error"] = "Hubo un error al Eliminar el Pago";
                 return RedirectToAction("Index","Loan");
             }
         }

@@ -1,0 +1,110 @@
+﻿@using ClienteApi.Models;
+@model ClienteApi.Models.LoanHistoryViewModel
+
+@{
+    ViewData["Title"] = "eDITAR pAGO ";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    String paymentName = "";
+
+    foreach (PaymentTypeViewModel paymentType in ViewBag.PaymentType)
+    {
+        if (paymentType.IdPaymentType == Model.PaymentType) 
+        {
+            paymentName = paymentType.PaymentTypeName;
+        }
+    }
+
+}
+
+
+@if (ViewBag.exito == "" | ViewBag.exito == null)
+{
+
+}
+else
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.exito</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+@if (ViewBag.error == "" | ViewBag.error == null)
+{
+
+}
+else
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+<div class="card-body card shadow mb-4">
+    <style>
+        .card-title {
+            padding-bottom: 15px;
+            background: #040FD9;
+            color: #fff;
+            padding: 16px 30px;
+            min-width: 100%;
+            margin: -20px -25px 10px;
+            border-radius: 3px 3px 0 0;
+        }
+    </style>
+    <div class="card-title">
+        <div class="row">
+            <div class="col-sm-6">
+                @{
+                    String payName = "FIDE0000" + Model.LoadId + "-00" + Model.IdLoansHistory;
+                }
+                <h2>Editar el Pago # @payName </h2>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+        <input asp-for="IdLoansHistory" class="form-control" hidden/>
+
+        <input asp-for="LoadId" class="form-control" hidden />
+
+        <input asp-for="PayDate" class="form-control" hidden />
+
+        <input asp-for="PaymentType" class="form-control" hidden/>
+
+        <div class="col-md-10 mt-3">
+            <label class="text-dark">
+                <strong>
+                    <label asp-for="PaymentAmount" class="control-label"></label>
+                </strong>
+            </label>
+            <input asp-for="PaymentAmount" class="form-control" />
+            <span asp-validation-for="PaymentAmount" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-10 mt-3">
+            <label class="text-dark">
+                <strong>
+                    <label asp-for="PaymentType" class="control-label"></label>
+                </strong>
+            </label>
+            <input value="@paymentName" class="form-control" disabled />
+        </div>
+
+
+        <div class="form-group mt-5">
+            <input type="submit" value="Actualizar Pago" class="btn btn-primary" />
+        </div>
+        
+    </form>
+
+    <div>
+        <a asp-action="Index" asp-controller="Loan">Volver a los Creditos</a>
+    </div>
+
+</div>
