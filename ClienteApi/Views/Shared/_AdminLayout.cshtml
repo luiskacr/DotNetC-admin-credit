@@ -23,6 +23,10 @@
     <link href="~/vendor/DatePicker/bootstrap-datepicker3.min.css" rel="stylesheet" />
     <script src="~/vendor/DatePicker/moment.min.js"></script>
     <script src="~/vendor/DatePicker/bootstrap-datepicker.min.js"></script>
+    <!--Select2-->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>  
+
 
 </head >
 <body id="page-top">
@@ -245,6 +249,6 @@
     <script src="~/vendor/Datatable/datatables.min.js"></script>
     <script src="~/js/mainTables.js"></script>
 
-
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

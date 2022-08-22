@@ -189,7 +189,7 @@ else
                                                 <label>Monto en Colones</label>
                                             </strong>
                                         </label>
-                                        <input value="" class="form-control"  />
+                                        <input type="number" name="compra" id="compra"  value="" class="form-control"  />
                                     </div>
                                     <div class="col-md-3 mt-3">
                                         <label class="text-dark">
@@ -197,24 +197,74 @@ else
                                                 <label>Monto en Dolares</label>
                                             </strong>
                                         </label>
-                                        <input value="" class="form-control" />
+                                        <input value="" name="venta" id="venta" class="form-control" />
                                     </div>
                                </div>                  
                             </div>
                         </div>
                         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                             <div class="card-body">
-                                Logica de Compra de Dolares
+                                <div class="row pt-1">
+                                    <div class="col-md-6 mx-auto">
+                                        <div class="row bg-light">
+                                            <div class="col-12 text-center text-dark py-3">
+                                                <h4>De Dolares a Colones </h4>
+                                            </div>
+                                        </div>
+                                        <div class="row bg-light p-3">
+                                            <div class="col-6">
+                                                <input value="" type="number" name="dol-venta" id="dol-venta" class="form-control" />
+                                            </div>
+                                            <div class="col-6">
+                                                <label name ="dol-compra" id="dol-compra" value="" class="form-control"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
 
-                <script>
+                @section Scripts {
 
+                    <script type="text/javascript">
+                        var dsell = "@ViewBag.exchangeRate.venta"
+                        var dbuy = "@ViewBag.exchangeRate.compra" 
 
-                </script>
+                        document.getElementsByName("compra")[0].addEventListener('change',vender);
+
+                        function vender(){
+                            var ndsell = parseFloat(dsell);
+                            console.log("ndsell:" ndsell)
+                            var dfielsell = parseFloat(document.getElementById("compra").value);
+                        if (isNaN(dfielsell)) {
+                                document.getElementById("venta").value = "";
+                            }else{
+                                var finalfield = dfielsell / ndsell;
+                                finalfield = finalfield.toFixed(2);
+                            document.getElementById("venta").value = "$" + finalfield;
+                            }
+                        };
+
+                        document.getElementsByName("dol-venta")[0].addEventListener('change', comprar);
+
+                        function comprar(){
+                            var ndsell = parseFloat(dbuy);
+                            console.log("ndsell:" ndsell)
+                            var dfielsell = parseFloat(document.getElementById("dol-venta").value);
+                            if (isNaN(dfielsell)) {
+                            document.getElementById("dol-compra").value = "";
+                            }else{
+                                var finalfield ndsell * dfielsell;
+                                finalfield = finalfield.toFixed(2);
+                                document.getElementById("dol-compra").value = "₡" + finalfield;
+                            }
+                        };
+                    </script>
+                }
+
 
             </div>
         }

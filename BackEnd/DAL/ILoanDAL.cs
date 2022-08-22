@@ -10,5 +10,7 @@ namespace BackEnd.DAL
     public  interface ILoanDAL : IDALGenerico<Loan>
     {
         public bool RemoveAll(int id);
+
+        public bool ChangeLoanCurrency(Change_loan_currency_util util);
     }
 }

@@ -208,6 +208,38 @@ namespace BackEndAPI.Controllers
             }
         }
 
+        [Route("ChangeLoanCurrency")]
+        [HttpPut]
+        [ProducesResponseType(typeof(Boolean), StatusCodes.Status200OK)]
+        public JsonResult ChangeLoanCurrency([FromBody] Change_loan_currency_util changeLoan) 
+        {
+            try
+            {
+                bool result = loanDAL.ChangeLoanCurrency(changeLoan);
+                if (result)
+                {
+                    return new JsonResult(new { message = "The currency of credit has been changed" })
+                    {
+                        StatusCode = (int)HttpStatusCode.OK
+                    };
+                }
+                else
+                {
+                    return new JsonResult(new { message = "There was an error when trying to change the credit currency." })
+                    {
+                        StatusCode = (int)HttpStatusCode.BadRequest
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { message = ex.Message })
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
+            }
+        }
+
         private LoanModel objectToModelConvert(Loan loan)
         {
 

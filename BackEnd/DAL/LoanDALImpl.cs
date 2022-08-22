@@ -121,6 +121,67 @@ namespace BackEnd.DAL
             return result;
         }
 
+        public bool ChangeLoanCurrency(Change_loan_currency_util util)
+        {
+            bool result = false;
+
+            try
+            {
+                List<sp_DeleteAllLoans_Result> results;
+                string sql = " EXEC usp_change_loan_currency @tiempo, @id , @bankfee , @moneda , @exchange ";
+                var param = new SqlParameter[]
+                {
+                    new SqlParameter()
+                    {
+                        ParameterName = "@tiempo",
+                        SqlDbType = System.Data.SqlDbType.Int,
+                        Direction = System.Data.ParameterDirection.Input,
+                        Value = util.Tiempo
+                    },
+                    new SqlParameter()
+                    {
+                        ParameterName = "@id ",
+                        SqlDbType = System.Data.SqlDbType.Int,
+                        Direction = System.Data.ParameterDirection.Input,
+                        Value = util.IdLoan
+                    },
+                    new SqlParameter()
+                    {
+                        ParameterName = "@bankfee ",
+                        SqlDbType = System.Data.SqlDbType.Money,
+                        Direction = System.Data.ParameterDirection.Input,
+                        Value = util.BankFees
+                    },
+                    new SqlParameter()
+                    {
+                        ParameterName = "@moneda ",
+                        SqlDbType = System.Data.SqlDbType.Int,
+                        Direction = System.Data.ParameterDirection.Input,
+                        Value = util.Currency
+                    },
+                    new SqlParameter()
+                    {
+                        ParameterName = "@exchange ",
+                        SqlDbType = System.Data.SqlDbType.Money,
+                        Direction = System.Data.ParameterDirection.Input,
+                        Value = util.Exchange
+                    }
+                };
+
+                results = context.sp_DeleteAllLoans_Result.FromSqlRaw(sql, param).ToListAsync().Result;
+
+                if (results[0].Return)
+                {
+                    result = true;
+                }
+            }
+            catch (Exception e) 
+            {
+                result = false;
+            }
+
+            return result;
+        }
 
         public bool Update(Loan entity)
         {
