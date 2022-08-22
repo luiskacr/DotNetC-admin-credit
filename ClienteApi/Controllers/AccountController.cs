@@ -9,7 +9,6 @@ namespace ClienteAPI.Controllers
 {
     public class AccountController : Controller
     {
-
         public IActionResult Index()
         {
             return View();
@@ -63,6 +62,24 @@ namespace ClienteAPI.Controllers
             HttpContext.Session.Clear();
 
             return RedirectToAction("Index","Home");
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            ServiceRepository serviceObj = new ServiceRepository();
+            HttpResponseMessage response = serviceObj.PostResponse("api/Authenticate/register", model);
+            response.EnsureSuccessStatusCode();
+
+            return RedirectToAction("index", "Home");
+
+
         }
 
     }

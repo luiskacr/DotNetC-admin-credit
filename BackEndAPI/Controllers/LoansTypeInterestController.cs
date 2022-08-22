@@ -24,6 +24,7 @@ namespace BackEndAPI.Controllers
 
 
         // GET: api/<LoansTypeInterestController>
+        //[Authorize]
         [HttpGet]
         public JsonResult Get()
         {
@@ -51,6 +52,7 @@ namespace BackEndAPI.Controllers
         }
 
         // GET api/<LoansTypeInterestController>/5
+        //[Authorize]
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
@@ -82,6 +84,7 @@ namespace BackEndAPI.Controllers
         }
 
         // POST api/<LoansTypeInterestController>
+        //[Authorize]
         [HttpPost]
         public JsonResult Post([FromBody] LoansTypeInterestModel loansTypeInterest)
         {
@@ -113,6 +116,7 @@ namespace BackEndAPI.Controllers
         }
 
         // PUT api/<LoansTypeInterestController>/5
+        //[Authorize]
         [HttpPut("{id}")]
         public JsonResult Put(int id, [FromBody] LoansTypeInterestModel loansTypeInterest)
         {
@@ -144,6 +148,7 @@ namespace BackEndAPI.Controllers
         }
 
         // DELETE api/<LoansTypeInterestController>/5
+        //[Authorize]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {

@@ -101,6 +101,8 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Clientes:</h6>
                         <a class="collapse-item" asp-area="" asp-controller="Customer" asp-action="index">Clientes</a>
+                        <a class="collapse-item" asp-area="" asp-controller="Account" asp-action="register">Registrar Usuario</a>
+
                     </div>
                 </div>
             </li>
@@ -119,8 +121,8 @@
                 <div class="collapse" id="opciones-collapse2" style="">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Configuraciones:</h6>
-                        <a class="collapse-item" asp-area="" asp-controller="Country" asp-action="index">Paices</a>
-                        <a class="collapse-item" asp-area="" asp-controller="State" asp-action="index">Privincias</a>
+                        <a class="collapse-item" asp-area="" asp-controller="Country" asp-action="index">Paises</a>
+                        <a class="collapse-item" asp-area="" asp-controller="State" asp-action="index">Provincias</a>
                         <a class="collapse-item" asp-area="" asp-controller="Currency" asp-action="index">Monedas</a>
                         <a class="collapse-item" asp-area="" asp-controller="LoansTypeInterest" asp-action="index">Tipos de Interes</a>
                         <h6 class="collapse-header">Logs:</h6>
@@ -197,7 +199,6 @@
                                 }
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                                <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LogOut">Salir</a></li>
                             </ul>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,23 +9,26 @@ namespace ClienteAPI.Models
 {
     public class RegisterViewModel
     {
-
-        [Required(ErrorMessage = "User Name is required")]
+        [DisplayName("Nombre de Usuario")]
+        [Required(ErrorMessage = "Debe ingresar el Nombre de Usuario")]
         public string Username { get; set; }
 
 
-        [Required]
+        [DisplayName("Correo Electronico")]
+        [Required(ErrorMessage = "Debe ingresar el Correo")]
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
+        [DisplayName("Contraseña")]
+        [Required(ErrorMessage = "Debe ingresar la Contraseña")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "Password and Confirmation do not match")]
+        [Display(Name = "Confirmar Contraseña")]
+        [Compare("Password", ErrorMessage = "Contraseñas no Coinciden")]
+        [Required(ErrorMessage = "Debe Confirmar Contraseña")]
         public string ComfirmPassword { get; set; }
     }
 }
