@@ -1,0 +1,249 @@
+﻿@using ClienteApi.Models;
+@model IEnumerable<ClienteApi.Models.LogLoanViewModel>
+
+@{
+    ViewData["Title"] = "Log de Creditos";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (ViewBag.exito == "" | ViewBag.exito == null)
+{
+
+}
+else
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.exito</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+@if (ViewBag.error == "" | ViewBag.error == null)
+{
+
+}
+else
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+<div class="card-body card shadow mb-4">
+    <style>
+        .table-title {
+            padding-bottom: 15px;
+            background: #007BFF;
+            color: #fff;
+            padding: 16px 30px;
+            min-width: 100%;
+            margin: -20px -25px 10px;
+            border-radius: 3px 3px 0 0;
+        }
+
+            .table-title h2 {
+                margin: 5px 0 0;
+                font-size: 24px;
+            }
+
+            .table-title .btn-group {
+                float: right;
+            }
+
+            .table-title .btn {
+                float: right;
+                font-size: 13px;
+                border: none;
+                min-width: 50px;
+                border-radius: 2px;
+                border: none;
+                outline: none !important;
+                margin-left: 10px;
+            }
+    </style>
+
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Log de Creditos</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive table-hover">
+        <table id="TableEmployee" class="table table-avance table-striped display nowrap " cellspacing="0" width="100%">
+            <thead class="table-primaryk">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Idlog)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdLoan)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Idcustomers)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InteresRate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LoanAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CurrentAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MonthlyAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NextDueDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BankFees)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TypeChange)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ChangeDate)
+                    </th>
+                    <th >
+                        @Html.DisplayNameFor(model => model.LoansDescription)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StarDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EndDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdloansType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdCurrencies)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdLoansState)
+                    </th>
+                </tr>
+            </thead>
+            <tbody class=" ">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @{
+                            string CurrencySymbol = " ";
+                            string CurrencyName = " ";
+                            foreach (CurrencyViewModel currency in ViewBag.Currency)
+                            {
+                                if (currency.IdCurrencies == item.IdCurrencies)
+                                {
+                                    CurrencySymbol = currency.Symbol;
+                                    CurrencyName = currency.CurrencyName;
+                                }
+                            }
+                        }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Idlog)
+                        </td>
+                        <td>
+                            FIDE000-@Html.DisplayFor(modelItem => item.IdLoan)
+                        </td>
+                        <td>
+                            
+                            @{
+                                String fullName = " ";
+                                foreach (CustomerViewModel customer in ViewBag.Customer)
+                                {
+                                    if (item.Idcustomers == customer.IdCustomers)
+                                    {
+                                        fullName = customer.FirstName + " " + customer.LastName;
+                                    }
+                                }
+                            }
+                            @fullName
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InteresRate)%
+                        </td>
+                        <td>
+                            @CurrencySymbol
+                            @Html.DisplayFor(modelItem => item.LoanAmount)
+                        </td>
+                        <td>
+                            @CurrencySymbol
+                            @Html.DisplayFor(modelItem => item.CurrentAmount)
+                        </td>
+                        <td>
+                            @CurrencySymbol
+                            @Html.DisplayFor(modelItem => item.MonthlyAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NextDueDate)
+                        </td>
+                        <td>
+                            @CurrencySymbol
+                            @Html.DisplayFor(modelItem => item.BankFees)
+                        </td>
+                        <td>
+                            @if (item.TypeChange == "DELETE") 
+                            {
+                                <span class="badge badge-danger">Eliminado</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-warning">@Html.DisplayFor(modelItem => item.TypeChange)</span>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ChangeDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoansDescription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StarDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EndDate)
+                        </td>
+                        <td>
+                            @{
+                                String typeModel = " ";
+                                foreach (LoanTypeViewModel loanType in ViewBag.LoansStype)
+                                {
+                                    if (loanType.IdloansType == item.IdloansType)
+                                    {
+                                        typeModel = loanType.LoansTypeName;
+                                    }
+                                }
+    
+                            }
+                            @typeModel
+                        </td>
+                        <td>
+                            @CurrencyName
+                        </td>
+                        <td>
+                            @{
+                                foreach (LoanStateViewModel loanState in ViewBag.LoanState)
+                                {
+                                    if (loanState.LoansStatesId == item.IdLoansState)
+                                    {
+                                        @Html.DisplayFor(modelItem => loanState.LoansStateName)
+                                    }
+                                }
+                            }
+                        </td>
+                        
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+
+</div>

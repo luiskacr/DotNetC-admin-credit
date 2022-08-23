@@ -1,0 +1,271 @@
+﻿
+@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (ViewBag.exito == "" | ViewBag.exito == null)
+{
+
+}
+else
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.exito</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+@if (ViewBag.error == "" | ViewBag.error == null)
+{
+
+}
+else
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+<div class="container-fluid">
+
+    <div class="card-body">
+        <div class="row">
+
+            @if (ViewBag.Dasboard != null)
+            {
+                <div class="col-12 col-lg-6 mt-3 col-xl">
+
+                    <div class="card bg-primary text-white">
+
+                        <div class="card-body">
+                            <div class="row align-items-center gx-0">
+
+                                <div class="col">
+
+                                    <h6 class="text-uppercase mb-2">Total de Clientes  </h6>
+                                    <span class="h2 mb-0">@ViewBag.Dasboard.totalCustomers </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-lg-6 mt-3 col-xl">
+
+                    <div class="card bg-info  text-white">
+
+                        <div class="card-body">
+                            <div class="row align-items-center gx-0">
+
+                                <div class="col">
+
+                                    <h6 class="text-uppercase  mb-2">Total de Creditos  </h6>
+                                    <span class="h2 mb-0">@ViewBag.Dasboard.totalLoans </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-lg-6 mt-3  col-xl">
+
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="row align-items-center gx-0">
+
+                                <div class="col">
+
+                                    <h6 class="text-uppercase text-muted mb-2">Creditos Activos  </h6>
+                                    <span class="h2 mb-0">@ViewBag.Dasboard.activeLoans </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-12 col-lg-6 mt-3  col-xl">
+
+                    <div class="card bg-danger  text-white">
+
+                        <div class="card-body">
+                            <div class="row align-items-center gx-0">
+
+                                <div class="col">
+
+                                    <h6 class="text-uppercase  mb-2">Creditos Atrasados  </h6>
+                                    <span class="h2 mb-0">@ViewBag.Dasboard.delayLoans </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            }
+      
+        </div>
+
+        @if (ViewBag.exchangeRate != null) 
+        {
+            <div class="row">
+
+            
+
+                    <div class="col-12 col-lg-6 mt-3 col-xl">
+
+                        <div class="card bg-success text-white">
+
+                            <div class="card-body">
+                                <div class="row align-items-center gx-0">
+
+                                    <div class="col">
+
+                                        <h6 class="text-uppercase mb-2">Venta Dolar </h6>
+                                        <span class="h2 mb-0"> ₡ @ViewBag.exchangeRate.venta </span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 col-lg-6 mt-3 col-xl">
+
+                        <div class="card bg-success text-white">
+
+                            <div class="card-body">
+                                <div class="row align-items-center gx-0">
+
+                                    <div class="col">
+
+                                        <h6 class="text-uppercase mb-2">Compra  Dolar </h6>
+                                        <span class="h2 mb-0"> ₡ @ViewBag.exchangeRate.compra </span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+            </div>
+          
+
+            <div class="row ">
+
+                <div class="col-6">
+
+                    <div class="card-body">
+                        <div class="row pt-1">
+                            <div class="col-md-12 mx-auto">
+                                <div class="row bg-light">
+                                    <div class="col-12 text-center text-dark py-3">
+                                        <h4>De Colones a Dolares </h4>
+                                    </div>
+                                </div>
+                                <div class="row bg-light p-3">
+                                    <div class="col-6">
+                                        <label> Monto en Colones </label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">₡</span>
+                                            <input type="number" value="" name="col-venta" id="col-venta" class="form-control money" />
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label> Monto en Dolares </label>
+                                        <input name="col-compra" id="col-compra" value="" class="form-control money" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-6">
+
+                    <div class="card-body">
+                        <div class="row pt-1">
+                            <div class="col-md-12 mx-auto">
+                                <div class="row bg-light">
+                                    <div class="col-12 text-center text-dark py-3">
+                                        <h4>De Dolares a Colones </h4>
+                                    </div>
+                                </div>
+                                <div class="row bg-light p-3">
+                                    <div class="col-6">
+                                        <label> Monto en Dolares </label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">$</span>
+                                            <input value="" type="number" name="dol-venta" id="dol-venta" class="form-control money" />
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label> Monto en Colones </label>
+                                        <input name="dol-compra" id="dol-compra" value="" class="form-control money" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <script>
+                    var sell = parseFloat("@ViewBag.exchangeRate.venta");
+                    var buy = parseFloat("@ViewBag.exchangeRate.compra");
+
+                    
+                    
+                    document.getElementsByName("col-venta")[0].addEventListener('change', calSell);
+                    document.getElementsByName("dol-venta")[0].addEventListener('change', callBuy);
+
+
+                    function calSell() {
+                        var userInput = parseFloat(document.getElementById("col-venta").value);
+                        if (isNaN(userInput)) {
+                            document.getElementById("col-compra").value = " ";
+                        } else {
+                            var finalfield = userInput / sell;
+                            finalfield = finalfield.toFixed(2);
+                            document.getElementById("col-compra").value = "$ " + finalfield;
+                        }
+                    };
+
+                    function callBuy(){
+                        var userInput = parseFloat(document.getElementById("dol-venta").value);
+                        if (isNaN(userInput)) {
+                            document.getElementById("dol-compra").value = " ";
+                        } else {
+                            var finalfield = userInput * buy;
+                            finalfield = finalfield.toFixed(2);
+                            document.getElementById("dol-compra").value = "₡ " + finalfield;
+                        }
+                    }
+                </script>
+
+            </div>
+
+
+        }
+    </div>
+</div>
+
+

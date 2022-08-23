@@ -1,0 +1,62 @@
+﻿@model ClienteAPI.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_LayoutPageOut.cshtml";
+}
+
+<div>
+    <div class="card">
+        <section class="vh-100" style="background-image: url(/img/img_5.jpg); background-repeat: no-repeat; background-size: cover ">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                            <div class="card-body p-5 text-center">
+                                <form asp-action="Register" method="post">
+                                    <h3 class="mb-5 text-dark">Registrar Usuario</h3>
+                                    <div class="form-floating form-group mb-3">
+                                        <input asp-for="Username" class="form-control" />
+                                        <label asp-for="Username" class="control-label"></label>
+                                        <span asp-validation-for="Username" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating form-group mb-3">
+                                        <input asp-for="Email" class="form-control" />
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating form-group mb-3">
+                                        <input asp-for="Password" class="form-control" />
+                                        <label asp-for="Password" class="control-label"></label>
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-floating form-group mb-3">
+                                        <input asp-for="ComfirmPassword" class="form-control" />
+                                        <label asp-for="ComfirmPassword" class="control-label"></label>
+                                        <span asp-validation-for="ComfirmPassword" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <input type="submit" value="Crear" class="btn btn-primary" />
+                                    </div>
+                                    <div class="form-group">
+                                        <font color="#FF0000">@ViewBag.message</font>
+                                    </div>
+                                </form>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="link-primary text-center">
+                                    <a asp-controller="Dashboard" asp-action="Index">Volver al Sitio</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

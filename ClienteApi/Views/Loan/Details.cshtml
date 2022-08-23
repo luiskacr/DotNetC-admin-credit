@@ -1,0 +1,401 @@
+﻿@using ClienteApi.Models;
+@model ClienteApi.Models.LoanViewModel
+
+@{
+    ViewData["Title"] = "Detalles del Credito";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    String fullName = "";
+    String customerId = "";
+    String customerMail = "";
+    String customerTelephone = "";
+    String typeLoanName = "";
+    String currencyName = "";
+    String loanStateName = "";
+    String currencySymbol = "";
+
+    foreach (CustomerViewModel customer in ViewBag.Customer)
+    {
+        if (customer.IdCustomers == Model.Idcustomers)
+        {
+            CustomerViewModel customerView = customer;
+            fullName = customerView.FirstName + " " + customerView.LastName;
+            customerId = customerView.DocumentId;
+            customerMail = customerView.Email;
+            customerTelephone = customerView.Telephone;
+        }
+    }
+
+    foreach (LoanTypeViewModel loanType in ViewBag.LoansStype)
+    {
+        if (loanType.IdloansType == Model.Idcustomers)
+        {
+            LoanTypeViewModel loanTypeView = loanType;
+            typeLoanName = loanTypeView.LoansTypeName;
+        }
+    }
+
+    foreach (CurrencyViewModel currency in ViewBag.Currency)
+    {
+        if (currency.IdCurrencies == Model.IdCurrencies)
+        {
+            CurrencyViewModel currencyView = currency;
+            currencyName = currencyView.CurrencyName;
+            currencySymbol = currencyView.Symbol;
+        }
+    }
+
+    foreach (LoanStateViewModel loans in ViewBag.LoanState)
+    {
+        if (loans.LoansStatesId == Model.IdLoansState)
+        {
+            LoanStateViewModel loanStateView = loans;
+            loanStateName = loanStateView.LoansStateName;
+        }
+    }
+
+
+}
+
+@if (ViewBag.exito == "" | ViewBag.exito == null)
+{
+
+}
+else
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.exito</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+@if (ViewBag.error == "" | ViewBag.error == null)
+{
+
+}
+else
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+<div class="card-body card shadow mb-4">
+    <style>
+        .card-title {
+            padding-bottom: 15px;
+            background: #007BFF;
+            color: #fff;
+            padding: 16px 30px;
+            min-width: 100%;
+            margin: -20px -25px 10px;
+            border-radius: 3px 3px 0 0;
+        }
+    </style>
+    <div class="card-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Detalles del Credito</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal">
+        <div class="form-group">
+
+            <h3>
+                Cliente
+            </h3>
+
+            <div class="row">
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            Nombre Cliente
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@fullName">
+                </div>
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            Cedula
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@customerId">
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            Correo
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@customerMail">
+                </div>
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            Telefono
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@customerTelephone">
+                </div>
+
+            </div>
+
+            <h3 class="mt-5">
+                Credito N# @Html.DisplayFor(model => model.IdLoan)
+            </h3>
+
+            <div class="row">
+                @{
+                    switch (Model.IdLoansState)
+                    {
+                        case 1:
+                            <h4>
+                                <span class="badge badge-success">
+                                    @loanStateName
+                                </span>
+                            </h4>
+                            break;
+
+                        case 2:
+                            <h4>
+                                <span class="badge badge-success">
+                                    @loanStateName
+                                </span>
+                            </h4>
+                            break;
+
+                        case 3:
+                            <h4>
+                                <span class="badge badge-success">
+                                    @loanStateName
+                                </span>
+                            </h4>
+                            break;
+                        case 4:
+                            <h4>
+                                <span class="badge badge-primary">
+                                    @loanStateName
+                                </span>
+                            </h4>
+                            break;
+                        case 5:
+                            <h4>
+                                <span class="badge badge-primary">
+                                    @loanStateName
+                                </span>
+                            </h4>
+                            break;
+                        case 6:
+                            <h4>
+                                <span class="badge badge-warning">
+                                    @loanStateName
+                                </span>
+                            </h4>
+                            break;
+                        case 7:
+                            <h4>
+                                <span class="badge badge-danger">
+                                    @loanStateName
+                                </span>
+                            </h4>
+                            break;
+                        case 8:
+                            <h4>
+                                <span class="badge badge-danger">
+                                    @loanStateName
+                                </span>
+                            </h4>
+                            break;
+                        default:
+                            <h4>
+                                <span class="badge badge-info">
+                                    @loanStateName
+                                </span>
+                            </h4>
+                            break;
+                    }
+                }
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            @Html.DisplayNameFor(model => model.IdloansType)
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@typeLoanName">
+                </div>
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            @Html.DisplayNameFor(model => model.IdCurrencies)
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@currencyName">
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            @Html.DisplayNameFor(model => model.LoanAmount)
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@currencySymbol @Html.DisplayFor(model => model.LoanAmount)">
+                </div>
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            @Html.DisplayNameFor(model => model.CurrentAmount)
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@currencySymbol @Html.DisplayFor(model => model.CurrentAmount)">
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            Fecha de  @Html.DisplayNameFor(model => model.StarDate)
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@Html.DisplayFor(model => model.StarDate)">
+                </div>
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            Fecha de @Html.DisplayNameFor(model => model.EndDate)
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@Html.DisplayFor(model => model.EndDate)">
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            @Html.DisplayNameFor(model => model.InteresRate)
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@Html.DisplayFor(model => model.InteresRate) %">
+                </div>
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            @Html.DisplayNameFor(model => model.MonthlyAmount)
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@currencySymbol @Html.DisplayFor(model => model.MonthlyAmount)">
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            @Html.DisplayNameFor(model => model.BankFees)
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@currencySymbol @Html.DisplayFor(model => model.BankFees) ">
+                </div>
+
+                <div class="col-md-5 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            @Html.DisplayNameFor(model => model.NextDueDate)
+                        </strong>
+                    </label>
+                    <input disabled class="form-control" id="colFormLabel" placeholder="@Html.DisplayFor(model => model.NextDueDate)">
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-10 mt-3">
+                    <label class="text-dark">
+                        <strong>
+                            @Html.DisplayNameFor(model => model.LoansDescription)
+                        </strong>
+                    </label>
+                    <textarea disabled class="form-control" id="colFormLabel">@Html.DisplayFor(model => model.LoansDescription)</textarea>
+                </div>
+
+            </div>
+
+            <div class="form-group mt-5 mt-3">
+                @Html.ActionLink("Editar", "Edit", new {  id = Model.IdLoan } , new { @class = "btn btn-warning" })
+                @if (Model.IdLoansState == 6)
+                {
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Eliminar
+                    </button>
+                }
+            </div>
+
+            <div class="col-md-10 mt-3">
+                <a asp-action="Index">Volver a la lista</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <i class="fas fa-exclamation-triangle" style="color:red;"></i>
+                    Advertencia
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Esta Seguro que desea Eliminar el Credito ?
+            </div>
+            <div class="modal-footer">
+
+                <form asp-action="Delete">
+                    <input asp-for="IdLoan" class="form-control" type="hidden" />
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <input type="submit" value="Eliminar" class="btn btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,177 @@
+﻿@using ClienteApi.Models;
+@model IEnumerable<ClienteApi.Models.LogLoanHistoryViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (ViewBag.exito == "" | ViewBag.exito == null)
+{
+
+}
+else
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.exito</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+@if (ViewBag.error == "" | ViewBag.error == null)
+{
+
+}
+else
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+<div class="card-body card shadow mb-4">
+    <style>
+        .table-title {
+            padding-bottom: 15px;
+            background: #007BFF;
+            color: #fff;
+            padding: 16px 30px;
+            min-width: 100%;
+            margin: -20px -25px 10px;
+            border-radius: 3px 3px 0 0;
+        }
+
+            .table-title h2 {
+                margin: 5px 0 0;
+                font-size: 24px;
+            }
+
+            .table-title .btn-group {
+                float: right;
+            }
+
+            .table-title .btn {
+                float: right;
+                font-size: 13px;
+                border: none;
+                min-width: 50px;
+                border-radius: 2px;
+                border: none;
+                outline: none !important;
+                margin-left: 10px;
+            }
+    </style>
+
+    <div class="table-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Registro de Modificacion de Pagos</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive table-hover">
+        <table id="loanTable" class="table table-avance table-striped " cellspacing="0" width="100%">
+            <thead class="table-primaryk">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Idlog)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdLoansHistory)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PayDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PaymentType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TypeChange)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ChangeDate)
+                    </th>
+                </tr>
+            </thead>
+            <tbody class=" ">
+                @foreach (var item in Model)
+                {
+                    String Symbol = "";
+                    foreach (LoanViewModel loans in ViewBag.Loans )
+                    {
+                        if (item.LoadId == loans.IdLoan)
+                        {
+                            int Currency = loans.IdCurrencies;
+
+                            foreach (CurrencyViewModel currency in ViewBag.Currency)
+                            {
+                                if (currency.IdCurrencies == Currency)
+                                {
+                                    Symbol = currency.Symbol;
+                                }
+                            }
+                        }
+                    }
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Idlog)
+                        </td>
+                        <td>
+                            @{
+                                String thisHistory = item.IdLoansHistory.ToString();
+                                String numReferen = "FIDE0000" + item.LoadId + "-00" + thisHistory;
+                            }
+                            @numReferen
+                        </td>
+                        <td>
+                            @Symbol @Html.DisplayFor(modelItem => item.PaymentAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PayDate)
+                        </td>
+                        <td>
+                            @foreach (PaymentTypeViewModel paymentType in ViewBag.PaymentType)
+                            {
+                                if (paymentType.IdPaymentType == item.PaymentType)
+                                {
+                                    @Html.DisplayFor(modelItem => paymentType.PaymentTypeName)
+                                }
+                            }
+                        </td>
+                        <td>
+                            @if (item.TypeChange == "BEFORE UPDATE")
+                            {
+                                <span class="badge badge-primary">Antes de Actualizar</span>
+                            }
+                            else if (item.TypeChange == "AFTER UPDATE")
+                            {
+                                <span class="badge badge-success">Despues de Actualizar</span>
+                            }
+                            else if (item.TypeChange == "DELETE")
+                            {
+                                <span class="badge badge-danger">Eliminado</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-warning">@Html.DisplayFor(modelItem => item.TypeChange)</span>
+                            }
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ChangeDate)
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        
+    </div>
+
+</div>

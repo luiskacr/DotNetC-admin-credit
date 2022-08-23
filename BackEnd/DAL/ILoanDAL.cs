@@ -1,13 +1,16 @@
-﻿using BackEnd.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BackEnd.Entities;
 
 namespace BackEnd.DAL
 {
-    internal interface ILoanDAL : IDALGenerico<Loan>
+    public  interface ILoanDAL : IDALGenerico<Loan>
     {
+        public bool RemoveAll(int id);
+
+        public bool ChangeLoanCurrency(Change_loan_currency_util util);
     }
 }

@@ -1,0 +1,161 @@
+﻿@model ClienteApi.Models.ChangeCurrencyViewModel
+
+@{
+    ViewData["Title"] = "Cambio de Moneda";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (ViewBag.exito == "" | ViewBag.exito == null)
+{
+
+}
+else
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.exito</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+@if (ViewBag.error == "" | ViewBag.error == null)
+{
+
+}
+else
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+<div class="card-body card shadow mb-4">
+    <style>
+        .card-title {
+            padding-bottom: 15px;
+            background: #007BFF;
+            color: #fff;
+            padding: 16px 30px;
+            min-width: 100%;
+            margin: -20px -25px 10px;
+            border-radius: 3px 3px 0 0;
+        }
+    </style>
+    <div class="card-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Cambio de Moneda para el Credito # FIDE000-@ViewBag.Loans.IdLoan </h2>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           
+        <div class="col-md-10 mt-3">
+            <label class="text-dark">
+                <span>
+                    <label asp-for="IdLoan" class="control-label"></label>
+                </span>
+            </label>
+            <input asp-for="IdLoan" class="form-control" value="@ViewBag.Loans.IdLoan" hidden/>
+            <input class="form-control" value="FIDE000-@ViewBag.Loans.IdLoan" disabled />
+            <span asp-validation-for="IdLoan" class="text-danger"></span>
+        </div>
+
+        @{
+            if (ViewBag.Loans.IdCurrencies == 1) 
+            {
+                    <div class="col-md-10 mt-3">
+                        <label class="text-dark">
+                            <span>
+                                Nueva
+                                <label asp-for="Currency" class="control-label"></label>
+                            </span>
+                        </label>
+                        <input asp-for="Currency" class="form-control" value="2" hidden />
+                        <input class="form-control" value="Dolares" disabled />
+                        <span asp-validation-for="Currency" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-10 mt-3">
+                        <label class="text-dark">
+                            <span>
+                                <label asp-for="Exchange" class="control-label"></label>
+                            </span>
+                        </label>
+                        @{
+                            decimal correctCurrency = 1 / ViewBag.exchangeRate.compra;
+                        }
+                        <input asp-for="Exchange" class="form-control" value="@correctCurrency" hidden />
+                        <input class="form-control" value="¢@ViewBag.exchangeRate.venta" disabled />
+                        <span asp-validation-for="Exchange" class="text-danger"></span>
+                    </div>
+                
+            }
+            else if (ViewBag.Loans.IdCurrencies == 2)
+            {
+                    <div class="col-md-10 mt-3">
+                        <label class="text-dark">
+                            <span>
+                                Nueva
+                                <label asp-for="Currency" class="control-label"></label>
+                            </span>
+                        </label>
+                        <input asp-for="Currency" class="form-control" value="1" hidden />
+                        <input class="form-control" value="Colones" disabled />
+                        <span asp-validation-for="Currency" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-10 mt-3">
+                        <label class="text-dark">
+                            <span>
+                                <label asp-for="Exchange" class="control-label"></label>
+                            </span>
+                        </label>
+
+                    <input asp-for="Exchange" class="form-control" value="@ViewBag.exchangeRate.compra" hidden />
+                        <input class="form-control" value="¢@ViewBag.exchangeRate.compra" disabled />
+                        <span asp-validation-for="Exchange" class="text-danger"></span>
+                    </div>
+            }
+        }
+
+        <div class="col-md-10 mt-3">
+            <label class="text-dark">
+                <span>
+                    Nuevo
+                    <label asp-for="Tiempo" class="control-label"></label>
+                </span>
+            </label>
+            <input asp-for="Tiempo" class="form-control" type="number" min="5" max="45" />
+            <span asp-validation-for="Tiempo" class="text-danger"></span>
+            <span class="text-primary">El tiempo se debe de indicar en Años </span>
+        </div>
+
+        <div class="col-md-10 mt-3">
+            <label class="text-dark">
+                <span>
+                    Nuevo
+                    <label asp-for="BankFees" class="control-label"></label>
+                </span>
+            </label>
+            <input asp-for="BankFees" class="form-control" />
+            <span asp-validation-for="BankFees" class="text-danger"></span>
+            <span class="text-primary">Los fees se deben de indicar en la Nueva Moneda </span>
+        </div>
+
+
+        <div class="form-group mt-5">
+            <input type="submit" value="Crear" class="btn btn-primary" />
+        </div>
+
+    </form>
+
+    <div>
+        <a asp-action="Index" asp-controller="Loan">Volver al Listado de Creditos</a>
+    </div>
+
+
+</div>

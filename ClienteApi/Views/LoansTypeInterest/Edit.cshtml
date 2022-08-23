@@ -1,0 +1,150 @@
+﻿@model ClienteApi.Models.LoansTypeInterestViewModel
+
+@{
+    ViewData["Title"] = "Editar tipo de Interes";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    List<SelectListItem> contentData = new List<SelectListItem>();
+    foreach (CurrencyViewModel currency in ViewBag.Currency)
+    {
+        if (Model.IdCurrencies == currency.IdCurrencies)
+        {
+            contentData.Add(new SelectListItem
+                    {
+                        Selected = true,
+                        Text = currency.CurrencyName,
+                        Value = currency.IdCurrencies.ToString(),
+                    });
+        }
+        contentData.Add(new SelectListItem
+                {
+                    Text = currency.CurrencyName,
+                    Value = currency.IdCurrencies.ToString(),
+                });
+    }
+
+    List<SelectListItem> contentData2 = new List<SelectListItem>();
+    foreach (LoanTypeViewModel loanType in ViewBag.LoansType)
+    {
+        if (Model.IdloansType == loanType.IdloansType) 
+        {
+            contentData2.Add(new SelectListItem
+                    {
+                        Selected = true,
+                        Text = loanType.LoansTypeName,
+                        Value = loanType.IdloansType.ToString(),
+                    });
+        }
+        contentData2.Add(new SelectListItem
+                {
+
+                    Text = loanType.LoansTypeName,
+                    Value = loanType.IdloansType.ToString(),
+                });
+    }
+
+}
+
+@if (ViewBag.exito == "" | ViewBag.exito == null)
+{
+
+}
+else
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.exito</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+@if (ViewBag.error == "" | ViewBag.error == null)
+{
+
+}
+else
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="aria-hidden">@Html.ViewBag.error</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
+
+<div class="card-body card shadow mb-4">
+    <style>
+        .card-title {
+            padding-bottom: 15px;
+            background: #007BFF;
+            color: #fff;
+            padding: 16px 30px;
+            min-width: 100%;
+            margin: -20px -25px 10px;
+            border-radius: 3px 3px 0 0;
+        }
+    </style>
+    <div class="card-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Editar Tipo de Interes</h2>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input asp-for="IdloansTypeInterest" class="form-control" hidden/>
+
+        <div class="col-md-10 mt-3">
+            <label class="text-dark">
+                <strong>
+                    <label asp-for="IdloansType" class="control-label"></label>
+                </strong>
+            </label>
+            <select class="form-select" id="IdloansType" asp-for="IdloansType" asp-items="@contentData2"></select>
+            <span asp-validation-for="IdloansType" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-10 mt-3">
+            <label class="text-dark">
+                <strong>
+                    <label asp-for="IdCurrencies" class="control-label"></label>
+                </strong>
+            </label>
+            <select class="form-select" id="IdCurrencies" asp-for="IdCurrencies" asp-items="@contentData"></select>
+            <span asp-validation-for="IdCurrencies" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-10 mt-3">
+            <label class="text-dark">
+                <strong>
+                    <label asp-for="InteresRate" class="control-label"></label>
+                </strong>
+            </label>
+            <input asp-for="InteresRate" class="form-control" />
+            <span asp-validation-for="InteresRate" class="text-danger"></span>
+            <spam class="text-primary">El Interes se debe de indicar en el formato 1,10</spam>
+        </div>
+
+        <div class="col-md-10 mt-3">
+            <label class="text-dark">
+                <strong>
+                    <label asp-for="YearTime" class="control-label"></label>
+                </strong>
+            </label>
+            <input asp-for="YearTime" class="form-control" />
+            <span asp-validation-for="YearTime" class="text-danger"></span>
+            <spam class="text-primary">El tiempo se debe de indicar en Años</spam>
+        </div>
+
+        <div class="form-group mt-5">
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+        </div>
+
+    </form>
+
+    <div>
+        <a asp-action="Index">Volver a la Lista</a>
+    </div>
+
+</div>

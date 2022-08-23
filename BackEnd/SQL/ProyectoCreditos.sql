@@ -1,202 +1,632 @@
-﻿
-SET XACT_ABORT ON
+﻿DROP DATABASE proyectoCreditos
 
-BEGIN TRANSACTION ProyectoCreditos
+--Alternative to Drop
 
-CREATE TABLE [Users] (
-    [UserID] int  NOT NULL ,
-    [UserRoles] int  NOT NULL ,
-    [FirstName] VARCHAR(50)  NOT NULL ,
-    [LastName] VARCHAR(50)  NOT NULL ,
-    [Telephone] VARCHAR(50)  NOT NULL ,
-    [Email] VARCHAR(50)  NOT NULL ,
-    [Paassword] VARCHAR(50)  NOT NULL ,
-    [BirthDay] datetime  NOT NULL ,
-    [DocumentId] int  NOT NULL ,
-    [Adddress] VARCHAR(10)  NOT NULL ,
-    CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED (
-        [UserID] ASC
-    )
-)
+USE master;
+GO
+ALTER DATABASE proyectoCreditos 
+SET SINGLE_USER 
+WITH ROLLBACK IMMEDIATE;
+GO
+DROP DATABASE proyectoCreditos;
 
-CREATE TABLE [UserRoles] (
-    [IDUserRoles] int  NOT NULL ,
-    [RoleName] VARCHAR(25)  NOT NULL ,
-    CONSTRAINT [PK_UserRoles] PRIMARY KEY CLUSTERED (
-        [IDUserRoles] ASC
-    )
-)
+--Create Start
 
-CREATE TABLE [loans] (
-    [LoansID] int  NOT NULL ,
-    [UserID] int  NOT NULL ,
-    [CorrencyID] int  NOT NULL ,
-    [LoansStatesId] int  NOT NULL ,
-    [Description] VARCHAR(50)  NOT NULL ,
-    -- - loanAmount this is the total amount that the of the loan
-    [loanAmount] MONEY  NOT NULL ,
-    [MontlyPayment] MONEY  NOT NULL ,
-    [StartDate] datetime  NOT NULL ,
-    [EndDate] datetime  NOT NULL ,
-    [InterestRate] FLOAT  NOT NULL ,
-    [BankFees] MONEY  NOT NULL ,
-    [nextDueDate] datetime  NOT NULL ,
-    CONSTRAINT [PK_loans] PRIMARY KEY CLUSTERED (
-        [LoansID] ASC
-    )
-)
+CREATE DATABASE proyectoCreditos;
 
-CREATE TABLE [Correncys] (
-    [CorrencyID] int  NOT NULL ,
-    [CorrencyName] VARCHAR(25)  NOT NULL ,
-    CONSTRAINT [PK_Correncys] PRIMARY KEY CLUSTERED (
-        [CorrencyID] ASC
-    )
-)
+USE proyectoCreditos;
 
-CREATE TABLE [DebtSnowball] (
-    [DebtSnowballID] int  NOT NULL ,
-    [UserID] int  NOT NULL ,
-    [PayOffOrder] int  NOT NULL ,
-    [CustomOrderListID] int  NOT NULL ,
-    [ExtraMonthlyPayment] int  NOT NULL ,
-    [MonlyPayment] int  NOT NULL ,
-    CONSTRAINT [PK_DebtSnowball] PRIMARY KEY CLUSTERED (
-        [DebtSnowballID] ASC
-    )
-)
+--ASPNET Users TABLES
 
-CREATE TABLE [PayOffStragedy] (
-    [PayOffOrderID] int  NOT NULL ,
-    [StragedyName] VARCHAR(25)  NOT NULL ,
-    CONSTRAINT [PK_PayOffStragedy] PRIMARY KEY CLUSTERED (
-        [PayOffOrderID] ASC
-    )
-)
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[__EFMigrationsHistory](
+	[MigrationId] [nvarchar](150) NOT NULL,
+	[ProductVersion] [nvarchar](32) NOT NULL,
+ CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY CLUSTERED 
+(
+	[MigrationId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
 
-CREATE TABLE [CustomOrderList] (
-    [CustomOrderListID] int  NOT NULL ,
-    [01CustomOrderPosition] int  NOT NULL ,
-    [02CustomOrderPosition] int  NOT NULL ,
-    [03CustomOrderPosition] int  NOT NULL ,
-    [04CustomOrderPosition] int  NOT NULL ,
-    [05CustomOrderPosition] int  NOT NULL ,
-    [06CustomOrderPosition] int  NOT NULL ,
-    [07CustomOrderPosition] int  NOT NULL ,
-    [08CustomOrderPosition] int  NOT NULL ,
-    [09CustomOrderPosition] int  NOT NULL ,
-    [10CustomOrderPosition] int  NOT NULL ,
-    CONSTRAINT [PK_CustomOrderList] PRIMARY KEY CLUSTERED (
-        [CustomOrderListID] ASC
-    )
-)
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[AspNetRoleClaims](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[RoleId] [nvarchar](450) NOT NULL,
+	[ClaimType] [nvarchar](max) NULL,
+	[ClaimValue] [nvarchar](max) NULL,
+ CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
 
-CREATE TABLE [LoansStates] (
-    [LoansStatesId] int  NOT NULL ,
-    [loansStateName] VARCHAR(50)  NOT NULL ,
-    CONSTRAINT [PK_LoansStates] PRIMARY KEY CLUSTERED (
-        [LoansStatesId] ASC
-    )
-)
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[AspNetRoles](
+	[Id] [nvarchar](450) NOT NULL,
+	[Name] [nvarchar](256) NULL,
+	[NormalizedName] [nvarchar](256) NULL,
+	[ConcurrencyStamp] [nvarchar](max) NULL,
+ CONSTRAINT [PK_AspNetRoles] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
 
-CREATE TABLE [PaymentHistory] (
-    [PaymentId] int  NOT NULL ,
-    [loadId] int  NOT NULL ,
-    [Amount] MONEY  NOT NULL ,
-    [DatePayed] datetime  NOT NULL ,
-    CONSTRAINT [PK_PaymentHistory] PRIMARY KEY CLUSTERED (
-        [PaymentId] ASC
-    )
-)
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[AspNetUserClaims](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [nvarchar](450) NOT NULL,
+	[ClaimType] [nvarchar](max) NULL,
+	[ClaimValue] [nvarchar](max) NULL,
+ CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
 
-ALTER TABLE [Users] WITH CHECK ADD CONSTRAINT [FK_Users_UserRoles] FOREIGN KEY([UserRoles])
-REFERENCES [UserRoles] ([IDUserRoles])
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[AspNetUserLogins](
+	[LoginProvider] [nvarchar](450) NOT NULL,
+	[ProviderKey] [nvarchar](450) NOT NULL,
+	[ProviderDisplayName] [nvarchar](max) NULL,
+	[UserId] [nvarchar](450) NOT NULL,
+ CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY CLUSTERED 
+(
+	[LoginProvider] ASC,
+	[ProviderKey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
 
-ALTER TABLE [Users] CHECK CONSTRAINT [FK_Users_UserRoles]
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[AspNetUserRoles](
+	[UserId] [nvarchar](450) NOT NULL,
+	[RoleId] [nvarchar](450) NOT NULL,
+ CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC,
+	[RoleId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
 
-ALTER TABLE [loans] WITH CHECK ADD CONSTRAINT [FK_loans_UserID] FOREIGN KEY([UserID])
-REFERENCES [Users] ([UserID])
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[AspNetUsers](
+	[Id] [nvarchar](450) NOT NULL,
+	[UserName] [nvarchar](256) NULL,
+	[NormalizedUserName] [nvarchar](256) NULL,
+	[Email] [nvarchar](256) NULL,
+	[NormalizedEmail] [nvarchar](256) NULL,
+	[EmailConfirmed] [bit] NOT NULL,
+	[PasswordHash] [nvarchar](max) NULL,
+	[SecurityStamp] [nvarchar](max) NULL,
+	[ConcurrencyStamp] [nvarchar](max) NULL,
+	[PhoneNumber] [nvarchar](max) NULL,
+	[PhoneNumberConfirmed] [bit] NOT NULL,
+	[TwoFactorEnabled] [bit] NOT NULL,
+	[LockoutEnd] [datetimeoffset](7) NULL,
+	[LockoutEnabled] [bit] NOT NULL,
+	[AccessFailedCount] [int] NOT NULL,
+ CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
 
-ALTER TABLE [loans] CHECK CONSTRAINT [FK_loans_UserID]
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[AspNetUserTokens](
+	[UserId] [nvarchar](450) NOT NULL,
+	[LoginProvider] [nvarchar](450) NOT NULL,
+	[Name] [nvarchar](450) NOT NULL,
+	[Value] [nvarchar](max) NULL,
+ CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC,
+	[LoginProvider] ASC,
+	[Name] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
 
-ALTER TABLE [loans] WITH CHECK ADD CONSTRAINT [FK_loans_CorrencyID] FOREIGN KEY([CorrencyID])
-REFERENCES [Correncys] ([CorrencyID])
+ALTER TABLE [dbo].[AspNetRoleClaims]  WITH CHECK ADD  CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY([RoleId])
+REFERENCES [dbo].[AspNetRoles] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[AspNetRoleClaims] CHECK CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId]
+GO
 
-ALTER TABLE [loans] CHECK CONSTRAINT [FK_loans_CorrencyID]
+ALTER TABLE [dbo].[AspNetUserClaims]  WITH CHECK ADD  CONSTRAINT [FK_AspNetUserClaims_AspNetUsers_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[AspNetUserClaims] CHECK CONSTRAINT [FK_AspNetUserClaims_AspNetUsers_UserId]
+GO
 
-ALTER TABLE [loans] WITH CHECK ADD CONSTRAINT [FK_loans_LoansStatesId] FOREIGN KEY([LoansStatesId])
-REFERENCES [LoansStates] ([LoansStatesId])
+ALTER TABLE [dbo].[AspNetUserRoles]  WITH CHECK ADD  CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId] FOREIGN KEY([RoleId])
+REFERENCES [dbo].[AspNetRoles] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[AspNetUserRoles] CHECK CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId]
+GO
 
-ALTER TABLE [loans] CHECK CONSTRAINT [FK_loans_LoansStatesId]
+ALTER TABLE [dbo].[AspNetUserRoles]  WITH CHECK ADD  CONSTRAINT [FK_AspNetUserRoles_AspNetUsers_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[AspNetUserRoles] CHECK CONSTRAINT [FK_AspNetUserRoles_AspNetUsers_UserId]
+GO
 
-ALTER TABLE [DebtSnowball] WITH CHECK ADD CONSTRAINT [FK_DebtSnowball_UserID] FOREIGN KEY([UserID])
-REFERENCES [Users] ([UserID])
 
-ALTER TABLE [DebtSnowball] CHECK CONSTRAINT [FK_DebtSnowball_UserID]
+-- Project Tables
 
-ALTER TABLE [DebtSnowball] WITH CHECK ADD CONSTRAINT [FK_DebtSnowball_PayOffOrder] FOREIGN KEY([PayOffOrder])
-REFERENCES [PayOffStragedy] ([PayOffOrderID])
+CREATE TABLE countries(
+	idCountry INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	countryName VARCHAR(50)  NOT NULL ,
+);
 
-ALTER TABLE [DebtSnowball] CHECK CONSTRAINT [FK_DebtSnowball_PayOffOrder]
+CREATE TABLE states(
+	idState INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	stateName VARCHAR(50)  NOT NULL ,
+	idCountry INT NOT NULL FOREIGN KEY REFERENCES countries(idCountry),
+);
 
-ALTER TABLE [DebtSnowball] WITH CHECK ADD CONSTRAINT [FK_DebtSnowball_CustomOrderListID] FOREIGN KEY([CustomOrderListID])
-REFERENCES [CustomOrderList] ([CustomOrderListID])
+CREATE TABLE customers(
+	idCustomers INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	firstName VARCHAR(150) NOT NULL,
+	lastName VARCHAR(150) NOT NULL,
+	documentId VARCHAR(75) UNIQUE NOT NULL,
+	email VARCHAR(75) NOT NULL,
+	telephone VARCHAR(25) NOT NULL,
+	birthDate DATETIME NULL,
+	userAddress VARCHAR(250),	
+	idState INT NOT NULL FOREIGN KEY REFERENCES states(idState),     
+);
 
-ALTER TABLE [DebtSnowball] CHECK CONSTRAINT [FK_DebtSnowball_CustomOrderListID]
 
-ALTER TABLE [CustomOrderList] WITH CHECK ADD CONSTRAINT [FK_CustomOrderList_01CustomOrderPosition] FOREIGN KEY([01CustomOrderPosition])
-REFERENCES [loans] ([LoansID])
+CREATE TABLE currencies(
+	idCurrencies INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	currencyName VARCHAR(75) NOT NULL,
+	currencyISO VARCHAR(5) NOT NULL,
+	symbol VARCHAR(5) 
+);
 
-ALTER TABLE [CustomOrderList] CHECK CONSTRAINT [FK_CustomOrderList_01CustomOrderPosition]
+CREATE TABLE loansStates(
+	loansStatesId INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	loansStateName VARCHAR(75) NOT NULL
+);
 
-ALTER TABLE [CustomOrderList] WITH CHECK ADD CONSTRAINT [FK_CustomOrderList_02CustomOrderPosition] FOREIGN KEY([02CustomOrderPosition])
-REFERENCES [loans] ([LoansID])
+CREATE TABLE loansType(
+	idloansType INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	loansTypeName VARCHAR(75) NOT NULL
+);
 
-ALTER TABLE [CustomOrderList] CHECK CONSTRAINT [FK_CustomOrderList_02CustomOrderPosition]
+CREATE TABLE loansTypeInterest(
+	idloansTypeInterest INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	idloansType INT NOT NULL FOREIGN KEY REFERENCES loansType(idloansType),
+	idCurrencies INT NOT NULL FOREIGN KEY REFERENCES currencies(idCurrencies),
+	interesRate DECIMAL(9,6) NOT NULL,
+	yearTime INT,
+);
 
-ALTER TABLE [CustomOrderList] WITH CHECK ADD CONSTRAINT [FK_CustomOrderList_03CustomOrderPosition] FOREIGN KEY([03CustomOrderPosition])
-REFERENCES [loans] ([LoansID])
+CREATE TABLE loans(
+	idLoan INT IDENTITY(1,1)PRIMARY KEY NOT NULL,
+	idcustomers INT NOT NULL FOREIGN KEY REFERENCES customers(idCustomers),
+	starDate DATETIME NOT NULL,
+	endDate DATETIME ,
+	interesRate DECIMAL(9,6) NOT NULL,
+	loanAmount MONEY NOT NULL,
+	currentAmount MONEY DEFAULT 0,
+	monthlyAmount MONEY NOT NULL,
+	nextDueDate DATETIME ,
+	bankFees MONEY NOT NULL,
+	loansDescription VARCHAR(250),
+	idloansType INT NOT NULL FOREIGN KEY REFERENCES loansType(idloansType),
+	idCurrencies INT NOT NULL FOREIGN KEY REFERENCES currencies(idCurrencies),
+	idLoansState INT NOT NULL FOREIGN KEY REFERENCES LoansStates(loansStatesId),
+);
 
-ALTER TABLE [CustomOrderList] CHECK CONSTRAINT [FK_CustomOrderList_03CustomOrderPosition]
+CREATE TABLE paymentType(
+	idPaymentType INT IDENTITY(1,1)PRIMARY KEY NOT NULL,
+	paymentTypeName VARCHAR(75) NOT NULL
+);
 
-ALTER TABLE [CustomOrderList] WITH CHECK ADD CONSTRAINT [FK_CustomOrderList_04CustomOrderPosition] FOREIGN KEY([04CustomOrderPosition])
-REFERENCES [loans] ([LoansID])
+CREATE TABLE loansHistories(
+	idLoansHistory INT IDENTITY(1,1)PRIMARY KEY NOT NULL,
+	loadId INT NOT NULL FOREIGN KEY REFERENCES loans(idLoan),
+	paymentAmount MONEY NOT NULL,
+	payDate DATETIME NOT NULL,
+	paymentType INT NOT NULL FOREIGN KEY REFERENCES paymentType(idPaymentType),
+);
 
-ALTER TABLE [CustomOrderList] CHECK CONSTRAINT [FK_CustomOrderList_04CustomOrderPosition]
+CREATE TABLE LOG_LoanHistory(
+	idlog INT IDENTITY(1,1)PRIMARY KEY NOT NULL,
+	idLoansHistory INT NOT NULL,
+	loadId INT NOT NULL,
+	paymentAmount MONEY NOT NULL,
+	payDate DATETIME NOT NULL,
+	paymentType INT NOT NULL,
+	typeChange VARCHAR(50) NOT NULL,
+	changeDate DATETIME NOT NULL,
+);
 
-ALTER TABLE [CustomOrderList] WITH CHECK ADD CONSTRAINT [FK_CustomOrderList_05CustomOrderPosition] FOREIGN KEY([05CustomOrderPosition])
-REFERENCES [loans] ([LoansID])
+CREATE TABLE LOG_Loan(
+	idlog INT IDENTITY(1,1)PRIMARY KEY NOT NULL,
+	idLoan INT NOT NULL,
+	idcustomers INT NOT NULL,
+	starDate DATETIME NOT NULL,
+	endDate DATETIME ,
+	interesRate DECIMAL(9,6) NOT NULL,
+	loanAmount MONEY NOT NULL,
+	currentAmount MONEY DEFAULT 0,
+	monthlyAmount MONEY NOT NULL,
+	nextDueDate DATETIME ,
+	bankFees MONEY NOT NULL,
+	loansDescription VARCHAR(250),
+	idloansType INT NOT NULL,
+	idCurrencies INT NOT NULL ,
+	idLoansState INT NOT NULL ,
+	typeChange VARCHAR(50) NOT NULL,
+	changeDate DATETIME NOT NULL,
+);
 
-ALTER TABLE [CustomOrderList] CHECK CONSTRAINT [FK_CustomOrderList_05CustomOrderPosition]
+--Triggers,Store Procedures and
 
-ALTER TABLE [CustomOrderList] WITH CHECK ADD CONSTRAINT [FK_CustomOrderList_06CustomOrderPosition] FOREIGN KEY([06CustomOrderPosition])
-REFERENCES [loans] ([LoansID])
+CREATE OR ALTER TRIGGER tr_insert_loadAmount 
+ON loansHistories
+	INSTEAD OF INSERT 
+AS
+BEGIN 
+	SET NOCOUNT ON
+	DECLARE @loadId INT;
+	DECLARE @paymentAmount MONEY;
+	DECLARE @paymentType INT; 
+	DECLARE @newCurrentAmount MONEY;
 
-ALTER TABLE [CustomOrderList] CHECK CONSTRAINT [FK_CustomOrderList_06CustomOrderPosition]
+	SELECT @loadId = INSERTED.loadId from INSERTED
+	SELECT @paymentAmount = INSERTED.paymentAmount from INSERTED
+	SELECT @paymentType = INSERTED.paymentType from INSERTED
+	SELECT @newCurrentAmount = currentAmount FROM loans where idLoan = @loadId
 
-ALTER TABLE [CustomOrderList] WITH CHECK ADD CONSTRAINT [FK_CustomOrderList_07CustomOrderPosition] FOREIGN KEY([07CustomOrderPosition])
-REFERENCES [loans] ([LoansID])
+	INSERT INTO loansHistories (loadId,paymentAmount,payDate,paymentType)
+	VALUES (@loadId,@paymentAmount,GETDATE(),@paymentType);
 
-ALTER TABLE [CustomOrderList] CHECK CONSTRAINT [FK_CustomOrderList_07CustomOrderPosition]
+	SET @newCurrentAmount = @newCurrentAmount - @paymentAmount;
 
-ALTER TABLE [CustomOrderList] WITH CHECK ADD CONSTRAINT [FK_CustomOrderList_08CustomOrderPosition] FOREIGN KEY([08CustomOrderPosition])
-REFERENCES [loans] ([LoansID])
+	UPDATE loans SET currentAmount = @newCurrentAmount, idLoansState = 4 WHERE idLoan = @loadId;
 
-ALTER TABLE [CustomOrderList] CHECK CONSTRAINT [FK_CustomOrderList_08CustomOrderPosition]
+END;
 
-ALTER TABLE [CustomOrderList] WITH CHECK ADD CONSTRAINT [FK_CustomOrderList_09CustomOrderPosition] FOREIGN KEY([09CustomOrderPosition])
-REFERENCES [loans] ([LoansID])
 
-ALTER TABLE [CustomOrderList] CHECK CONSTRAINT [FK_CustomOrderList_09CustomOrderPosition]
+CREATE OR ALTER TRIGGER tr_update_loadAmount
+ON loansHistories
+	INSTEAD OF UPDATE 
+AS
+BEGIN 
+	SET NOCOUNT ON
+	DECLARE @idLoansHistory INT;
+	DECLARE @loadId INT;
+	DECLARE @paymentAmount MONEY;
+	DECLARE @paymentType INT; 
+	DECLARE @newCurrentAmount MONEY;
+	DECLARE @payDate DATETIME;
 
-ALTER TABLE [CustomOrderList] WITH CHECK ADD CONSTRAINT [FK_CustomOrderList_10CustomOrderPosition] FOREIGN KEY([10CustomOrderPosition])
-REFERENCES [loans] ([LoansID])
+	DECLARE @oldidLoansHistory INT;
+	DECLARE @oldloadId INT;
+	DECLARE @oldpaymentAmount MONEY;
+	DECLARE @oldpaymentType INT; 
+	DECLARE @oldpayDate DATETIME;
 
-ALTER TABLE [CustomOrderList] CHECK CONSTRAINT [FK_CustomOrderList_10CustomOrderPosition]
+	SELECT @idLoansHistory = INSERTED.idLoansHistory from INSERTED
+	SELECT @loadId = INSERTED.loadId from INSERTED
+	SELECT @paymentAmount = INSERTED.paymentAmount from INSERTED
+	SELECT @paymentType = INSERTED.paymentType from INSERTED
+	SELECT @payDate = INSERTED.payDate from INSERTED
+	SELECT @newCurrentAmount = currentAmount FROM loans where idLoan = @loadId
 
-ALTER TABLE [PaymentHistory] WITH CHECK ADD CONSTRAINT [FK_PaymentHistory_loadId] FOREIGN KEY([loadId])
-REFERENCES [loans] ([LoansID])
+	SELECT @oldidLoansHistory = DELETED.idLoansHistory from DELETED
+	SELECT @oldloadId = DELETED.loadId from DELETED
+	SELECT @oldpaymentAmount = DELETED.paymentAmount from DELETED
+	SELECT @oldpaymentType = DELETED.paymentType from DELETED
+	SELECT @oldpayDate = DELETED.payDate from DELETED
 
-ALTER TABLE [PaymentHistory] CHECK CONSTRAINT [FK_PaymentHistory_loadId]
+	INSERT INTO LOG_LoanHistory (idLoansHistory,loadId,paymentAmount,payDate,paymentType,typeChange,changeDate)
+	VALUES(@oldidLoansHistory,@oldloadId,@oldpaymentAmount,@oldpayDate,@oldpaymentType,'BEFORE UPDATE',GETDATE());
 
-COMMIT TRANSACTION QUICKDBD
+	UPDATE loansHistories SET paymentAmount = @paymentAmount, payDate = @payDate, paymentType = @paymentType WHERE idLoansHistory = @idLoansHistory;
+
+	INSERT INTO LOG_LoanHistory (idLoansHistory,loadId,paymentAmount,payDate,paymentType,typeChange,changeDate)
+	VALUES (@oldidLoansHistory,@loadId,@paymentAmount,@payDate,@paymentType,'AFTER UPDATE',GETDATE());
+
+	IF(@oldpaymentAmount = @paymentAmount) SET @newCurrentAmount = @newCurrentAmount - @paymentAmount;
+	ELSE IF (@oldpaymentAmount > @paymentAmount) SET @newCurrentAmount = @newCurrentAmount + (@oldpaymentAmount -@paymentAmount) ;
+	ELSE IF (@oldpaymentAmount < @paymentAmount) SET @newCurrentAmount = @newCurrentAmount - (@paymentAmount - @oldpaymentAmount) ;
+
+	UPDATE loans SET currentAmount = @newCurrentAmount WHERE idLoan = @loadId;
+
+END;
+
+
+CREATE OR ALTER TRIGGER tr_delete_loadAmount
+ON loansHistories
+	INSTEAD OF DELETE 
+AS
+BEGIN 
+	SET NOCOUNT ON
+
+	DECLARE @newCurrentAmount MONEY;
+	DECLARE @oldidLoansHistory INT;
+	DECLARE @oldloadId INT;
+	DECLARE @oldpaymentAmount MONEY;
+	DECLARE @oldpaymentType INT; 
+	DECLARE @oldpayDate DATETIME;
+
+	
+	SELECT @oldidLoansHistory = DELETED.idLoansHistory from DELETED
+	SELECT @oldloadId = DELETED.loadId from DELETED
+	SELECT @oldpaymentAmount = DELETED.paymentAmount from DELETED
+	SELECT @oldpaymentType = DELETED.paymentType from DELETED
+	SELECT @oldpayDate = DELETED.payDate from DELETED
+	SELECT @newCurrentAmount = currentAmount FROM loans where idLoan = @oldloadId
+
+	INSERT INTO LOG_LoanHistory (idLoansHistory,loadId,paymentAmount,payDate,paymentType,typeChange,changeDate)
+	VALUES(@oldidLoansHistory,@oldloadId,@oldpaymentAmount,@oldpayDate,@oldpaymentType,'DELETE',GETDATE());
+
+	DELETE FROM loansHistories WHERE idLoansHistory = @oldidLoansHistory;
+
+	SET @newCurrentAmount = @newCurrentAmount + @oldpaymentAmount;
+
+	UPDATE loans SET currentAmount = @newCurrentAmount WHERE idLoan = @oldloadId;
+
+END;
+
+CREATE OR ALTER TRIGGER tr_update_loanStatus
+on loans
+	AFTER UPDATE
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @loadId INT;
+	DECLARE @newCurrentAmount MONEY;
+	DECLARE @actualCurrentAmount MONEY;
+
+	SELECT @loadId = INSERTED.idLoan from INSERTED
+	SELECT @newCurrentAmount = INSERTED.currentAmount from INSERTED
+	SELECT @actualCurrentAmount = currentAmount FROM loans WHERE idLoan = @loadId;
+
+	IF(@newCurrentAmount<=0)
+		BEGIN
+			UPDATE loans SET currentAmount=0, idLoansState=6 WHERE idLoan = @loadId 
+		END;
+END;
+
+CREATE OR ALTER PROCEDURE sp_delete_loans_all @idLoan int
+AS
+BEGIN 
+	DECLARE	@return_value BIT;
+	DECLARE @actualLoanHistory int;
+	DECLARE db_cursor CURSOR FOR SELECT idloansHistory from loansHistories where loadId = @idLoan;
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM loans WHERE idLoan = @idLoan)
+			BEGIN
+				BEGIN TRANSACTION
+					OPEN db_cursor 
+					FETCH NEXT FROM db_cursor INTO @actualLoanHistory
+					WHILE @@FETCH_STATUS = 0  
+					BEGIN  
+						DELETE FROM loansHistories WHERE idloansHistory = @actualLoanHistory;
+						FETCH NEXT FROM db_cursor INTO @actualLoanHistory
+					END
+					CLOSE db_cursor  
+					DEALLOCATE db_cursor 
+					DECLARE @idcustomers INT;
+					DECLARE @starDate DATETIME;
+					DECLARE @endDate DATETIME;
+					DECLARE @interesRate DECIMAL(9,6);
+					DECLARE @loanAmount MONEY;
+					DECLARE @currentAmount MONEY;
+					DECLARE @monthlyAmount MONEY;
+					DECLARE @nextDueDate DATETIME;
+					DECLARE @bankFees MONEY;
+					DECLARE @loansDescription VARCHAR(250);
+					DECLARE @idloansType INT;
+					DECLARE @idCurrencies INT;
+					DECLARE @idLoansState INT;
+					SELECT @idcustomers = idcustomers,@starDate = starDate, @endDate = endDate,@interesRate = interesRate,
+						@loanAmount = loanAmount, @currentAmount = currentAmount, @monthlyAmount = monthlyAmount,
+						@nextDueDate = nextDueDate, @bankFees = bankFees,@loansDescription = loansDescription,
+						@idloansType = idloansType, @idCurrencies = idCurrencies, @idLoansState = idLoansState
+						FROM loans WHERE idLoan = @idLoan;
+					INSERT INTO LOG_Loan(idLoan,idcustomers,starDate,endDate,interesRate,loanAmount,currentAmount,monthlyAmount,
+						nextDueDate,bankFees,loansDescription,idloansType,idCurrencies,idLoansState,typeChange,changeDate)
+						values (@idLoan,@idcustomers,@starDate, @endDate,@interesRate,@loanAmount,@currentAmount,
+						@monthlyAmount,@nextDueDate,@bankFees,@loansDescription,@idloansType,@idCurrencies,@idLoansState,
+						'DELETE',GETDATE());
+					DELETE FROM LOANS WHERE idLoan = @idLoan;
+				COMMIT TRANSACTION;
+				SET @return_value = 1;
+				SELECT 'Return' = @return_value;
+			END;
+		ELSE
+			BEGIN
+				SET @return_value = 0;
+				SELECT 'Return' = @return_value;
+			END;		
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRANSACTION
+		CLOSE db_cursor  
+		DEALLOCATE db_cursor 
+		SET @return_value = 0;
+		SELECT 'Return' = @return_value;
+	END CATCH;
+END;
+
+CREATE OR ALTER PROCEDURE usp_change_loan_currency 
+@tiempo INT, @id int, @bankfee money, @moneda int, @exchange money
+AS
+BEGIN 
+	BEGIN TRY
+        BEGIN TRAN t
+			INSERT INTO loans (idcustomers,starDate,endDate,interesRate,loanAmount,currentAmount,monthlyAmount,
+				nextDueDate,bankFees,loansDescription,idloansType,idCurrencies,idLoansState)
+				SELECT l.idcustomers,GETDATE(),DATEADD(YEAR,@tiempo ,GETDATE()),l.interesRate, 
+					(l.currentAmount * @exchange),	
+					((l.currentAmount * @exchange)*(1+(l.interesRate/100))+ @bankfee ),
+					((l.currentAmount * @exchange)*(1+(l.interesRate/100))+ @bankfee ) / (@tiempo *12),
+					DATEADD(MONTH,1 ,GETDATE()),@bankfee,CONCAT('Cambio de Moneda del Credito: FIDE000-',@id ),
+					5, @moneda, 4
+					FROM loans l WHERE idLoan = @id;
+			EXEC sp_delete_loans_all @idLoan = @id;
+        COMMIT TRAN t
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRAN t
+        DECLARE @Message varchar(MAX) ,@Severity int ,@State smallint
+        SET @Message = CONCAT('Error: ', ERROR_NUMBER(), ', ', ERROR_PROCEDURE(), ', ', ERROR_MESSAGE())
+        SET    @Severity = ERROR_SEVERITY()
+        SET    @State = ERROR_STATE()
+        RAISERROR('Error DB: No se pudo cambiar la moneda del Credito',@Severity,@State) --Retorna un error
+    END CATCH
+END;
+
+
+CREATE OR ALTER PROCEDURE usp_monthly_credit_validation
+AS
+BEGIN 
+	BEGIN TRY
+		BEGIN TRAN t
+				select L.idLoan, (SELECT COUNT(*) 
+									from loansHistories H 
+									WHERE H.paymentType = 1 
+										AND H.loadId = L.idLoan 
+										and MONTH(payDate) = MONTH(GETDATE()) ) CANT
+					into #tabla 
+				  from loans L 
+				  where l.idLoansState = 4
+			UPDATE loans SET idLoansState = 8
+				FROM #tabla A WHERE CANT = 0 AND A.idLoan = loans.idLoan
+		COMMIT TRAN t
+	END TRY
+	BEGIN CATCH
+        ROLLBACK TRAN t
+        DECLARE @Message varchar(MAX) ,@Severity int ,@State smallint
+        SET @Message = CONCAT('Error: ', ERROR_NUMBER(), ', ', ERROR_PROCEDURE(), ', ', ERROR_MESSAGE())
+        SET    @Severity = ERROR_SEVERITY()
+        SET    @State = ERROR_STATE()
+        RAISERROR('Error DB: No se pudo cambiar la moneda del Credito',@Severity,@State) --Retorna un error
+	END CATCH
+END;
+
+--Create Entries for this Database
+
+INSERT INTO countries (countryName) 
+VALUES ('Costa Rica'),
+('Panamá'),
+('United States'),
+('España ');
+
+INSERT INTO states (stateName,idCountry)
+VALUES ('San Jose',1),
+('Alajuela',1),
+('Heredia',1),
+('Cartago',1),
+('Guacanacaste',1),
+('Puntarenas',1),
+('Limon',1),
+('Panamá',2),
+('Chiriquí',2),
+('Bocas del Toro',2),
+('California',3),
+('Texas',3),
+('Florida',3),
+('Washington',3),
+('New York',3),
+('Barcelona',4),
+('Madrid',4),
+('Valencia',4),
+('Sevillla',4);
+
+INSERT INTO customers (firstName,lastName,documentId,email,telephone,birthDate,userAddress,idState)
+VALUES ('Wilmar','Arlett','352959179','warlett0@amazon.co.uk','82899837 ','8/2/2001','Praza Sandoval,200 E. and 100 S.',4),
+('Mario Villagómez','Leiva Blázquez','ES756872822','valeria.caban@yahoo.es','204 244 4122','3/22/1993','Rúa Aitana',17),
+('Scottie ','Minocchi','902588915','sminocchib@google.ca','(806)888-9723','4/10/1971','6903 Cassin Crescent',14),
+('Isabel','Briseño Hijo','174898275','ualvarez@info.cr','85608182','09/21/1999','Avenida Benavídez',1);
+
+
+INSERT INTO currencies(currencyName,currencyISO,symbol)
+VALUES ('Colones','CRC','₡'),
+('Dollares','USD','$'),
+('Euros','EUR ','€');
+
+INSERT INTO loansStates (loansStateName)
+VALUES ('Creado'),
+('Bajo Validación'),
+('Aprobado'),
+('Activo'),
+('Formalizado'),
+('Cancelado'),
+('Rechazado'),
+('Pago en Atraso');
+
+INSERT INTO loansType(loansTypeName)
+VALUES ('Credito Personal'),
+('Credito Casa'),
+('Credito Vehiculo'),
+('Credito Comercial'),
+('Cambio de Moneda');
+
+INSERT INTO loans (idcustomers,starDate,endDate,interesRate,loanAmount,currentAmount,monthlyAmount,nextDueDate,
+bankFees,loansDescription,idloansType,idCurrencies,idLoansState)
+VALUES (1,'8/1/2021','8/1/2051',8.00,50000000,50000000,366883,'9/15/2022',1000000,'First-time homebuyer loan',2,1,4),
+(4,'3/1/2015','4/1/2023',7.4,12000000,10000000,156005,'9/15/2022',500000,'Purchase of Toyota Rav4 2015 Vehicle',3,1,4),
+(3,'5/1/2018','6/1/2030',22.6,5000,3000,102,'9/15/2022',250,'Credit Card Payment',1,2,4);
+
+INSERT INTO paymentType(paymentTypeName)
+VALUES ('Pago Mensual'),
+('Pago Extraordinario');
+
+INSERT INTO loansHistories(loadId,paymentAmount,payDate,paymentType)
+values(2,156005,'7/15/2022',1),
+(2,156005,'8/15/2022',1),
+(3,102,'7/15/2022',1),
+(3,1000,'8/1/2022',2),
+(3,102,'8/15/2022',1);
+
+INSERT INTO loansTypeInterest (idloansType,idCurrencies,interesRate,yearTime)
+VALUES (1,1,15.3,5),
+(1,1,15.3,5),
+(1,1,16.43,6),
+(1,1,17.56,7),
+(1,1,18.69,8),
+(1,1,19.82,9),
+(1,1,20.95,10);
+
