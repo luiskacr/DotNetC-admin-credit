@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ClienteApi.Models.LogLoanViewModel>
+﻿@using ClienteApi.Models;
+@model IEnumerable<ClienteApi.Models.LogLoanViewModel>
 
 @{
     ViewData["Title"] = "Log de Creditos";
@@ -72,7 +73,7 @@ else
     </div>
 
     <div class="table-responsive table-hover">
-        <table id="TableEmployee" class="table table-avance table-striped ">
+        <table id="TableEmployee" class="table table-avance table-striped display nowrap " cellspacing="0" width="100%">
             <thead class="table-primaryk">
                 <tr>
                     <th>
@@ -83,12 +84,6 @@ else
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Idcustomers)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.StarDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.EndDate)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.InteresRate)
@@ -109,7 +104,19 @@ else
                         @Html.DisplayNameFor(model => model.BankFees)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(model => model.TypeChange)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ChangeDate)
+                    </th>
+                    <th >
                         @Html.DisplayNameFor(model => model.LoansDescription)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StarDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EndDate)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.IdloansType)
@@ -120,26 +127,81 @@ else
                     <th>
                         @Html.DisplayNameFor(model => model.IdLoansState)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.TypeChange)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ChangeDate)
-                    </th>
                 </tr>
             </thead>
             <tbody class=" ">
                 @foreach (var item in Model)
                 {
                     <tr>
+                        @{
+                            string CurrencySymbol = " ";
+                            string CurrencyName = " ";
+                            foreach (CurrencyViewModel currency in ViewBag.Currency)
+                            {
+                                if (currency.IdCurrencies == item.IdCurrencies)
+                                {
+                                    CurrencySymbol = currency.Symbol;
+                                    CurrencyName = currency.CurrencyName;
+                                }
+                            }
+                        }
                         <td>
                             @Html.DisplayFor(modelItem => item.Idlog)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.IdLoan)
+                            FIDE000-@Html.DisplayFor(modelItem => item.IdLoan)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Idcustomers)
+                            
+                            @{
+                                String fullName = " ";
+                                foreach (CustomerViewModel customer in ViewBag.Customer)
+                                {
+                                    if (item.Idcustomers == customer.IdCustomers)
+                                    {
+                                        fullName = customer.FirstName + " " + customer.LastName;
+                                    }
+                                }
+                            }
+                            @fullName
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InteresRate)%
+                        </td>
+                        <td>
+                            @CurrencySymbol
+                            @Html.DisplayFor(modelItem => item.LoanAmount)
+                        </td>
+                        <td>
+                            @CurrencySymbol
+                            @Html.DisplayFor(modelItem => item.CurrentAmount)
+                        </td>
+                        <td>
+                            @CurrencySymbol
+                            @Html.DisplayFor(modelItem => item.MonthlyAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NextDueDate)
+                        </td>
+                        <td>
+                            @CurrencySymbol
+                            @Html.DisplayFor(modelItem => item.BankFees)
+                        </td>
+                        <td>
+                            @if (item.TypeChange == "DELETE") 
+                            {
+                                <span class="badge badge-danger">Eliminado</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-warning">@Html.DisplayFor(modelItem => item.TypeChange)</span>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ChangeDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoansDescription)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.StarDate)
@@ -148,41 +210,34 @@ else
                             @Html.DisplayFor(modelItem => item.EndDate)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.InteresRate)
+                            @{
+                                String typeModel = " ";
+                                foreach (LoanTypeViewModel loanType in ViewBag.LoansStype)
+                                {
+                                    if (loanType.IdloansType == item.IdloansType)
+                                    {
+                                        typeModel = loanType.LoansTypeName;
+                                    }
+                                }
+    
+                            }
+                            @typeModel
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.LoanAmount)
+                            @CurrencyName
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CurrentAmount)
+                            @{
+                                foreach (LoanStateViewModel loanState in ViewBag.LoanState)
+                                {
+                                    if (loanState.LoansStatesId == item.IdLoansState)
+                                    {
+                                        @Html.DisplayFor(modelItem => loanState.LoansStateName)
+                                    }
+                                }
+                            }
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MonthlyAmount)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NextDueDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BankFees)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LoansDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.IdloansType)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.IdCurrencies)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.IdLoansState)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TypeChange)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ChangeDate)
-                        </td>
+                        
                     </tr>
                 }
 

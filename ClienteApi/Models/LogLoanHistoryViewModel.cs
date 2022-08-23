@@ -16,6 +16,7 @@ namespace ClienteApi.Models
         public int LoadId { get; set; }
 
         [DisplayName("Monto del Pago")]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         [Range(1, 9999999)]
         public decimal PaymentAmount { get; set; }
 

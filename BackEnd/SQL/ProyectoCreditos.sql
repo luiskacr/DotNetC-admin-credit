@@ -321,7 +321,7 @@ BEGIN
 
 	SET @newCurrentAmount = @newCurrentAmount - @paymentAmount;
 
-	UPDATE loans SET currentAmount = @newCurrentAmount WHERE idLoan = @loadId;
+	UPDATE loans SET currentAmount = @newCurrentAmount, idLoansState = 4 WHERE idLoan = @loadId;
 
 END;
 
@@ -518,6 +518,33 @@ BEGIN
     END CATCH
 END;
 
+
+CREATE OR ALTER PROCEDURE usp_monthly_credit_validation
+AS
+BEGIN 
+	BEGIN TRY
+		BEGIN TRAN t
+				select L.idLoan, (SELECT COUNT(*) 
+									from loansHistories H 
+									WHERE H.paymentType = 1 
+										AND H.loadId = L.idLoan 
+										and MONTH(payDate) = MONTH(GETDATE()) ) CANT
+					into #tabla 
+				  from loans L 
+				  where l.idLoansState = 4
+			UPDATE loans SET idLoansState = 8
+				FROM #tabla A WHERE CANT = 0 AND A.idLoan = loans.idLoan
+		COMMIT TRAN t
+	END TRY
+	BEGIN CATCH
+        ROLLBACK TRAN t
+        DECLARE @Message varchar(MAX) ,@Severity int ,@State smallint
+        SET @Message = CONCAT('Error: ', ERROR_NUMBER(), ', ', ERROR_PROCEDURE(), ', ', ERROR_MESSAGE())
+        SET    @Severity = ERROR_SEVERITY()
+        SET    @State = ERROR_STATE()
+        RAISERROR('Error DB: No se pudo cambiar la moneda del Credito',@Severity,@State) --Retorna un error
+	END CATCH
+END;
 
 --Create Entries for this Database
 

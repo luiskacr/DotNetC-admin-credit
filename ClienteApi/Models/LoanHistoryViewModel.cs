@@ -15,6 +15,7 @@ namespace ClienteApi.Models
 
         [DisplayName("Monto del Pago")]
         [Range(1, 9999999)]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         [Required(ErrorMessage = "El Monto del Pago es obligatorio")]
         public decimal PaymentAmount { get; set; }
 

@@ -116,7 +116,10 @@ else
                                 <label asp-for="BirthDate" class="control-label"></label>
                             </span>
                         </label>
-                        <input asp-for="BirthDate" class="form-control datetimepicker" />
+                        <!--
+                        <input asp-for="BirthDate" class="form-control custom-datepicker" />
+                        -->
+                        <input asp-for="BirthDate" type="text" class="form-control custom-datepicker">
                         <span asp-validation-for="BirthDate" class="text-danger"></span>
                     </div>
 
@@ -189,4 +192,13 @@ else
     </div>
 
 </div>
+@*
 <script src="~/vendor/DatePicker/DatePicker.js"></script>
+*@
+
+<script>
+    $('.custom-datepicker').datepicker({
+        format: "dd/mm/yyyy",
+        language: "es"
+    });
+</script>

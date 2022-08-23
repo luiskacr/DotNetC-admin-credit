@@ -166,59 +166,32 @@ else
                         </div>
 
                     </div>
-
-            
-
             </div>
+          
 
-            <div class="row">
-                <div class="col-12 col-lg-6 mt-3 col-xl">
-                    <nav>
-                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Tipo de Cambio Venta Dolares</button>
-                            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Tipo de Cambio Compra Dolares</button>
-                        </div>
-                    </nav>
-                    <div class="tab-content bg-white" id="nav-tabContent">
-                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                            <div class="card-body">
-                               <div class="Row">
-                                    <div class="col-md-3 mt-3">
-                                        <label class="text-dark">
-                                            <strong>
-                                                <label>Monto en Colones</label>
-                                            </strong>
-                                        </label>
-                                        <input type="number" name="compra" id="compra"  value="" class="form-control"  />
+            <div class="row ">
+
+                <div class="col-6">
+
+                    <div class="card-body">
+                        <div class="row pt-1">
+                            <div class="col-md-12 mx-auto">
+                                <div class="row bg-light">
+                                    <div class="col-12 text-center text-dark py-3">
+                                        <h4>De Colones a Dolares </h4>
                                     </div>
-                                    <div class="col-md-3 mt-3">
-                                        <label class="text-dark">
-                                            <strong>
-                                                <label>Monto en Dolares</label>
-                                            </strong>
-                                        </label>
-                                        <input value="" name="venta" id="venta" class="form-control" />
+                                </div>
+                                <div class="row bg-light p-3">
+                                    <div class="col-6">
+                                        <label> Monto en Colones </label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">₡</span>
+                                            <input type="number" value="" name="col-venta" id="col-venta" class="form-control money" />
+                                        </div>
                                     </div>
-                               </div>                  
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                            <div class="card-body">
-                                <div class="row pt-1">
-                                    <div class="col-md-6 mx-auto">
-                                        <div class="row bg-light">
-                                            <div class="col-12 text-center text-dark py-3">
-                                                <h4>De Dolares a Colones </h4>
-                                            </div>
-                                        </div>
-                                        <div class="row bg-light p-3">
-                                            <div class="col-6">
-                                                <input value="" type="number" name="dol-venta" id="dol-venta" class="form-control" />
-                                            </div>
-                                            <div class="col-6">
-                                                <label name ="dol-compra" id="dol-compra" value="" class="form-control"></label>
-                                            </div>
-                                        </div>
+                                    <div class="col-6">
+                                        <label> Monto en Dolares </label>
+                                        <input name="col-compra" id="col-compra" value="" class="form-control money" disabled />
                                     </div>
                                 </div>
                             </div>
@@ -227,46 +200,70 @@ else
 
                 </div>
 
-                @section Scripts {
+                <div class="col-6">
 
-                    <script type="text/javascript">
-                        var dsell = "@ViewBag.exchangeRate.venta"
-                        var dbuy = "@ViewBag.exchangeRate.compra" 
+                    <div class="card-body">
+                        <div class="row pt-1">
+                            <div class="col-md-12 mx-auto">
+                                <div class="row bg-light">
+                                    <div class="col-12 text-center text-dark py-3">
+                                        <h4>De Dolares a Colones </h4>
+                                    </div>
+                                </div>
+                                <div class="row bg-light p-3">
+                                    <div class="col-6">
+                                        <label> Monto en Dolares </label>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">$</span>
+                                            <input value="" type="number" name="dol-venta" id="dol-venta" class="form-control money" />
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label> Monto en Colones </label>
+                                        <input name="dol-compra" id="dol-compra" value="" class="form-control money" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                        document.getElementsByName("compra")[0].addEventListener('change',vender);
+                </div>
+                <script>
+                    var sell = parseFloat("@ViewBag.exchangeRate.venta");
+                    var buy = parseFloat("@ViewBag.exchangeRate.compra");
 
-                        function vender(){
-                            var ndsell = parseFloat(dsell);
-                            console.log("ndsell:" ndsell)
-                            var dfielsell = parseFloat(document.getElementById("compra").value);
-                        if (isNaN(dfielsell)) {
-                                document.getElementById("venta").value = "";
-                            }else{
-                                var finalfield = dfielsell / ndsell;
-                                finalfield = finalfield.toFixed(2);
-                            document.getElementById("venta").value = "$" + finalfield;
-                            }
-                        };
+                    
+                    
+                    document.getElementsByName("col-venta")[0].addEventListener('change', calSell);
+                    document.getElementsByName("dol-venta")[0].addEventListener('change', callBuy);
 
-                        document.getElementsByName("dol-venta")[0].addEventListener('change', comprar);
 
-                        function comprar(){
-                            var ndsell = parseFloat(dbuy);
-                            console.log("ndsell:" ndsell)
-                            var dfielsell = parseFloat(document.getElementById("dol-venta").value);
-                            if (isNaN(dfielsell)) {
-                            document.getElementById("dol-compra").value = "";
-                            }else{
-                                var finalfield ndsell * dfielsell;
-                                finalfield = finalfield.toFixed(2);
-                                document.getElementById("dol-compra").value = "₡" + finalfield;
-                            }
-                        };
-                    </script>
-                }
+                    function calSell() {
+                        var userInput = parseFloat(document.getElementById("col-venta").value);
+                        if (isNaN(userInput)) {
+                            document.getElementById("col-compra").value = " ";
+                        } else {
+                            var finalfield = userInput / sell;
+                            finalfield = finalfield.toFixed(2);
+                            document.getElementById("col-compra").value = "$ " + finalfield;
+                        }
+                    };
 
+                    function callBuy(){
+                        var userInput = parseFloat(document.getElementById("dol-venta").value);
+                        if (isNaN(userInput)) {
+                            document.getElementById("dol-compra").value = " ";
+                        } else {
+                            var finalfield = userInput * buy;
+                            finalfield = finalfield.toFixed(2);
+                            document.getElementById("dol-compra").value = "₡ " + finalfield;
+                        }
+                    }
+                </script>
 
             </div>
+
+
         }
     </div>
 </div>

@@ -153,7 +153,7 @@ else
                                 <label asp-for="BankFees" class="control-label"></label>
                             </span>
                         </label>
-                        <input asp-for="BankFees" class="form-control" />
+                        <input asp-for="BankFees" id="BankFees" class="form-control money" />
                         <span asp-validation-for="BankFees" class="text-danger"></span>
                     </div>
 
@@ -194,7 +194,7 @@ else
                                 <label asp-for="LoanAmount" class="control-label"></label>
                             </span>
                         </label>
-                        <input asp-for="LoanAmount" class="form-control" />
+                        <input asp-for="LoanAmount" id="LoanAmount" class="form-control money" />
                         <span asp-validation-for="LoanAmount" class="text-danger"></span>
                     </div>
 
@@ -204,7 +204,7 @@ else
                                 <label asp-for="InteresRate" class="control-label"></label>
                             </span>
                         </label>
-                        <input asp-for="InteresRate" class="form-control" />
+                        <input asp-for="InteresRate" id="InteresRate" class="form-control" />
                         <span asp-validation-for="InteresRate" class="text-danger"></span>
                     </div>
 
@@ -218,7 +218,7 @@ else
                                 <label asp-for="LoansDescription" class="control-label"></label>
                             </span>
                         </label>
-                        <input asp-for="LoansDescription" class="form-control" />
+                        <input asp-for="LoansDescription" id="LoansDescription" class="form-control" />
                         <span asp-validation-for="LoansDescription" class="text-danger"></span>
                     </div>
 
@@ -226,6 +226,29 @@ else
 
                 <div class="form-group mt-5">
                     <input type="submit" value="Crear" class="btn btn-primary" />
+
+                    <button type="button" class="btn btn-success" onclick="callLoan()" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >
+                      Calcular Credito
+                    </button>
+                </div>
+
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Calculo del Credito </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="idParent">
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -237,14 +260,95 @@ else
         <a asp-action="Index">Volver al Listado</a>
     </div>
 
+
+
     @section Scripts {
 
         <script type="text/javascript">
             var data = @Html.Raw(Json.Serialize(ViewBag.TypeInterests));
+            var Currencies = @Html.Raw(Json.Serialize(ViewBag.Currency));
+
+            $('.money').mask('# ###', { reverse: true });
 
             $(document).ready(function() {
                 $('.js-example-basic-single').select2();
             });
+
+            document.getElementById("IdCurrencies").addEventListener('change', interest);
+            document.getElementById("IdloansType").addEventListener('change', interest);
+            document.getElementById("tiempo").addEventListener('change', interest);
+
+            function interest(){
+                var currency = document.getElementById("IdCurrencies").value
+                var loantype = document.getElementById("IdloansType").value
+                var time = document.getElementById("tiempo").value
+
+                if (currency != null && loantype != null && time != null) {
+
+                    for (i = 0; i < data.length; i++) {
+                        if (data[i].idloansType == loantype && data[i].idCurrencies == currency && data[i].yearTime == time )
+                        {
+                            var showinteres = data[i].interesRate;
+                            console.log(showinteres.toString().replace(".",","));
+                            document.getElementById("InteresRate").value = showinteres.toString().replace(".",",");
+                            break
+                        }
+                    } 
+                }
+
+            }
+            function padTo2Digits(num) {
+                return num.toString().padStart(2, '0');
+            }
+
+            function formatDate(date) {
+                return [
+                    padTo2Digits(date.getDate()),
+                    padTo2Digits(date.getMonth() + 1),
+                    date.getFullYear(),
+                ].join('/');
+            }
+
+
+            function callLoan(){
+                document.getElementById('idParent').innerHTML = " ";
+                var now = formatDate(new Date());
+
+                var time = parseInt(document.getElementById("tiempo").value);
+               
+                var newdate = new Date();
+                newdate.setFullYear(newdate.getFullYear() + time)
+                var fechaMostrar = newdate.getDay() + "/" + newdate.getMonth() + "/" + newdate.getFullYear();
+
+                var currencySelected = document.getElementById("IdCurrencies").value;
+
+
+                var loanAmountString = document.getElementById("LoanAmount").value;
+                var loanAmount = parseInt(loanAmountString.replace(/\s+/g, ''));
+                console.log(loanAmount);
+
+                var interesString = document.getElementById("InteresRate").value;
+                var interes = parseFloat(interesString.replace(",", "."));
+
+                var feesString = document.getElementById("BankFees").value;
+                var fees = parseInt(feesString.replace(/\s+/g, ''));
+
+                var newLoan = (loanAmount * (1 + (interes / 100))) + fees;
+
+                var monthlyLoan = newLoan / (time * 12);
+                var monthlyLoan = monthlyLoan.toFixed(2);
+
+                for(i=0; i< Currencies.length; i++){
+
+                    if (Currencies[i].idCurrencies == currencySelected ){
+                        var currencySymbol = Currencies[i].symbol;
+                    }
+                }
+
+
+                var hmlt = '<div id="idChild"><ul><li><b>Fecha de Inicio: </b>' + now + ' </li><li><b>Fecha de Final: </b>' + fechaMostrar + '</li><li><b>Monto a Prestar: </b>' + currencySymbol + ' ' + newLoan + '</li><li><b>Monto del Mensual: </b>' + currencySymbol + ' ' + monthlyLoan + '</li></ul></div> <p class="text-danger">* Los Montos indicados son Aproximados</p>'
+                document.getElementById('idParent').innerHTML += hmlt;
+            }
 
         </script>
     }

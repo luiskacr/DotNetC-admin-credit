@@ -73,7 +73,7 @@ else
     </div>
 
     <div class="table-responsive table-hover">
-        <table id="loanTable" class="table table-avance table-striped ">
+        <table id="loanTable" class="table table-avance table-striped " cellspacing="0" width="100%">
             <thead class="table-primaryk">
                 <tr>
                     <th>
@@ -145,7 +145,23 @@ else
                             }
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.TypeChange)
+                            @if (item.TypeChange == "BEFORE UPDATE")
+                            {
+                                <span class="badge badge-primary">Antes de Actualizar</span>
+                            }
+                            else if (item.TypeChange == "AFTER UPDATE")
+                            {
+                                <span class="badge badge-success">Despues de Actualizar</span>
+                            }
+                            else if (item.TypeChange == "DELETE")
+                            {
+                                <span class="badge badge-danger">Eliminado</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-warning">@Html.DisplayFor(modelItem => item.TypeChange)</span>
+                            }
+
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.ChangeDate)

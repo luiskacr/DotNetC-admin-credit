@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     $('.table-avance').DataTable({
+        "responsive": true,
         "language": {
             "lengthMenu": "Mostrar _MENU_ registros",
             "zeroRecords": "No se encontraron resultados",

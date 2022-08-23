@@ -7,6 +7,7 @@ namespace ClienteApi.Models
     public class LoanViewModel
     {
         [Key]
+        [DisplayName("Credito")]
         public int IdLoan { get; set; }
 
         [DisplayName("Cliente")]
@@ -31,15 +32,18 @@ namespace ClienteApi.Models
         [DisplayName("Monto del Credito")]
         [Range(1, 9999999)]
         [Required(ErrorMessage = "El Monto del Credito es obligatorio")]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         public decimal LoanAmount { get; set; }
 
         [DisplayName("Monto Actual")]
         [Range(1, 9999999.99)]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         public decimal? CurrentAmount { get; set; }
 
         [DisplayName("Mensualidad")]
         [Range(1, 9999999.99)]
         [Required(ErrorMessage = "La mensualidad es obligatoria")]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         public decimal? MonthlyAmount { get; set; }
 
         [DisplayName("Siguente Fecha de Pago")]
@@ -48,6 +52,7 @@ namespace ClienteApi.Models
 
         [DisplayName("Comision Bancaria")]
         [Range(1, 9999999.99)]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         [Required(ErrorMessage = "Se deben Indicar la Comision Bancaria ")]
         public decimal BankFees { get; set; }
 

@@ -1,5 +1,5 @@
 ﻿$(function () {
-    $('.datetimepicker').datepicker({
+    $('#datetimepicker1').datepicker({
         format: 'dd-mm-yyyy',
         firstDay: 1,
         autoclose: true,
